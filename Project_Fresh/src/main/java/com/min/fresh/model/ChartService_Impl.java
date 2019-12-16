@@ -6,6 +6,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.min.fresh.dto.Chart_DTO;
+import com.min.fresh.dto.Product_DTO;
+
 @Service
 public class ChartService_Impl implements IChartService{
 
@@ -13,83 +16,88 @@ public class ChartService_Impl implements IChartService{
 	private IChartDao dao;
 	
 	@Override
-	public List<Map<String, String>> chartJumcntSangnameList(Map<String, String> map) {
+	public List<Chart_DTO> chartJumcntSangnameList(Map<String, String> map) {
 		return dao.chartJumcntSangnameList(map);
 	}
 
 	@Override
-	public List<Map<String, String>> chartJumcntSangnameYearList(String sangname) {
+	public List<Chart_DTO> chartJumcntSangnameYearList(String sangname) {
 		return dao.chartJumcntSangnameYearList(sangname);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllJumcntSangnameList(String year) {
+	public List<Chart_DTO> chartAllJumcntSangnameList(String year) {
 		return dao.chartAllJumcntSangnameList(year);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllJumcntSangnameYearList() {
+	public List<Chart_DTO> chartAllJumcntSangnameYearList() {
 		return dao.chartAllJumcntSangnameYearList();
 	}
 
 	@Override
-	public List<Map<String, String>> chartPaymoneySangnameList(Map<String, String> map) {
+	public List<Chart_DTO> chartPaymoneySangnameList(Map<String, String> map) {
 		return dao.chartPaymoneySangnameList(map);
 	}
 
 	@Override
-	public List<Map<String, String>> chartPaymoneySangnameYearList(String sangname) {
+	public List<Chart_DTO> chartPaymoneySangnameYearList(String sangname) {
 		return dao.chartPaymoneySangnameYearList(sangname);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPaymoneyList(String year) {
+	public List<Chart_DTO> chartAllPaymoneyList(String year) {
 		return dao.chartAllPaymoneyList(year);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPaymoneyYearList() {
+	public List<Chart_DTO> chartAllPaymoneyYearList() {
 		return dao.chartAllPaymoneyYearList();
 	}
 
 	@Override
-	public List<Map<String, String>> chartPyegicntSangnameList(Map<String, String> map) {
+	public List<Chart_DTO> chartPyegicntSangnameList(Map<String, String> map) {
 		return dao.chartPyegicntSangnameList(map);
 	}
 
 	@Override
-	public List<Map<String, String>> chartPyegicntSangnameYearList(String sangname) {
+	public List<Chart_DTO> chartPyegicntSangnameYearList(String sangname) {
 		return dao.chartPyegicntSangnameYearList(sangname);
 	}
 
 	@Override
-	public List<Map<String, String>> chartPyegiPriceList(Map<String, String> map) {
+	public List<Chart_DTO> chartPyegiPriceList(Map<String, String> map) {
 		return dao.chartPyegiPriceList(map);
 	}
 
 	@Override
-	public List<Map<String, String>> chartPyegiPriceYearList(String sangname) {
+	public List<Chart_DTO> chartPyegiPriceYearList(String sangname) {
 		return dao.chartPyegicntSangnameYearList(sangname);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPyegicntList(String year) {
+	public List<Chart_DTO> chartAllPyegicntList(String year) {
 		return dao.chartAllPyegicntList(year);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPyegicntYearList() {
+	public List<Chart_DTO> chartAllPyegicntYearList() {
 		return dao.chartAllPyegicntYearList();
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPyegiPriceList(String year) {
+	public List<Chart_DTO> chartAllPyegiPriceList(String year) {
 		return dao.chartAllPyegiPriceList(year);
 	}
 
 	@Override
-	public List<Map<String, String>> chartAllPyegiPriceYearList() {
+	public List<Chart_DTO> chartAllPyegiPriceYearList() {
 		return dao.chartAllPyegiPriceYearList();
+	}
+
+	@Override
+	public List<Product_DTO> selSangName() {
+		return dao.selSangName();
 	}
 
 }

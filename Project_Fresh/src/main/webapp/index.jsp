@@ -11,5 +11,6 @@
 <a href="./paging.do">집에 가소 어서 가소</a>
 <a href="./jumun.do">주문 테스트용</a>
 <a href="./product.do">상품관리 Test</a>
+<a href="./gochart.do">차트조회</a>
 </body>
 </html>
