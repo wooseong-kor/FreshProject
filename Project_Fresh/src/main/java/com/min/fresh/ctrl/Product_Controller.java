@@ -1,0 +1,77 @@
+package com.min.fresh.ctrl;
+
+import java.util.List;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.min.fresh.dto.Jaego_DTO;
+import com.min.fresh.dto.Product_DTO;
+import com.min.fresh.model.IProductService;
+
+@Controller
+public class Product_Controller {
+	
+	private Logger log = LoggerFactory.getLogger(Product_Controller.class);
+	
+	@Autowired
+	private IProductService service;
+	
+	@RequestMapping(value = "/product.do", method = RequestMethod.GET)
+	public String product() {
+		log.info("★★★★★ 상품관리 페이지 이동 ★★★★★");
+		return "ProductManagement";
+	}
+	
+	@RequestMapping(value = "/productJSON.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String productJqgrid () {
+		log.info("★★★★★ 상품 JSON ★★★★★");
+		JSONObject json = null;
+		List<Product_DTO> lists = service.allProductList();
+		json = obejctJSON(lists); // 상품조회결과를 json에 담는다.
+		return json.toString();
+	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	private JSONObject obejctJSON (List<Product_DTO> lists) {
+		JSONObject json = new JSONObject(); // {}
+		JSONArray jlists = new JSONArray(); // []
+		JSONObject jdto = null; // [{},{},{}]
+		
+		for (Product_DTO dto : lists) {
+			jdto = new JSONObject();
+			jdto.put("sangcode", dto.getSangcode()); // 상품코드
+			jdto.put("sangname", dto.getSangname()); // 상품이름
+			jdto.put("price", dto.getPrice()); //상품가격
+			jdto.put("sangstat", dto.getSangstat()); //상품상태
+			jlists.add(jdto); // []안에 {},{} 넣기 => [{},{},{}]
+		}
+		json.put("productJaegoList", jlists);
+		return json;
+	}
+	/**
+	 * 상품 판매가, 상태 수정
+	 * @param jDto 재고정보
+	 * @param pDto 상품정보
+	 * @return 상품정보 그리드
+	 */
+	@RequestMapping(value = "/productEdit.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String productEdit(Jaego_DTO jDto, Product_DTO pDto) {
+		jDto.setProduct_DTO(pDto);
+		log.info("\t★★★★★Edit확인 : \n" + "★★재고DTO확인 : " + jDto.toString() +
+				"\n★★상품DTO확인 : " + pDto.toString());
+		int pEdit = service.updateProductPriceSangstat(pDto); // 상품 - 판매가, 상태 수정
+		return (pEdit > 0)?"redirect:/productJSON.do":"redirect:/productJSON.do";
+	}
+
+	
+}

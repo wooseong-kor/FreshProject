@@ -1,0 +1,320 @@
+package com.min.fresh.ctrl;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.google.gson.JsonObject;
+import com.min.fresh.dto.AddrList_DTO;
+import com.min.fresh.dto.Hoogi_DTO;
+import com.min.fresh.dto.Member_DTO;
+import com.min.fresh.dto.QA_GO_DTO;
+import com.min.fresh.dto.RowNum_DTO;
+import com.min.fresh.model.IBoardServiceDao;
+import com.min.fresh.model.IMemberService;
+import com.min.fresh.model.IPagingService;
+
+@Controller
+public class board_Controller {
+	//마이페이지,게시판 컨트롤러
+	private Logger log=LoggerFactory.getLogger(board_Controller.class);
+	
+	@Autowired
+	private IBoardServiceDao service;
+	
+	@Autowired
+	private IMemberService mservice;
+	
+	@Autowired
+	private IPagingService pservice;
+	
+	//배송지 관리
+	//배송지 추가하기(배송지 이름,연락처,주소 )
+	@RequestMapping(value = "/insertAddrlist.do", method = RequestMethod.GET)
+	public String insertAddrlist() {
+		log.info("insertAddrlist 배송지 등록폼 이동", new Date());
+		return "insertAddrlist";
+	}
+
+	// 배송지 추가 입력 폼
+	@RequestMapping(value = "/insertAddrlistForm.do", method = RequestMethod.POST,produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String insertAddrlistForm(AddrList_DTO aDto) {
+		log.info("insertAddrlistForm 배송지 등록", aDto);
+		String id=aDto.getId();
+		log.info("countMemberAddrList 배송지 갯수",id);
+		int n=service.countMemberAddrList(id);
+		System.out.println("countmemberaddlist="+n);
+		if (n<3) {
+			boolean isc=service.insertAddrlist(aDto);
+			System.out.println("배송지 3개 이하. 등록됨");
+			return "배송지 3개 이하. 등록됨";
+		} else {
+			System.out.println("배송지 3개 이상. 등록안됨");
+			return "배송지 3개 이상. 등록안됨";
+		}
+	}
+	//배송지 수정 폼
+	@RequestMapping(value = "/updateAddrlist.do", method = RequestMethod.GET)
+	public String updateAddrlist(AddrList_DTO aDto) {
+		log.info("updateAddrlist 배송지 수정");
+		return "updateAddrlist";
+	}
+	//배송지 수정 
+	@RequestMapping(value = "/updateAddrlistForm.do", method = RequestMethod.POST)
+	public String updateAddrlistForm(AddrList_DTO aDto) {
+		log.info("updateAddrlistForm 배송지 수정");
+		boolean isc=service.updateAddrlist(aDto);
+		return isc?"redirect:/updateAddrlist.do":"redirect:/updateAddrlist.do";
+	}
+	//배송지 삭제
+	@RequestMapping(value = "/deleteAddrlist.do", method = RequestMethod.GET)
+	public String deleteAddrlist(String id,String bsgcode) {
+		log.info("deleteAddrlist 배송지 삭제", id,bsgcode);
+		boolean isc=service.deleteAddrlist(bsgcode, id);
+		return "redirect:/insertAddlist.do";
+	}
+	//배송지 조회
+	@RequestMapping(value = "/addrlistIdList.do", method = RequestMethod.GET)
+	public String addrlistIdList(String id,Model model) {
+		log.info("addrlistIdList 배송지 목록 조회",id);
+		List<AddrList_DTO> aDto=service.addrlistIdList(id);
+		model.addAttribute("aDto",aDto);
+		return "addrlistIdList";
+	}
+	//배송지 상세조회
+	@RequestMapping(value = "/addrListOne.do", method = RequestMethod.GET)
+	public String addrListOne(Model model,HttpServletRequest req) {
+		log.info("addrListOne 배송지 상세 조회");
+		String id=req.getParameter("id");
+		String bsgcode=req.getParameter("bsgcode");
+		Map<String,Object> map=new HashMap<String, Object>();
+		map.put("id",id);
+		map.put("bsgcode",bsgcode);
+		log.info(id,bsgcode);
+		AddrList_DTO aDto=service.addrListOne(map);
+		System.out.println(aDto);
+		model.addAttribute("aDto", aDto);
+		return "addrListOne";
+	}
+	//QnA
+	//QnA 글 작성
+	@RequestMapping(value = "/insertQago.do", method = RequestMethod.GET)
+	public String insertQago() {
+		log.info("insertQago 글 작성 이동");
+		return "insertQago";
+	}
+	//QnA 글 작성 에디터
+	@RequestMapping(value = "/insertQagoImg.do", method = RequestMethod.POST)
+	public void insertQagoImg(HttpServletRequest req,HttpServletResponse resp,
+			@RequestParam MultipartFile upload) throws IOException {
+		log.info("insertQagoImg 이미지 업로드");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html;charset=UTF-8");
+		OutputStream out=null;//파일의 데이터를 저장할 경로에 바이트 형태로 보내주는 스트림
+		PrintWriter printWriter=null;//출력을 지원해주는 스트림
+		JsonObject json=new JsonObject();//json으로 사용하기 위해.
+		
+		String filename=upload.getOriginalFilename();//화면에서 등록한 파일을 담은 파라미터
+		
+		try {
+			byte[] bytes=upload.getBytes();//byte를 사용하기 때문
+			//상대경로(was에 저장되는 경로 
+			String attachPath="C:\\eclipse_fresh\\eclipse-jee-2019-09-R-win32-x86_64\\eclipse\\workspace_fresh\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Project_Fresh\\image\\";
+			//파일이 업로드 되는 경로(상대
+			String uploadPath=attachPath.replace("/", "\\")+filename;
+			
+			System.out.println(filename);
+			
+			out=new FileOutputStream(new File(uploadPath));
+			out.write(bytes);
+			
+			System.out.println(out);
+			
+			printWriter = resp.getWriter();
+			String fileUrl="http://localhost:8099/Project_Fresh/image/"+filename;
+			System.out.println(fileUrl);
+			
+			json.addProperty("uploaded",1);
+			json.addProperty("fileName", filename);
+			json.addProperty("url", fileUrl);
+
+			printWriter.println(json);
+			req.setAttribute("fileUrl", fileUrl);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally {
+			if (out != null) {
+				out.close();
+			}
+			if (printWriter !=null) {
+				printWriter.close();
+			}
+		}
+		
+		
+		
+	}
+	@RequestMapping(value = "/QagoWrite.do",method=RequestMethod.POST)
+	public String QagoWrite(QA_GO_DTO dto,HttpSession session) {
+		log.info("QagoWrite",dto);
+		session.getAttribute("dto");
+		dto.setId(dto.getId());
+		boolean isc= service.insertQago(dto);
+		return isc?"redirect:/QagoWrite.do":"redirect:/QagoWrite.do";
+	}
+	
+	//QnA 글 수정 입력
+	@RequestMapping(value = "/updateQago.do", method = RequestMethod.GET)
+	public String updateQago() {
+		log.info("updateQago 글 작성 폼 입력");
+		return "updateQagoForm";
+	}
+	//QnA 글 수정 등록
+	@RequestMapping(value = "/updateQagoForm.do", method = RequestMethod.POST)
+	public String updateQagoForm(QA_GO_DTO qDto) {
+		log.info("updateQagoForm 글 작성 등록",qDto);
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("title", qDto.getTitle());
+		map.put("content", qDto.getContent());
+		map.put("seq", qDto.getSeq());
+		boolean isc=service.updateQago(qDto);
+		return isc?"redirect:/updateQago.do":"redirect:/updateQago.do";
+	}
+	//QnA,공지사항 글 삭제
+	@RequestMapping(value = "/deleteQago.do", method = RequestMethod.GET)
+	public String deleteQago(int seq) {
+		log.info("deleteQago 글 삭제",seq);
+		boolean isc=service.deleteQago(seq);
+		return isc?"redirect:/updateQago.do":"redirect:/updateQago.do";
+	}
+	//QnA,공지 글 상세 조회
+	@RequestMapping(value = "/qagoOne.do", method = RequestMethod.GET)
+	public String qagoOne(int seq,Model model) {
+		log.info("qagoOne 글 상세조회",seq);
+		QA_GO_DTO qDto=service.qagoOne(seq);
+		model.addAttribute("qDto", qDto);
+		return "qagoOne";
+	}
+	//QnA 답글 작성
+	@RequestMapping(value = "/insertAnswer.do", method = RequestMethod.GET)
+	public String insertAnswer() {
+		log.info("insertAnswer 답글 등록");
+		return "insertAnswer";
+	}
+	//QnA 답글 작성
+	@RequestMapping(value = "/insertAnswerForm.do", method = RequestMethod.GET)
+	public String insertAnswerForm(QA_GO_DTO qDto) {
+		log.info("insertAnswerForm 답글 등록",qDto);
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("seq",qDto.getSeq());
+		map.put("content",qDto.getContent());
+		boolean isc=service.insertAnswer(map);
+		return isc?"redirect:/insertAnswer.do":"redirect:/insertAnswer.do";
+	}
+	//QnA 답글 수정
+	@RequestMapping(value = "/updateAnswer.do", method = RequestMethod.GET)
+	public String updateAnswer(QA_GO_DTO qDto) {
+		log.info("updateAnswer 답글 수정",qDto);
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("seq", qDto.getSeq());
+		map.put("title", qDto.getTitle());
+		map.put("content", qDto.getContent());
+		boolean isc=service.updateAnswer(map);
+		return isc?"redirect:/updateAnswer.do":"redirect:/updateAnswer.do";
+	}
+	//QnA 답변 글 삭제
+	@RequestMapping(value = "/deleteAnswer.do", method = RequestMethod.GET)
+	public String deleteAnswer(int seq) {
+		log.info("deleteAnswer 답글 삭제",seq);
+		boolean isc=service.deleteAnswer(seq);
+		return isc?"redirect:/updateAnswer.do":"redirect:/updateAnswer.do";
+	}
+	//QnA 답변 글 조회
+	@RequestMapping(value = "/answerOne.do",method = RequestMethod.GET)
+	public String answerOne(int seq,Model model) {
+		log.info("answerOne 상세조회",seq);
+		QA_GO_DTO qDto=service.answerOne(seq);
+		model.addAttribute("qDto");
+		return "answerOne";
+	}
+	//페이징(관리자용 qa 글 목록)
+	@RequestMapping(value = "/pagingTest.do",method = RequestMethod.GET)
+	public String pagingTest(Model model) {
+		log.info("paging 조회");
+		RowNum_DTO rDto=new RowNum_DTO(); //페이징 dto
+		rDto.setTotal(pservice.countAllQa());//total=>count 
+		int count=rDto.getCount(); //페이지 갯수
+		System.out.println(count);
+		System.out.println(rDto);
+		List<QA_GO_DTO> lists=pservice.allQaList(rDto);
+		model.addAttribute("lists", lists);
+		model.addAttribute("count", count);
+		return "";
+	}
+	//상품 후기
+	//상품 후기 등록
+	@RequestMapping(value = "/insertHoogi.do",method = RequestMethod.GET)
+	public String insertHoogi() {
+		log.info("insertHoogi 후기 입력");
+		return "insertHoogi";
+	} 
+	//상품 후기 등록
+	@RequestMapping(value = "/insertHoogiForm.do",method = RequestMethod.POST)
+	public String insertHoogiForm(Hoogi_DTO hDto) {
+		log.info("insertHoogiForm 후기 입력",hDto);
+		boolean isc=service.insertHoogi(hDto);
+		return "";
+	}
+	//상품  후기 수정
+	@RequestMapping(value = "/updateHoogi.do",method = RequestMethod.GET)
+	public String updateHoogi(Hoogi_DTO hDto) {
+		log.info("updateHoogi 후기 수정",hDto);
+		boolean isc=service.updateHoogi(hDto);
+		
+		return isc?"성공":"실패";
+	}
+	
+	//상품 후기 상세 조회
+		@RequestMapping(value = "/hoogiOne.do",method = RequestMethod.GET)
+		public String hoogiOne(Model model,String sangpgnum) {
+			log.info("hoogiOne 후기 상세");
+			Hoogi_DTO hDto=new Hoogi_DTO();
+			Map<String, Object> map=new HashMap<String, Object>();
+			map.put("id", hDto.getId());
+			map.put("seq", hDto.getSeq());
+			return "";
+		}
+	//상품 상세 조회
+	@RequestMapping(value = "/jumunpageDeepOne.do",method = RequestMethod.GET)
+	public String jumunpageDeepOne() {
+		
+		return "";
+	}
+	
+	
+	
+	
+}

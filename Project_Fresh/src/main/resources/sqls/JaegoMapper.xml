@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.IJaegoDao">
+
+<resultMap type="com.min.fresh.dto.Jaego_DTO" id="JaegoMap">
+	<result column="JAEGOCODE" property="jaegocode"/>
+	<result column="SANGCODE" property="sangcode"/>
+	<result column="JAEGOCNT" property="jaegocnt"/>
+	<result column="JAEGOSTAT" property="jaegostat"/>
+	<collection property="product_DTO" resultMap="ProductMap"/>
+</resultMap>
+<resultMap type="com.min.fresh.dto.Product_DTO" id="ProductMap">
+	<result column="SANGCODE" property="sangcode"/>
+	<result column="SANGNAME" property="sangname"/>
+	<result column="PRICE" property="price"/>
+	<result column="SANGSTAT" property="sangstat"/>
+</resultMap>
+
+<!-- Good 상태인 재고 개수-->
+<select id="countAllGoodJaego" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JAEGO WHERE JAEGOSTAT = 'GOOD'
+</select>
+<!-- Good 상태인 재고 페이징-->
+<select id="allGoodJaegoList" parameterType="RowNum" resultMap="JaegoMap">
+SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
+(SELECT ROWNUM,JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
+(SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM JAEGO JOIN PRODUCT USING(SANGCODE) ORDER BY SANGNAME))
+WHERE JAEGOSTAT = 'GOOD' AND ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 입고 개수-->
+<select id="countAllIpgo" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM IPGO
+</select>
+<!-- 입고 페이징-->
+<select id="allIpgoList" parameterType="RowNum" resultType="Ipgo">
+SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
+(SELECT ROWNUM,IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
+(SELECT IPGONUM,JAEGOCODE,TO_CHAR(IPGODATE,'YYYYMMDD') IPGODATE,IPGOCNT,TO_CHAR(EXPDATE,'YYYYMMDD') EXPDATE FROM IPGO ORDER BY IPGODATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- 폐기 개수-->
+<select id="countAllPyegi" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PYEGI
+</select>
+<!-- 폐기 페이징-->
+<select id="allPyegiList" parameterType="RowNum" resultType="Pyegi">
+SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
+(SELECT ROWNUM,PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
+(SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM PYEGI))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+
+<!-- 재고 - 재고정보를 입력한다. -->
+<insert id="insertJaego" parameterType="Jaego">
+INSERT INTO JAEGO(JAEGOCODE,SANGCODE,JAEGOCNT,JAEGOSTAT) 
+VALUES('JA'||LPAD(JAEGO_SEQ.NEXTVAL,'8','0') ,#{sangcode},#{jaegocnt},'GOOD')
+</insert>
+<!-- 입고 - 입고정보를 입력한다 -->
+<insert id="insertIpgo" parameterType="Ipgo">
+INSERT INTO IPGO(IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE)
+ VALUES('IP'||LPAD(IPGO_SEQ.NEXTVAL,'8','0'),#{jaegocode},SYSDATE,#{ipgocnt},SYSDATE+30)
+</insert>
+<!-- 재고 - 출고 (수정) -->
+<update id="updateJaegoMinus" parameterType="java.lang.String">
+UPDATE JAEGO J SET JAEGOCNT = (SELECT JAEGOCNT-JAE.JUM FROM
+  (SELECT JU.JUMCNT JUM
+  FROM PAYHISTORY P , JUMUN JU WHERE P.JUMUNNUM = JU.JUMUNNUM AND P.PAYNUM = #{paynum}) JAE)
+  WHERE SANGCODE = (SELECT S.SANGCODE FROM PAYHISTORY P,JUMUN JU,JUMUNPAGE S,PRODUCT SG WHERE P.PAYNUM = #{paynum}
+  AND P.JUMUNNUM = JU.JUMUNNUM 
+  AND JU.SANGPGNUM=S.SANGPGNUM 
+  AND SG.SANGCODE=S.SANGCODE)
+</update>
+<!-- 재고 - 폐기할 상품의 정보를 입력한다. -->
+<insert id="insertPyegi" parameterType="Pyegi">
+INSERT INTO PYEGI(PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU,PYEGIFLAG) 
+VALUES('PG'||TO_CHAR(SYSDATE,'YYYYMMDD')||LPAD(PYEGI_SEQ.NEXTVAL,'4','0'),#{jaegocode},#{pyegicnt},#{pyegisayu},'N')
+</insert>
+<!-- 재고 - 폐기처리된 수량만큼 재고량을 감소 시킨다. -->
+<update id="updateJaecountPyegiOne" parameterType="java.lang.String">
+UPDATE JAEGO J
+SET J.JAEGOCNT = J.JAEGOCNT - (SELECT P.PYEGICNT 
+	FROM PYEGI P 
+	WHERE P.PYEGINUM =#{pyeginum}
+	AND P.JAEGOCODE=J.JAEGOCODE 
+	AND P.PYEGIFLAG = 'N')
+WHERE J.JAEGOCODE = (SELECT P.JAEGOCODE
+	FROM PYEGI P 
+	WHERE P.PYEGINUM=#{pyeginum}
+	AND P.JAEGOCODE=J.JAEGOCODE 
+	AND P.PYEGIFLAG = 'N')
+</update>
+<!-- 재고 - 재고량에 반영된 폐기품의 상태를 변경한다. -->
+<update id="updatePyegiflagOne" parameterType="java.lang.String">
+UPDATE PYEGI 
+SET PYEGIFLAG = 'Y'
+WHERE PYEGINUM = #{pyeginum}
+</update>
+<!-- 재고 - 재고상태 수정 (출고 불가) -->
+<update id="updateJaegostatOne">
+UPDATE JAEGO
+SET JAEGOSTAT='BAD'
+WHERE JAEGOCNT = 0
+</update>
+
+<!-- 코드별 조회 -->
+<!-- <select id="jaegoCodeList" resultMap="JaegoMap">
+SELECT S.SANGNAME,S.SANGCODE,S.PRICE,S.SANGSTAT,J.JAEGOCNT,J.JAEGOCODE FROM PRODUCT S, JAEGO J 
+ WHERE S.SANGCODE = J.SANGCODE ORDER BY SANGNAME
+</select>
+유통기한별 조회
+<select id="jaegoExpdateList" resultMap="">
+SELECT S.SANGNAME,J.JAEGOCNT,J.JAEGOCODE,I.IPGOCNT,I.IPGODATE,I.EXPDATE  FROM PRODUCT S,JAEGO J,IPGO I 
+WHERE S.SANGCODE=J.SANGCODE AND I.JAEGOCODE=J.JAEGOCODE
+</select> 비수용여부 결정중 -->
+
+
+</mapper>

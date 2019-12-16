@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.IChartDao">
+
+	<!-- 모든것 alias추가 쿼리테스트 반영해야함 -->
+	<!-- 품목별 특정년도  월별 판매량  -->
+	<select id="chartJumcntSangnameList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT TO_CHAR(JUMDATE, 'YYYYMM') MONTH, SUM(J.JUMCNT) CNT  
+	FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+					FROM JUMUNPAGE JP, PRODUCT P
+					WHERE JP.SANGCODE = P.SANGCODE) SA
+	WHERE SA.SANGPGNUM = J.SANGPGNUM
+	AND TO_CHAR(JUMDATE, 'YYYY') = #{year}
+	AND SA.NAME = #{sangname}
+	GROUP BY TO_CHAR(JUMDATE, 'YYYYMM')
+	</select>
+
+	<!-- 품목별 년도만 판매량  -->
+	<select id="chartJumcntSangnameYearList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT TO_CHAR(JUMDATE, 'YYYY') YEAR, SUM(J.JUMCNT) CNT  
+	FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+					FROM JUMUNPAGE JP, PRODUCT P
+					WHERE JP.SANGCODE = P.SANGCODE) SA
+	WHERE SA.SANGPGNUM = J.SANGPGNUM
+	AND SA.NAME = #{sangname}
+	GROUP BY TO_CHAR(JUMDATE, 'YYYY')
+	</select>
+	
+	<!-- 총제품 년도의 월별 판매량 -->
+	<select id="chartAllJumcntSangnameList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT TO_CHAR(JUMDATE, 'YYYYMM') MONTH, SUM(JUMCNT) CNT
+	FROM JUMUN
+	WHERE TO_CHAR(JUMDATE,'YYYY') = #{year}
+	GROUP BY TO_CHAR(JUMDATE, 'YYYYMM')
+	</select>
+	
+	<!-- 총제품 년도 판매량 총합 -->
+	<select id="chartAllJumcntSangnameYearList" resultType="java.util.HashMap">
+	SELECT TO_CHAR(JUMDATE,'YYYY') YEAR, SUM(JUMCNT) CNT
+	FROM JUMUN
+	GROUP BY TO_CHAR(JUMDATE,'YYYY')
+	</select>
+	
+	<!-- 한제품의 특정년도 월별 판매액 -->
+	<select id="chartPaymoneySangnameList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT TO_CHAR(P.PAYDAY, 'YYYYMM') MONTH, SUM(P.PAYMONEY) MONEY
+	FROM PAYHISTORY P, (SELECT SA.NAME SANGNAME, J.JUMCNT JUMCNT, J.JUMUNNUM JUMUNNUM    
+				FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+								FROM JUMUNPAGE JP, PRODUCT P
+								WHERE JP.SANGCODE = P.SANGCODE) SA
+				WHERE SA.SANGPGNUM = J.SANGPGNUM) SA
+	WHERE P.JUMUNNUM = SA.JUMUNNUM
+	AND TO_CHAR(P.PAYDAY, 'YYYY') = #{year}
+	AND SA.SANGNAME = #{sangname}
+	GROUP BY TO_CHAR(P.PAYDAY, 'YYYYMM')
+	</select>
+	
+	<!-- 한제품의 년도별 총 판매액 -->
+	<select id="chartPaymoneySangnameYearList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT TO_CHAR(P.PAYDAY, 'YYYY') YEAR, SUM(P.PAYMONEY) MONEY
+	FROM PAYHISTORY P, (SELECT SA.NAME SANGNAME, J.JUMCNT JUMCNT, J.JUMUNNUM JUMUNNUM    
+				FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+								FROM JUMUNPAGE JP, PRODUCT P
+								WHERE JP.SANGCODE = P.SANGCODE) SA
+				WHERE SA.SANGPGNUM = J.SANGPGNUM) SA
+	WHERE P.JUMUNNUM = SA.JUMUNNUM
+	AND SA.SANGNAME = #{sangname}
+	GROUP BY TO_CHAR(P.PAYDAY, 'YYYY')
+	</select>
+	
+	<!-- 총제품 특정년도 월별 금액 통계 -->
+	<select id="chartAllPaymoneyList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT TO_CHAR(P.PAYDAY, 'YYYYMM') MONTH, SUM(P.PAYMONEY) MONEY
+	FROM PAYHISTORY P, (SELECT SA.NAME SANGNAME, J.JUMCNT JUMCNT, J.JUMUNNUM JUMUNNUM    
+				FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+								FROM JUMUNPAGE JP, PRODUCT P
+								WHERE JP.SANGCODE = P.SANGCODE) SA
+				WHERE SA.SANGPGNUM = J.SANGPGNUM) SA
+	WHERE P.JUMUNNUM = SA.JUMUNNUM
+	AND TO_CHAR(P.PAYDAY, 'YYYY') = #{year}
+	GROUP BY TO_CHAR(P.PAYDAY, 'YYYYMM')
+	</select>
+	
+	<!-- 총 판매액 년도별 -->
+	<select id="chartAllPaymoneyYearList" resultType="java.util.HashMap">
+	SELECT TO_CHAR(P.PAYDAY, 'YYYY') YEAR, SUM(P.PAYMONEY) MONEY
+	FROM PAYHISTORY P, (SELECT SA.NAME SANGNAME, J.JUMCNT JUMCNT, J.JUMUNNUM JUMUNNUM    
+				FROM JUMUN J, (SELECT JP.SANGPGNUM SANGPGNUM, SANGNAME NAME 
+								FROM JUMUNPAGE JP, PRODUCT P
+								WHERE JP.SANGCODE = P.SANGCODE) SA
+				WHERE SA.SANGPGNUM = J.SANGPGNUM) SA
+	WHERE P.JUMUNNUM = SA.JUMUNNUM
+	GROUP BY TO_CHAR(P.PAYDAY, 'YYYY')
+	</select>
+	
+	<!-- 제품별 총 폐기량 특정년도 월별 -->
+	<select id="chartPyegicntSangnameList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,6) MONTH, SUM(J.PYEGICNT) CNT 
+	FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+						FROM PYEGI P, JAEGO J
+							WHERE P.JAEGOCODE = J.JAEGOCODE) J
+	WHERE P.SANGCODE = J.SANGCODE
+	AND SUBSTR(J.PYEGINUM,3,4) = #{year}
+	AND P.SANGNAME = #{sangname}
+	GROUP BY SUBSTR(J.PYEGINUM,3,6)
+	</select>
+	
+	<!-- 제품별 총 폐기량 년도별 -->
+	<select id="chartPyegicntSangnameYearList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,4) YEAR, SUM(J.PYEGICNT) CNT 
+	FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+						FROM PYEGI P, JAEGO J
+							WHERE P.JAEGOCODE = J.JAEGOCODE) J
+	WHERE P.SANGCODE = J.SANGCODE
+	AND P.SANGNAME = #{sangname}
+	GROUP BY SUBSTR(J.PYEGINUM,3,4)
+	</select>
+	
+	<!-- 제품별 총 폐기금액 특정년도 월별 -->
+	<select id="chartPyegiPriceList" parameterType="java.util.Map" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,6) MONTH, SUM(J.PYEGICNT*P.PRICE) MONEY
+	FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+						FROM PYEGI P, JAEGO J
+							WHERE P.JAEGOCODE = J.JAEGOCODE) J
+	WHERE P.SANGCODE = J.SANGCODE
+	AND SUBSTR(J.PYEGINUM,3,4) = #{year}
+	AND P.SANGNAME = #{sangname}
+	GROUP BY SUBSTR(J.PYEGINUM,3,6)
+	</select>
+	
+	<!-- 제품별 총 폐기금액 년도별 -->
+	<select id="chartPyegiPriceYearList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,4) YEAR, SUM(J.PYEGICNT*P.PRICE) MONEY 
+	FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+						FROM PYEGI P, JAEGO J
+							WHERE P.JAEGOCODE = J.JAEGOCODE) J
+	WHERE P.SANGCODE = J.SANGCODE
+	AND P.SANGNAME = #{sangname}
+	GROUP BY SUBSTR(J.PYEGINUM,3,4)
+	</select>
+	
+	<!-- 제품 총 폐기량 특정년도의 월별 -->
+	<select id="chartAllPyegicntList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,6) MONTH , SUM(J.PYEGICNT) CNT
+    FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+                                                FROM PYEGI P, JAEGO J
+                                                        WHERE P.JAEGOCODE = J.JAEGOCODE) J
+    WHERE P.SANGCODE = J.SANGCODE
+    AND SUBSTR(J.PYEGINUM,3,4) = #{year}
+    GROUP BY SUBSTR(J.PYEGINUM,3,6)
+	</select>
+	
+	<!-- 제품 총 폐기량 년도별 -->
+	<select id="chartAllPyegicntYearList" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,4) YEAR, SUM(J.PYEGICNT) MONTH  
+    FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+                                                FROM PYEGI P, JAEGO J
+                                                        WHERE P.JAEGOCODE = J.JAEGOCODE) J
+    WHERE P.SANGCODE = J.SANGCODE
+    GROUP BY SUBSTR(J.PYEGINUM,3,4)
+	</select>
+	
+	<!-- 총 폐기 금액 특정년도 월별 -->
+	<select id="chartAllPyegiPriceList" parameterType="java.lang.String" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,6) MONTH, SUM(J.PYEGICNT*P.PRICE) MONEY  
+    FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+                                                FROM PYEGI P, JAEGO J
+                                                        WHERE P.JAEGOCODE = J.JAEGOCODE) J
+    WHERE P.SANGCODE = J.SANGCODE
+    AND SUBSTR(J.PYEGINUM,3,4) = #{year}
+    GROUP BY SUBSTR(J.PYEGINUM,3,6)
+	</select>
+	
+	<!-- 총 폐기금액 년도별 -->
+	<select id="chartAllPyegiPriceYearList" resultType="java.util.HashMap">
+	SELECT SUBSTR(J.PYEGINUM,3,4) YEAR, SUM(J.PYEGICNT*P.PRICE) MONEY
+    FROM PRODUCT P, (SELECT P.PYEGICNT PYEGICNT, J.SANGCODE SANGCODE, P.PYEGINUM PYEGINUM
+                                                FROM PYEGI P, JAEGO J
+                                                        WHERE P.JAEGOCODE = J.JAEGOCODE) J
+    WHERE P.SANGCODE = J.SANGCODE
+    GROUP BY SUBSTR(J.PYEGINUM,3,4)
+	</select>
+</mapper>

@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.IBoardDao">
+
+	<resultMap type="com.min.fresh.dto.Payhistory_DTO" id="PaymentMap">
+		<result column="PAYNUM" property="paynum" />
+		<result column="JUMUNNUM" property="jumunnum" />
+		<result column="COUSEQ" property="couseq" />
+		<result column="PAYWHAT" property="paywhat" />
+		<result column="PAYMONEY" property="paymoney" />
+		<result column="PAYDAY" property="payday" />
+		<result column="PAYDAY" property="payday" />
+		<result column="MILEAGE" property="mileage" />
+		<collection property="jumun_DTO" resultMap="JumunMap" />
+	</resultMap>
+
+	<resultMap type="com.min.fresh.dto.Jumun_DTO" id="JumunMap">
+		<result column="JUMUNNUM" property="jumunnum" />
+		<result column="ID" property="id" />
+		<result column="SANGPGNUM" property="sangpgnum" />
+		<result column="BSGCODE" property="bsgcode" />
+		<result column="JUMMONEY" property="jummoney" />
+		<result column="JUMCNT" property="jumcnt" />
+		<result column="JUMSTAT" property="jumstat" />
+		<result column="JUMDATE" property="jumdate" />
+		<collection property="jumunpage_DTO" resultMap="JPageMap" />
+	</resultMap>
+
+	<resultMap type="com.min.fresh.dto.Couponhistory_DTO" id="couponMap">
+		<result column="COUSEQ" property="couseq" />
+		<result column="COUCODE" property="coucode" />
+		<result column="ID" property="id" />
+		<result column="CNT" property="cnt" />
+		<result column="JGNALZA" property="jgnalza" />
+		<result column="USEFLAG" property="useflag" />
+		<result column="LIMITE" property="limite" />
+		<result column="COUNAME" property="couname" />
+		<result column="DISCOUNT" property="discount" />
+	</resultMap>
+	
+	<resultMap type="com.min.fresh.dto.Member_DTO" id="MemberPayMap">
+		<result column="ID" property="id" />
+		<result column="GRADE" property="grade" />
+		<result column="GCODE" property="gcode" />
+	</resultMap>
+
+	<resultMap type="com.min.fresh.dto.Jumunpage_DTO"
+		id="JPageMap">
+		<result column="SANGPGNUM" property="sangpgnum" />
+		<result column="SANGCODE" property="sangcode" />
+		<result column="SANGPNAME" property="sangpname" />
+		<result column="TITLE" property="title" />
+		<result column="CONTENT" property="content" />
+		<collection property="productImg_DTO" resultMap="PImgMap" />
+		<collection property="product_DTO" resultMap="ProductMap" />
+	</resultMap>
+
+	<resultMap type="com.min.fresh.dto.ProductImg_DTO"
+		id="PImgMap">
+		<result column="SEQ" property="seq" />
+		<result column="SANGPGNUM" property="sangpgnum" />
+		<result column="IMGNAME" property="imgname" />
+		<result column="SAVENAME" property="savename" />
+		<result column="IMGPATH" property="imgpath" />
+	</resultMap>
+
+	<resultMap type="com.min.fresh.dto.Product_DTO" id="ProductMap">
+		<result column="SANGCODE" property="sangcode" />
+		<result column="SANGNAME" property="sangname" />
+		<result column="PRICE" property="price" />
+		<result column="SANGSTAT" property="sangstat" />
+	</resultMap>
+
+	<!-- 사용자 쿠폰 내역 조회 -->
+	<select id="couhistoryList" resultType="java.util.LinkedHashMap" parameterType="java.lang.String">
+		SELECT
+		COUSEQ,COUCODE,ID,CNT,
+		JGNALZA ,USEFLAG ,
+		LIMITE ,COUNAME ,DISCOUNT
+		FROM COUPONHISTORY
+		JOIN MEMBER
+		USING(ID)
+		JOIN COUPON
+		USING(COUCODE)
+		WHERE ID=#{id}
+		ORDER BY JGNALZA
+	</select>
+	<!-- 사용자 등급 조회 -->
+	<select id="gradeList" parameterType="java.lang.String" resultMap="PaymentMap">
+		SELECT
+		SUM(PAYMONEY) PAYMONEY,GRADE
+		FROM MEMBER JOIN JUMUN
+		USING(ID)
+		JOIN PAYHISTORY
+		USING(JUMUNNUM)
+		JOIN GRADE
+		USING(GCODE)
+		WHERE ID=#{id}
+		</select>
+	<!-- 배송지 입력 -->
+	<insert id="insertAddrlist" parameterType="Addr">
+		INSERT INTO ADDRLIST(BSGCODE,ID,BSGNAME,JUSO,PHONE)
+		VALUES('BSG'||LPAD(BSG_SEQ.NEXTVAL,'4','0')
+		,#{id},#{bsgname},#{juso},#{phone})
+	</insert>
+	<!-- 배송지 수정 -->
+	<update id="updateAddrlist" parameterType="Addr">
+		UPDATE ADDRLIST SET BSGNAME=#{bsgname},JUSO=#{juso},
+		PHONE=#{phone} WHERE BSGCODE=#{bsgcode} AND ID=#{id}
+	</update> 
+	<!-- 배송지 삭제 -->
+	<delete id="deleteAddrlist" parameterType="java.lang.String">
+		DELETE FROM ADDRLIST
+		WHERE BSGCODE=#{bsgcode} AND ID=#{id}
+	</delete>
+	<!-- 배송지 목록 조회 -->
+	<select id="addrlistIdList" parameterType="java.lang.String"
+		resultType="java.util.LinkedHashMap">
+		SELECT ID,BSGCODE,BSGNAME,JUSO,PHONE
+		FROM ADDRLIST
+		WHERE ID=#{id}
+		ORDER BY BSGCODE
+	</select>
+	<!-- 아이디별 주소록 몇개인지 알려주는 쿼리(3개 이상이면 더 못만들게 화면에서 처리할 것)-->
+	<select id="countMemberAddrList" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM ADDRLIST WHERE ID =#{id}
+	</select>               
+<!-- 다른 매퍼로 이동 -->
+
+	<!-- 배송지 상세 조회 -->
+	<select id="addrListOne" parameterType="java.util.Map"
+		resultType="Addr">
+		SELECT M.ID,M.NAME,B.BSGNAME,B.JUSO,B.PHONE
+		FROM ADDRLIST B JOIN "MEMBER" M
+		ON B.ID=M.ID
+		WHERE M.ID=#{id} AND B.BSGCODE=#{bsgcode}
+	</select>
+	<!-- 주문내역 상세조회 -->
+	<select id="jumunMylist" parameterType="java.util.Map"
+		resultMap="PaymentMap">
+		SELECT ID,JUMUNNUM,PAYWHAT,
+		SANGPGNUM,JUMMONEY,
+		JUMCNT,JUMSTAT,JUMDATE
+		FROM JUMUN JOIN PAYHISTORY
+		USING(JUMUNNUM)
+		WHERE ID=#{id} AND JUMUNNUM=#{jumunnum}
+	</select>
+	<!-- 게시판 파일 업로드 -->
+	<insert id="insertFileimg" parameterType="QA_GO">
+		INSERT INTO FILEIMG(FILESEQ,SEQ,FILENAME,SAVENAME,FILEPATH,SAVEDATE)
+		VALUES(FILEIMG_SEQ.NEXTVAL,#{seq},#{filename},#{savename},SYSDATE)
+	</insert>
+	<!-- 게시판 파일 삭제 -->
+	<delete id="deleteFileimg" parameterType="java.lang.Integer">
+		DELETE FROM FILEIMG
+		WHERE FILESEQ=#{fileseq}
+	</delete>
+	<!-- QnA 글 작성 -->
+	<insert id="insertQago" parameterType="QA_GO">
+		INSERT INTO "QA/GO"(SEQ,ID,TITLE,CONTENT,REGDATE,GUBUN)
+		VALUES("SEQ_QA/GO".NEXTVAL,#{id},#{title},#{content},SYSDATE,'Q')
+	</insert>
+	<!-- QnA 글 수정 -->
+	<update id="updateQago" parameterType="QA_GO">
+		UPDATE "QA/GO" SET TITLE=#{title},CONTENT=#{content}
+		WHERE ID=#{id} AND SEQ=#{seq} AND GUBUN='Q'
+	</update>
+	<!-- QnA,공지 글 삭제 -->
+	<delete id="deleteQago" parameterType="java.lang.Integer">
+		DELETE FROM "QA/GO"
+		WHERE SEQ=#{seq}
+	</delete>
+	<!-- QnA,공지 글 상세 조회 -->
+	<select id="qagoOne" parameterType="java.lang.Integer" resultType="QA_GO">
+		SELECT SEQ,ID,TITLE,CONTENT,REGDATE
+		FROM "QA/GO"
+		WHERE SEQ=#{seq}
+	</select>
+	<!-- QnA 답변 글 작성 -->
+	<insert id="insertAnswer" parameterType="java.util.Map">
+		INSERT INTO ANSWER(SEQ,CONTENT,REGDATE)
+		VALUES(#{seq},#{content},SYSDATE)
+	</insert>
+	<!-- QnA 답변 글 수정 -->
+	<update id="updateAnswer" parameterType="java.util.Map">
+		UPDATE ANSWER SET TITLE=#{title},CONTENT=#{content}
+		WHERE SEQ=#{seq}
+	</update>
+	<!-- QnA 답변 글 삭제 -->
+	<delete id="deleteAnswer" parameterType="java.lang.Integer">
+		DELETE FROM ANSWER
+		WHERE SEQ=#{seq}
+	</delete>
+	<!-- QnA 답변 글 조회 -->
+	<select id="answerOne" parameterType="java.lang.Integer" resultType="QA_GO">
+		SELECT SEQ,CONTENT,REGDATE
+		FROM ANSWER
+		WHERE SEQ=#{seq}
+	</select>
+	<!--카테고리 별 상품 목록 조회 -->
+	<select id="jumunpageListScroll"
+		parameterType="java.lang.String" resultType="JPage">
+		SELECT S.SANGCODE,S.SANGNAME,G.SANGPNAME,G.TITLE,SI.IMGPATH FROM PRODUCT 
+		 S, JUMUNPAGE G,PRODUCTIMG SI WHERE S.SANGCODE LIKE #{sangcode}||'%'  
+		AND S.SANGCODE=G.SANGCODE AND G.SANGPGNUM = SI.SANGPGNUM
+	</select>
+	<!--상세품목 별 상품 목록조회 -->
+	<select id="jumunpageDeepListScroll" parameterType="java.lang.String" resultType="JPage">
+		SELECT S.SANGCODE,S.SANGNAME,G.SANGPNAME,G.TITLE,SI.IMGPATH FROM PRODUCT 
+		 S, JUMUNPAGE G,PRODUCTIMG SI WHERE S.SANGNAME LIKE '%'|| #{sangname}||'%' 
+		AND S.SANGCODE=G.SANGCODE AND G.SANGPGNUM = SI.SANGPGNUM
+
+	</select>
+	<!--사용자가 상품 검색 -->
+	<select id="searchJumunpageList" parameterType="java.lang.String" resultType="JPage">
+		SELECT S.SANGCODE,S.SANGNAME,G.SANGPNAME,G.TITLE,SI.IMGPATH FROM PRODUCT 
+		 S, JUMUNPAGE G,PRODUCTIMG SI WHERE S.SANGNAME LIKE '%'|| #{sangname}||'%' 
+		AND S.SANGCODE=G.SANGCODE AND G.SANGPGNUM = SI.SANGPGNUM
+	</select>
+	
+	<!-- 상품 상세 보기 -->
+	<select id="jumunpageDeepOne" parameterType="java.lang.String" resultMap="JPageMap">
+		SELECT J.CONTENT,J.SANGPGNUM,J.TITLE,D.SANGCODE,P.IMGPATH,
+		D.PRICE
+		FROM JUMUNPAGE J JOIN PRODUCTIMG P
+		ON J.SANGPGNUM=P.SANGPGNUM
+		
+		JOIN PRODUCT D ON J.SANGCODE=D.SANGCODE
+		WHERE SANGPGNUM=#{sangpgnum}
+	</select>
+	<!-- @@추가@@ 상품 수량 가져오기 -->
+	<select id="selectJaegoCnt" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT NVL(JAEGOCNT,0) FROM JAEGO
+	WHERE SANGCODE=#{sangcode}
+	</select>
+	<!-- 후기 입력 -->
+	<insert id="insertHoogi" parameterType="Hoogi">
+		INSERT INTO HOOGI(SEQ,SANGPGNUM,ID,TITLE,CONTENT,REGDATE)
+		VALUES(HOOGI_SEQ.NEXTVAL,#{sangpgnum},#{id},#{title},#{content},SYSDATE)
+	</insert>
+	<!-- 후기 삭제 -->
+	<delete id="deleteHoogi" parameterType="java.lang.Integer">
+		DELETE FROM HOOGI WHERE SEQ=#{seq}
+	</delete>
+	<!-- 후기 수정 -->
+	<update id="updateHoogi" parameterType="Hoogi">
+		UPDATE HOOGI SET TITLE=#{title},
+		CONTENT=#{content} WHERE ID=#{id}
+	</update>
+	<!-- 후기 페이지별 후기 개수 -->
+	<select id="countSangpgnumHoogi"
+		parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT COUNT(*) FROM HOOGI WHERE SANGPGNUM = #{sangpgnum}
+	</select>
+	<!-- 후기 페이지별 후기 페이징 -->
+	<select id="sangpgnumHoogiList" parameterType="java.util.Map"
+		resultType="Hoogi">
+		SELECT SEQ,ID,TITLE,CONTENT,REGDATE FROM
+		(SELECT ROWNUM,SEQ,ID,TITLE,CONTENT,REGDATE FROM
+		(SELECT SEQ,ID,TITLE,CONTENT,REGDATE FROM HOOGI WHERE SANGPGNUM=#{sangpgnum}
+		ORDER BY SEQ DESC))
+		WHERE ROWNUM BETWEEN #{first} AND #{last}
+	</select>
+	<!-- 후기 상세 조회 -->
+	<select id="hoogiOne" parameterType="java.util.Map"
+		resultType="Hoogi">
+		SELECT SEQ,SANGPGNUM,ID,TITLE,CONTENT,H.REGDATE
+		,P.IMGPATH
+		FROM HOOGI H JOIN JUMUNPAGE S
+		ON H.SANGPGNUM=S.SANGPGNUM
+		JOIN PRODUCTIMG P
+		ON P.SANGPGNUM=S.SANGPGNUM
+		WHERE H.ID=#{id} AND H.SEQ=#{seq}
+	</select>
+	<!-- 상품 구매페이지 입력 -->
+	<insert id="insertJumunpage" parameterType="JPage">
+		INSERT INTO JUMUNPAGE(SANGPGNUM,SANGCODE,SANGPNAME,TITLE,CONTENT)
+		VALUES(#{sangpgnum},#{sangcode},#{sangpname},#{title},#{content})
+	</insert>
+	<!-- 상품 이미지 입력 -->
+	<insert id="insertProductimg" parameterType="JPage">
+		INSERT INTO PRODUCTIMG(SEQ,SANGPGNUM,
+		IMGNAME,SAVENAME,IMGPATH)
+		VALUES(PRODUCTIMG_SEQ.NEXTVAL,#{sangpgnum},#{imgname},#{savename},#{imgpath})
+	</insert>
+	<!-- @@@@@쿼리테스트-장바구니 추가 @@@@@ -->
+	<!-- 장바구니 입력 -->
+	<insert id="cartInsert" parameterType="Member">
+		INSERT INTO CART(SEQ,ID,SANGPGNUM,CARTCNT)
+		VALUES(CART_SEQ.NEXTVAL,#{id},#{sangpgnum},#{cartcnt})
+	</insert>
+	<!-- 장바구니 수정 -->
+	<update id="cartUpdate" parameterType="Member">
+		UPDATE CART SET CARTCNT=#{cartcnt} WHERE ID=#{id} AND SEQ=#{seq}
+	</update>
+	
+	<!-- 장바구니 삭제 -->
+	<delete id="cartDelete" parameterType="java.lang.Integer">
+		DELETE FROM CART
+		WHERE SEQ=#{seq}
+	</delete>
+	<!-- 장바구니 목록 조회 -->	
+	<select id="memberCartList" parameterType="java.util.Map"
+	resultType="Member">
+	SELECT SEQ,SANGPGNUM,CARTCNT FROM
+	(SELECT ROWNUM,SEQ,SANGPGNUM,CARTCNT FROM
+	(SELECT SEQ,SANGPGNUM,CARTCNT FROM CART WHERE ID = #{id} ORDER BY SEQ DESC))
+	WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+</mapper>

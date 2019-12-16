@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+		<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<property name="locations">
+				<list>
+					<value>classpath:fresh.properties</value>
+				</list>
+			</property>
+		</bean>
+		 
+		<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+			<property name="driverClassName" value="${driver}"/>
+			<property name="username" value="${user}"/>
+			<property name="password" value="${pw}"/>
+			<property name="url" value="${url}"/>
+			<property name="defaultAutoCommit" value="true"/>
+		</bean>
+		
+		<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean"> 
+			<property name="dataSource" ref="dataSource"/>
+			<property name="configLocation" value="/WEB-INF/sqls/config.xml"/>
+		</bean>
+		
+		<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+			<constructor-arg index="0" ref="sqlSessionFactoryBean"/>
+		</bean>
+		
+		<bean id="dataSourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+			<property name="dataSource" ref="dataSource"/>
+		</bean>
+		
+		<bean id="tossAPI" class="com.min.fresh.utils.TossAPI">
+			<property name="apiKey" value="${apiKey}"/>
+			<property name="retUrl" value="${retUrl}"/>
+			<property name="retCancelUrl" value="${retCancelUrl}"/>
+		</bean>
+		
+<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+	<property name="host" value="${host}"/>
+	<property name="port" value="${port}"/>
+	<property name="username" value="${username}"/>
+	<property name="password" value="${password}"/>
+	
+	<property name="javaMailProperties">
+		<props>
+			<prop key="mail.debug">true</prop>
+			<prop key="mail.smtp.auth">true</prop>
+			<prop key="mail.transport.protocol">smtp</prop>
+			<prop key="mail.smtp.starttls.enable">true</prop>
+		</props>
+	</property>
+</bean>
+		
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+		<property name="defaultEncoding" value="UTF-8"/>
+	</bean>		
+		
+</beans>

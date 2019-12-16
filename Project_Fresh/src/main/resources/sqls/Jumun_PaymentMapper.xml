@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.IJumun_PaymentDao">
+
+<resultMap type="com.min.fresh.dto.Payhistory_DTO" id="PaymentMap">
+	<result column="PAYNUM" property="paynum"/>
+	<result column="JUMUNNUM" property="jumunnum"/>
+	<result column="COUSEQ" property="couseq"/>
+	<result column="PAYWHAT" property="paywhat"/>
+	<result column="PAYMONEY" property="paymoney"/>
+	<result column="PAYDAY" property="payday"/>
+	<result column="PAYDAY" property="payday"/>
+	<result column="MILEAGE" property="mileage"/>
+	<collection property="jumun_DTO" resultMap="JumunMap"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Jumun_DTO" id="JumunMap">
+	<result column="JUMUNNUM" property="jumunnum"/>
+	<result column="ID" property="id"/>
+	<result column="SANGPGNUM" property="sangpgnum"/>
+	<result column="BSGCODE" property="bsgcode"/>
+	<result column="JUMMONEY" property="jummoney"/>
+	<result column="JUMCNT" property="jumcnt"/>
+	<result column="JUMSTAT" property="jumstat"/>
+	<result column="JUMDATE" property="jumdate"/>
+</resultMap>
+
+
+<!-- 주문을 입력한다 -->
+<insert id="insertJumun" parameterType="Jumun">
+INSERT INTO JUMUN(JUMUNNUM,ID,SANGPGNUM,BSGCODE,JUMMONEY,JUMCNT,JUMDATE)
+VALUES( 'JU'||LPAD(JUMUN_SEQ.NEXTVAL,'8','0'),#{id},#{sangpgnum},#{bsgcode},#{jummoney},#{jumcnt},SYSDATE)
+</insert>
+
+<!-- 회원의 주문내역 조회 -->
+<!-- 회원별 주문 내역 수-->
+<select id="countMemberJumun" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUN WHERE ID=#{id}
+</select>
+
+<!-- 회원별 주문 내역 페이징-->
+<select id="memberJumunList" parameterType="java.util.Map" resultMap="JumunMap">
+SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
+(SELECT ROWNUM,JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
+(SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 전체 주문내역 수 관리자용-->
+<select id="countAllJumun" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUN
+</select>
+
+<!-- 전체 주문내역 페이징 관리자용 관리자용-->
+<select id="allJumunList" parameterType="RowNum" resultMap="JumunMap">
+SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
+(SELECT ROWNUM,JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
+(SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 배송지 보기 (주문내역,결제내역에서 배송지코드만 나오게 했는데 버튼을 누르면 상세내용이 아작스로 표출)-->
+<select id="addrListOne" parameterType="java.lang.String" resultType="Addr">
+SELECT BSGNAME,JUSO,PHONE FROM JUMUN JOIN ADDRLIST USING(BSGCODE) WHERE JUMUNNUM = #{jumunnum}
+</select>					<!-- 다른매퍼로 이동 -->
+
+
+
+<!-- 관리자, 회원 주문을 취소한다 회원은 결제 전에만 가능 -->
+<delete id="deleteJumun" parameterType="java.lang.String">
+DELETE JUMUN WHERE JUMUNNUM = #{jumunnum}
+</delete>
+
+<!-- 구매확정 진행시 교환불가하다 -->
+<update id="updateJumstatConfirm" parameterType="java.lang.String">
+UPDATE JUMUN SET JUMSTAT ='구매확정' WHERE JUMUNNUM =#{jumunnum}
+</update>
+
+<!-- 주문일자 기준 1개월 이내 가능하며, 이후 자동으로 확정 처리된다. -->
+<update id="updateJumstatAutoConfirm">
+UPDATE JUMUN J
+SET JUMSTAT ='구매확정'
+WHERE JUMSTAT = '입금완료' 
+     AND JUMDATE >  (SELECT P.PAYDAY FROM PAYHISTORY P WHERE PAYSTAT = '결제 완료' AND J.JUMUNNUM = P.JUMUNNUM)+30
+</update>
+     
+<!-- 돈이 결제 되었을 때 결제 상태와 주문 상태를 바꿈 -->
+<update id="updateJumunDeposit" parameterType="java.lang.String">
+UPDATE JUMUN SET JUMSTAT = '입금완료' WHERE JUMSTAT= '입금대기' AND JUMUNNUM =#{jumunnum}
+</update>
+
+<!-- 같이 실행됨 -->
+<update id="updatePayhistoryDeposit" parameterType="java.lang.String">
+UPDATE PAYHISTORY SET PAYSTAT = '결제완료' WHERE PAYSTAT = '결제대기' AND JUMUNNUM =#{jumunnum}
+</update>
+
+<!-- 결제 정보 입력 -->
+<insert id="insertPayhistory" parameterType="Payment">
+INSERT INTO PAYHISTORY(PAYNUM,JUMUNNUM,COUSEQ,PAYWHAT,PAYMONEY,PAYDAY,PAYSTAT,MILEAGE)
+VALUES('PAY'||LPAD(PAYMENT_SEQ.NEXTVAL,'8','0'),#{jumunnum},#{couseq},#{paywhat},#{paymoney},SYSDATE,'결제대기',#{mileage})
+</insert>
+
+<!-- 회원의 결제 내역 조회 -->
+<!-- 회원별 결제 내역 수 -->
+<select id="countMemberPayHistory" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM) WHERE ID=#{id}
+</select>
+
+<!-- 회원별 결제 내역 페이징-->
+<select id="memberPayHistoryList" parameterType="java.util.Map" resultMap="PaymentMap">
+SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT ROWNUM,PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE 
+FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM) WHERE ID =#{id}))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 전체 결제 내역 수 관리자용-->
+<select id="countAllPayHistory" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM)
+</select>
+
+<!-- 전체 결제 내역 페이징 관리자용-->
+<select id="allPayHistoryList" parameterType="RowNum" resultMap="PaymentMap">
+SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT ROWNUM,PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT PAYNUM,JUMUNNUM,ID,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM)))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+</mapper>

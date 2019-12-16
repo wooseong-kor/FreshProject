@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.IPagingDao">
+
+<resultMap type="com.min.fresh.dto.Jaego_DTO" id="JaegoMap">
+	<result column="JAEGOCODE" property="jaegocode"/>
+	<result column="SANGCODE" property="sangcode"/>
+	<result column="JAEGOCNT" property="jaegocnt"/>
+	<result column="JAEGOSTAT" property="jaegostat"/>
+	<collection property="product_DTO" resultMap="ProductMap"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Product_DTO" id="ProductMap">
+	<result column="SANGCODE" property="sangcode"/>
+	<result column="SANGNAME" property="sangname"/>
+	<result column="PRICE" property="price"/>
+	<result column="SANGSTAT" property="sangstat"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Jumunpage_DTO" id="JPageMap">
+	<result column="SANGPGNUM" property="sangpgnum"/>
+	<result column="SANGCODE" property="sangcode"/>
+	<result column="SANGPNAME" property="sangpname"/>
+	<result column="TITLE" property="title"/>
+	<result column="CONTENT" property="content"/>
+	<collection property="productImg_DTO" resultMap="PImgMap"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.ProductImg_DTO" id="PImgMap">
+	<result column="SEQ" property="seq"/>
+	<result column="SANGPGNUM" property="sangpgnum"/>
+	<result column="IMGNAME" property="imgname"/>
+	<result column="SAVENAME" property="savename"/>
+	<result column="IMGPATH" property="imgpath"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Member_DTO" id="MemberPayMap">
+	<result column="ID" property="id"/>
+	<result column="GRADE" property="grade"/>
+	<result column="GCODE" property="gcode"/>
+	<collection property="payhistory_DTO" resultMap="PaymentMap"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Payhistory_DTO" id="PaymentMap">
+	<result column="PAYNUM" property="paynum"/>
+	<result column="JUMUNNUM" property="jumunnum"/>
+	<result column="COUSEQ" property="couseq"/>
+	<result column="PAYWHAT" property="paywhat"/>
+	<result column="PAYMONEY" property="paymoney"/>
+	<result column="PAYDAY" property="payday"/>
+	<result column="PAYDAY" property="payday"/>
+	<result column="MILEAGE" property="mileage"/>
+	<collection property="jumun_DTO" resultMap="JumunMap"/>
+</resultMap>
+
+<resultMap type="com.min.fresh.dto.Jumun_DTO" id="JumunMap">
+	<result column="JUMUNNUM" property="jumunnum"/>
+	<result column="ID" property="id"/>
+	<result column="SANGPGNUM" property="sangpgnum"/>
+	<result column="BSGCODE" property="bsgcode"/>
+	<result column="JUMMONEY" property="jummoney"/>
+	<result column="JUMCNT" property="jumcnt"/>
+	<result column="JUMSTAT" property="jumstat"/>
+	<result column="JUMDATE" property="jumdate"/>
+	<collection property="jumunpage_DTO" resultMap="JPageMap"/>
+</resultMap>
+
+
+<!-- 전체 회원 수-->
+<select id="countAllMember" resultType="java.lang.Integer">
+SELECT COUNT(ID) FROM  "MEMBER"
+</select>
+<!-- 활동중인 회원 수-->
+<select id="countMember" resultType="java.lang.Integer">
+SELECT COUNT(ID) FROM  "MEMBER" WHERE DELFLAG='N' 
+</select>
+<!-- 전체 회원수 페이징-->
+<select id="allMemberList" parameterType="RowNum" resultType="Member">
+SELECT ID,NAME,GCODE,EMAIL,LLOGIN,NVL(MILEAGE,0),HIREDATE FROM
+(SELECT ROWNUM,ID,NAME,GCODE,EMAIL,LLOGIN,MILEAGE,HIREDATE FROM 
+(SELECT ID,NAME,GCODE,EMAIL,LLOGIN,MILEAGE,HIREDATE FROM "MEMBER" ORDER BY HIREDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- 활동중인 회원수 페이징-->
+<select id="memberList" parameterType="RowNum" resultType="Member">
+SELECT ID,NAME,GCODE,EMAIL,LLOGIN,NVL(MILEAGE,0),HIREDATE FROM
+(SELECT ROWNUM,ID,NAME,GCODE,EMAIL,LLOGIN,MILEAGE,HIREDATE FROM 
+(SELECT ID,NAME,GCODE,EMAIL,LLOGIN,MILEAGE,HIREDATE FROM "MEMBER" WHERE DELFLAG = 'N' ORDER BY HIREDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- 한 회원의 전체 장바구니 수-->
+<select id="countMemberCart" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM CART WHERE ID=#{id}
+</select>
+<!-- 한 회원의 전체 장바구니 수 페이징-->
+<select id="memberCartList" parameterType="java.util.Map" resultType="Member">
+SELECT SEQ,SANGPGNUM,CARTCNT FROM
+(SELECT ROWNUM,SEQ,SANGPGNUM,CARTCNT FROM
+(SELECT SEQ,SANGPGNUM,CARTCNT FROM CART WHERE ID = #{id} ORDER BY SEQ DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- QA게시판 회원별 글수-->
+<select id="countMemberQa" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM "QA/GO" WHERE GUBUN='Q' AND ID= #{id}
+</select>
+<!-- QA게시판 회원별 글수 페이징-->
+<select id="memberQaList" parameterType="java.util.Map" resultType="QA_GO">
+SELECT SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT ROWNUM,SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT SEQ,REGDATE,TITLE,CONTENT FROM "QA/GO" WHERE GUBUN='Q' AND ID=#{id} ORDER BY SEQ DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- QA게시판 관리자용 전체글 수-->
+<select id="countAllQa" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM "QA/GO" WHERE GUBUN='Q'
+</select>
+<!-- QA게시판 관리자용 전체글 수-->
+<select id="allQaList" parameterType="RowNum" resultType="QA_GO">
+SELECT SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT ROWNUM,SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT SEQ,REGDATE,TITLE,CONTENT FROM "QA/GO" WHERE GUBUN='Q' ORDER BY SEQ DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- 공지사항게시판 전체 게시글 수-->
+<select id="countAllGo" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM "QA/GO" WHERE GUBUN='G'
+</select>
+<!-- 공지사항게시판 전체 게시글 수 페이징-->
+<select id="allGoList" parameterType="RowNum" resultType="QA_GO">
+SELECT SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT ROWNUM,SEQ,REGDATE,TITLE,CONTENT FROM
+(SELECT SEQ,REGDATE,TITLE,CONTENT FROM "QA/GO" WHERE GUBUN='G' ORDER BY SEQ DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- QA 관리자가 답변을달면 제목 변경해주는 쿼리-->
+<update id="updateTitleQa" parameterType="java.util.Map">
+UPDATE "QA/GO" SET TITLE = #{title} WHERE GUBUN='Q' AND SEQ = #{seq}
+</update>					<!-- 다른 매퍼로 이동 -->
+
+<!-- 쿠폰 내역 아이디별 전체 개수-->
+<!-- <select id="countMemberCouponHistory" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM COUPONHISTORY WHERE ID=#{id}
+</select>
+쿠폰 내역 아이디별 전체 개수 페이징
+<select id="memberCounponHistoryList" parameterType="java.util.Map" resultType="Coupon">
+SELECT COUSEQ,COUNAME,JGNALZA,USEFLAG FROM
+(SELECT ROWNUM,COUSEQ,COUNAME,JGNALZA,USEFLAG FROM
+(SELECT COUSEQ,COUNAME,JGNALZA,USEFLAG FROM COUPONHISTORY JOIN COUPON USING(COUCODE) WHERE ID = #{id} ORDER BY 1))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+쿠폰 내역 전체 개수
+<select id="countAllCouponHistory" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM COUPONHISTORY
+</select>										새로 추가된 쿼리
+쿠폰 내역 전체 개수 페이징
+<select id="allCounponHistoryList" parameterType="RowNum" resultType="Coupon">
+SELECT COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM
+(SELECT ROWNUM,COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM
+(SELECT COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM COUPONHISTORY JOIN COUPON USING(COUCODE) ORDER BY ID))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> 	 -->									<!-- 새로 추가된 쿼리 -->
+
+
+<!-- 아이디별 주소록 몇개인지 알려주는 쿼리(3개 이상이면 더 못만들게 화면에서 처리할 것)-->
+<select id="countMemberAddrList" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM ADDRLIST WHERE ID =#{id}
+</select>					<!-- 다른 매퍼로 이동 -->
+
+
+
+<!-- Jumun_PaymentMapper로 이동 -->
+<!-- 회원별 결제 내역 수 -->
+<!-- <select id="countMemberPayHistory" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM) WHERE ID=#{id}
+</select>  -->
+<!-- 회원별 결제 내역 페이징-->
+<!-- <select id="memberPayHistoryList" parameterType="java.util.Map" resultMap="PaymentMap">
+SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT ROWNUM,PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE 
+FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM) WHERE ID =#{id}))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+전체 결제 내역 수
+<select id="countAllPayHistory" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM)
+</select>
+전체 결제 내역 페이징 관리자용
+<select id="allPayHistoryList" parameterType="RowNum" resultMap="PaymentMap">
+SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT ROWNUM,PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
+(SELECT PAYNUM,JUMUNNUM,ID,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM)))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+배송지 보기 (주문내역,결제내역에서 배송지코드만 나오게 했는데 버튼을 누르면 상세내용이 아작스로 표출)
+<select id="addrListOne" parameterType="java.lang.String" resultType="Addr">
+SELECT BSGNAME,JUSO,PHONE FROM JUMUN JOIN ADDRLIST USING(BSGCODE) WHERE JUMUNNUM = #{jumunnum}
+</select>					다른매퍼로 이동 -->
+
+<!-- 회원별 주문 내역 수-->
+<!-- <select id="countMemberJumun" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUN WHERE ID=#{id}
+</select>
+회원별 주문 내역 페이징
+<select id="memberJumunList" parameterType="java.util.Map" resultMap="JumunMap">
+SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
+(SELECT ROWNUM,JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
+(SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+전체 주문내역 수
+<select id="countAllJumun" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUN
+</select>
+전체 주문내역 페이징 관리자용
+<select id="allJumunList" parameterType="RowNum" resultMap="JumunMap">
+SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
+(SELECT ROWNUM,JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
+(SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> -->
+
+
+
+
+<!-- 상품 상세 페이지 전체 개수-->
+<select id="countAllJumunpage" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUNPAGE
+</select>
+<!-- 상품 상세 페이지 전체 페이징-->
+<select id="allJumunpageList" parameterType="java.util.Map" resultMap="JPageMap">
+SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT ROWNUM,SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM JUMUNPAGE JOIN PRODUCTIMG USING(SANGPGNUM) 
+WHERE IMGNAME LIKE '%'||#{imgname}||'%' ORDER BY SANGPGNUM DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+<!-- 상품 품목/제목별 개수-->
+<select id="countDynamicJumunpage" parameterType="java.util.Map" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUNPAGE 
+<where>
+	<choose>
+		<when test="sangcode != null">
+		SANGCODE LIKE '%'||#{sangcode}||'%'
+		</when>
+		<when test="sangname != null">
+		SANGNAME LIKE '%'||#{sangname}||'%'
+		</when>
+	</choose>
+</where>
+</select>
+<!-- 상품 품목/제목별 페이징-->
+<select id="dynamicJumunList" parameterType="java.util.Map" resultMap="JPageMap">
+SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT ROWNUM,SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM JUMUNPAGE JOIN PRODUCTIMG USING(SANGPGNUM) 
+<where>
+	<choose>
+		<when test="sangcode !=null">
+		SANGCODE LIKE '%'||#{sangcode}||'%'
+		</when>
+		<when test="sangname !=null">
+		SANGNAME LIKE '%'||#{sangname}||'%'
+		</when>
+	</choose>
+AND IMGNAME LIKE '%'||#{imgname}||'%' ORDER BY SANGPGNUM DESC))
+</where>
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 상품 제목별 개수-->
+<!-- <select id="countSangnameJumunpage" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JUMUNPAGE WHERE SANGPNAME LIKE '%'||#{sangpname}||'%'
+</select>
+상품 제목별 페이징
+<select id="">
+SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT ROWNUM,SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM
+(SELECT SANGPGNUM,SANGCODE,TITLE,IMGPATH FROM JUMUNPAGE JOIN PRODUCTIMG USING(SANGPGNUM) 
+WHERE SANGCODE LIKE '%'||#{sangcode}||'%' AND IMGNAME LIKE '%'||#{imgname}||'%' ORDER BY SANGPGNUM DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> -->
+
+<!-- 후기 페이지별 후기 개수-->
+<!-- <select id="countSangpgnumHoogi" parameterType="java.lang.String" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM HOOGI WHERE SANGPGNUM = #{sangpgnum}
+</select>
+후기 페이지별 후기 페이징
+<select id="sangpgnumHoogiList" parameterType="java.util.Map" resultType="Hoogi">
+SELECT SEQ,ID,TITLE,CONTENT,REGDATE FROM
+(SELECT ROWNUM,SEQ,ID,TITLE,CONTENT,REGDATE FROM
+(SELECT SEQ,ID,TITLE,CONTENT,REGDATE FROM HOOGI WHERE SANGPGNUM=#{sangpgnum} ORDER BY SEQ DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> -->
+
+
+<!-- 상품 개수-->    					<!-- Product 매퍼로 이동 -->
+<!-- <select id="countAllProduct" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PRODUCT
+</select>
+상품 페이징
+<select id="allProductList" parameterType="RowNum" resultType="Product">
+SELECT SANGCODE,SANGNAME,PRICE,SANGSTAT FROM
+(SELECT ROWNUM,SANGCODE,SANGNAME,PRICE,SANGSTAT FROM 
+(SELECT SANGCODE,SANGNAME,PRICE,SANGSTAT FROM PRODUCT ORDER BY SANGNAME))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> -->
+
+<!-- 재고 개수-->
+<!-- <select id="countAllJaego" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM JAEGO 
+</select>
+재고 페이징
+<select id="allJaegoList" parameterType="RowNum" resultMap="JaegoMap">
+SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
+(SELECT ROWNUM,JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
+(SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM JAEGO JOIN PRODUCT USING(SANGCODE) ORDER BY SANGNAME))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+입고 개수
+<select id="countAllIpgo" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM IPGO
+</select>
+입고 페이징
+<select id="allIpgoList" parameterType="RowNum" resultType="Ipgo">
+SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
+(SELECT ROWNUM,IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
+(SELECT IPGONUM,JAEGOCODE,TO_CHAR(IPGODATE,'YYYYMMDD') IPGODATE,IPGOCNT,TO_CHAR(EXPDATE,'YYYYMMDD') EXPDATE FROM IPGO ORDER BY IPGODATE DESC))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+폐기 개수
+<select id="countAllPyegi" resultType="java.lang.Integer">
+SELECT COUNT(*) FROM PYEGI
+</select>
+폐기 페이징
+<select id="allPyegiList" parameterType="RowNum" resultType="Pyegi">
+SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
+(SELECT ROWNUM,PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
+(SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM PYEGI))
+WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select> -->
+</mapper>

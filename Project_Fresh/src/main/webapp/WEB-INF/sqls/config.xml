@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+
+	<typeAliases>
+		<typeAlias type="com.min.fresh.dto.RowNum_DTO" alias="RowNum"/>
+		<typeAlias type="com.min.fresh.dto.Member_DTO" alias="Member"/>
+		<typeAlias type="com.min.fresh.dto.AddrList_DTO" alias="Addr"/>
+		<typeAlias type="com.min.fresh.dto.Warning_DTO" alias="Warning"/>
+		<typeAlias type="com.min.fresh.dto.Jumun_DTO" alias="Jumun"/>
+		<typeAlias type="com.min.fresh.dto.Payhistory_DTO" alias="Payment"/>
+		<typeAlias type="com.min.fresh.dto.Couponhistory_DTO" alias="Coupon"/>
+		<typeAlias type="com.min.fresh.dto.QA_GO_DTO" alias="QA_GO"/>
+		<typeAlias type="com.min.fresh.dto.Jumunpage_DTO" alias="JPage"/>
+		<typeAlias type="com.min.fresh.dto.Hoogi_DTO" alias="Hoogi"/>
+		<typeAlias type="com.min.fresh.dto.ProductImg_DTO" alias="PImg"/>
+		<typeAlias type="com.min.fresh.dto.Product_DTO" alias="Product"/>
+		<typeAlias type="com.min.fresh.dto.Jaego_DTO" alias="Jaego"/>
+		<typeAlias type="com.min.fresh.dto.Ipgo_DTO" alias="Ipgo"/>
+		<typeAlias type="com.min.fresh.dto.Pyegi_DTO" alias="Pyegi"/>
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="sqls/pagingmapper.xml"/>
+		<mapper resource="sqls/ChartMapper.xml"/>
+		<mapper resource="sqls/CouponMileage.xml"/>
+		<mapper resource="sqls/JaegoMapper.xml"/>
+		<mapper resource="sqls/Jumun_PaymentMapper.xml"/>
+		<mapper resource="sqls/Member.xml"/>
+		<mapper resource="sqls/Product.xml"/>
+		<mapper resource="sqls/BoardMapper.xml"/>
+	</mappers>
+
+</configuration>

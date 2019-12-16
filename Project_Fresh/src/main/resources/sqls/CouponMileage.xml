@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.min.fresh.ICouponMileageDao">
+  
+  <!-- 마일리지 적립 R -->
+  <update id="updateMileageRMember" parameterType="java.util.Map">
+  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.01) FROM PAYHISTORY WHERE PAYNUM = #{paynum})
+        WHERE ID = #{id}
+  </update>
+  
+  <!-- 마일리지 적립 B -->
+  <update id="updateMileageBMember" parameterType="java.util.Map">
+  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.03) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+        WHERE ID = #{id}
+  </update>
+  
+  <!-- 마일리지 적립 S -->
+  <update id="updateMileageSMember" parameterType="java.util.Map">
+  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.05) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+        WHERE ID = #{id}
+  </update>
+  
+  <!-- 마일리지 적립 V -->
+  <update id="updateMileageVMember" parameterType="java.util.Map">
+  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.1) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+	WHERE ID = #{id}
+  </update>
+  
+  <!-- 결재시 회원 보유 마일리지 차감 -->
+  <update id="updateMileageOneMember" parameterType="java.util.Map">
+  UPDATE "MEMBER" M SET MILEAGE = (SELECT NVL((SELECT MILEAGE-P.USEMIL
+						FROM (SELECT P.MILEAGE USEMIL, J.ID JID
+								FROM JUMUN J, PAYHISTORY P
+									WHERE J.JUMUNNUM = P.JUMUNNUM
+									AND P.JUMUNNUM = #{jumunnum}) P
+						WHERE M.ID = P.JID
+						AND M.MILEAGE >= P.USEMIL),0) FROM DUAL)
+		WHERE M.ID=#{id}
+  </update>
+  
+  <!-- 결재 할때 결제금액 주문금액에 사용마일리지빼서 바꿔주는것, 쿼리테스트에 추가 -->
+  <update id="updatePaymoneyMOne" parameterType="java.lang.String">
+  UPDATE PAYHISTORY P SET PAYMONEY = (SELECT (JUMMONEY*JUMCNT-MILEAGE) FROM JUMUN J
+								WHERE J.JUMUNNUM = P.JUMUNNUM)
+	WHERE P.JUMUNNUM = #{jumunnum}
+  </update>
+  
+  <!-- 쿠폰 사용시 쿠폰 상태 변경-->
+  <update id="updateUseflagOne" parameterType="java.lang.Integer">
+  UPDATE COUPONHISTORY SET USEFLAG = 'Y'
+        WHERE ID = 'MAN'
+                AND COUSEQ = #{couseq};
+  </update>
+  
+  <!-- 가입 쿠폰 지급, 쿼리수정  -->
+  <insert id="insertCouponhistoryG" parameterType="java.lang.String">
+  INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
+(SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU01'), 
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N')
+  </insert>
+  
+  <!-- 그외 쿠폰 지급, 쿼리 수정 -->
+  <insert id="insertCouponhistoryB" parameterType="java.lang.String">
+  INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
+(SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU02'), 
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N');
+  </insert>
+  
+  <insert id="insertCouponhistoryS" parameterType="java.lang.String">
+  INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
+(SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU03'), 
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N');
+  </insert>
+  
+  <insert id="insertCouponhistoryV" parameterType="java.lang.String">
+  INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
+(SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU04'), 
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N')
+  </insert>
+  
+  <!-- 결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(가입) -->
+  <update id="updatePaymoneyGOne" parameterType="java.util.Map">
+  "UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT-3000))
+     FROM JUMUN J, 
+        (SELECT C.LIMITE LIMITE, M.ID ID, C.CODE CODE
+            FROM ""MEMBER"" M, (SELECT C.LIMITE LIMITE, CH.ID ID, CH.COUSEQ CSEQ, C.COUCODE CODE
+                                    FROM COUPON C, COUPONHISTORY CH
+                                		 WHERE C.COUCODE = CH.COUCODE
+                                     AND USEFLAG = 'N'
+                                     AND CH.COUSEQ = #{couseq}) C
+                  WHERE M.ID = C.ID) C
+        WHERE J.ID = C.ID
+					 AND J.JUMUNNUM = #{jumunnum})
+                WHERE P.JUMUNNUM = #{jumunnum}
+  </update>
+  
+  <!-- 결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(브론즈) -->
+  <update id="updatePaymoneyBOne" parameterType="java.util.Map">
+  UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT*0.05))
+	FROM JUMUN J, 
+		(SELECT C.LIMITE LIMITE, M.ID ID, C.CODE CODE
+			FROM "MEMBER" M, (SELECT C.LIMITE LIMITE, CH.ID ID, CH.COUSEQ CSEQ, C.COUCODE CODE
+					FROM COUPON C, COUPONHISTORY CH
+						WHERE C.COUCODE = CH.COUCODE
+							AND USEFLAG = 'N'
+							AND CH.COUSEQ = #{couseq}) C
+				WHERE M.ID = C.ID) C
+			WHERE J.ID = C.ID AND J.JUMUNNUM = #{jumunnum})
+		WHERE P.JUMUNNUM = #{jumunnum}
+  </update>
+  
+  <!-- 결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(실버) -->
+  <update id="updatePaymoneySOne" parameterType="java.util.Map">
+  UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT*0.1))
+       FROM JUMUN J, 
+        (SELECT C.LIMITE LIMITE, M.ID ID, C.CODE CODE
+            FROM "MEMBER" M, (SELECT C.LIMITE LIMITE, CH.ID ID, CH.COUSEQ CSEQ, C.COUCODE CODE
+                FROM COUPON C, COUPONHISTORY CH
+                    WHERE C.COUCODE = CH.COUCODE
+                        AND USEFLAG = 'N'
+                           AND CH.COUSEQ =#{couseq}) C
+                    WHERE M.ID = C.ID) C
+             WHERE J.ID = C.ID
+       AND J.JUMUNNUM = #{jumunnum})
+   WHERE P.JUMUNNUM = #{jumunnum}
+  </update>
+  
+  <!-- 결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(VIP) -->
+  <update id="updatePaymoneyVOne" parameterType="java.util.Map">
+  UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT*0.15))
+    FROM JUMUN J, 
+      (SELECT C.LIMITE LIMITE, M.ID ID, C.CODE CODE
+            FROM "MEMBER" M, (SELECT C.LIMITE LIMITE, CH.ID ID, CH.COUSEQ CSEQ, C.COUCODE CODE
+                     FROM COUPON C, COUPONHISTORY CH
+                		 WHERE C.COUCODE = CH.COUCODE  AND USEFLAG = 'N' 
+                		 AND CH.COUSEQ =#{couseq}) C  WHERE M.ID = C.ID) C
+               WHERE J.ID = C.ID AND J.JUMUNNUM = #{jumunnum})
+                WHERE P.JUMUNNUM = #{jumunnum}
+  </update>
+  
+  <!-- 만료된 가입쿠폰 지우기 -->
+  <update id="updateUseflagAutoOne">
+  UPDATE COUPONHISTORY SET USEFLAG = 'Y'
+        WHERE COUCODE = 'COU01'
+        AND
+        (SELECT (TRUNC(SYSDATE)-TRUNC(JGNALZA))
+                FROM COUPONHISTORY
+                        WHERE COUCODE = 'COU01') > 7
+  </update>
+  
+  <!-- 만료된 그외의 쿠폰 지우기 -->
+  <update id="updateCouponUseflaghistory">
+  UPDATE COUPONHISTORY SET USEFLAG = 'Y'
+	WHERE COUCODE != 'COU01'
+  </update>
+  
+  <!-- 쿠폰 내역 아이디별 전체 개수-->
+	<select id="countMemberCouponHistory" parameterType="java.lang.String" resultType="java.lang.Integer">
+	SELECT COUNT(*) FROM COUPONHISTORY WHERE ID=#{id}
+	</select>
+	<!-- 쿠폰 내역 아이디별 전체 개수 페이징-->
+	<select id="memberCounponHistoryList" parameterType="java.util.Map" resultType="Coupon">
+	SELECT COUSEQ,COUNAME,JGNALZA,USEFLAG FROM
+	(SELECT ROWNUM,COUSEQ,COUNAME,JGNALZA,USEFLAG FROM
+	(SELECT COUSEQ,COUNAME,JGNALZA,USEFLAG FROM COUPONHISTORY JOIN COUPON USING(COUCODE) WHERE ID = #{id} ORDER BY 1))
+	WHERE ROWNUM BETWEEN #{first} AND #{last}
+	</select>
+	<!-- 쿠폰 내역 전체 개수-->
+	<select id="countAllCouponHistory" resultType="java.lang.Integer">
+	SELECT COUNT(*) FROM COUPONHISTORY
+	</select>                              <!-- 새로 추가된 쿼리 -->
+	<!-- 쿠폰 내역 전체 개수 페이징-->
+	<select id="allCounponHistoryList" parameterType="RowNum" resultType="Coupon">
+	SELECT COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM
+	(SELECT ROWNUM,COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM
+	(SELECT COUSEQ,ID,COUNAME,JGNALZA,USEFLAG FROM COUPONHISTORY JOIN COUPON USING(COUCODE) ORDER BY ID))
+	WHERE ROWNUM BETWEEN #{first} AND #{last}
+	</select>                               <!-- 새로 추가된 쿼리 -->
+</mapper>
