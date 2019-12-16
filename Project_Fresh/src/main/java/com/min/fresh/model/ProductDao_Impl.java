@@ -1,7 +1,6 @@
 package com.min.fresh.model;
 
 import java.util.List;
-import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -9,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.min.fresh.dto.Jaego_DTO;
-import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Product_DTO;
-import com.min.fresh.dto.RowNum_DTO;
 
 @Repository
 public class ProductDao_Impl implements IProductDao {
@@ -46,6 +42,26 @@ public class ProductDao_Impl implements IProductDao {
 	}
 
 	/**
+	 * <h2>상품관리 - 상품상태 자동 품절처리</h2>
+	 * @return true 사용가능 &#47; false 사용불가
+	 */
+	@Override
+	public int updateProductSoldout() {
+		log.info("updateProductSoldout 실행");
+		return session.update(NS+"updateProductSoldout");
+	}
+
+	/**
+	 * <h2>상품관리 - 상품상태 자동 판매중 처리</h2>
+	 * @return true 사용가능 &#47; false 사용불가
+	 */
+	@Override
+	public int updateProductSale() {
+		log.info("updateProductSale 실행");
+		return session.update(NS+"updateProductSale");
+	}
+	
+	/**
 	 * <h2>상품관리 - 상품정보 전체조회</h2>
 	 * @return 모든 상품의 정보
 	 */
@@ -54,6 +70,22 @@ public class ProductDao_Impl implements IProductDao {
 		log.info("allProductList 실행");
 		return session.selectList(NS+"allProductList");
 	}
+
+	/**
+	 * <h2>상품관리 - 상품 단종처리(DELFLAG) : 단일 다중</h2>
+	 * @param 상품이름
+	 * @return true 사용가능 &#47; false 사용불가
+	 */
+//	@Override
+//	public int updateProductDiscontinued(Product_DTO dto) {
+//		log.info("updateProductDiscontinued 실행");
+//		return session.update(NS+"updateProductDiscontinued", dto);
+//	}
+//	@Override
+//	public int updateProductDiscontinued(Map<String, Object> map) {
+//		log.info("updateProductDiscontinued 실행");
+//		return session.update(NS+"updateProductDiscontinued", map);
+//	}
 
 	/**
 	 * <h2>상품관리 - 상품+재고 정보 전체 조회</h2>
