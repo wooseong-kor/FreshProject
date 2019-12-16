@@ -39,7 +39,7 @@ $(document).ready(function() {
 			colNames : ['상품코드', '상품이름', '판매가', '상품상태'],
 			
 			colModel: [
-				{name : 'sangcode', index : 'sangcode', width : 100, editable: true,
+				{name : 'sangcode', index : 'sangcode', width : 100, editable: true, sortable:false,
 					cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
 						if (rowObject.sangstat == "Y") { return 'style="color:#1C1C1C"' }
 						else if (rowObject.sangstat == "S") { return 'style="color:#FE2E2E"' }
@@ -47,7 +47,7 @@ $(document).ready(function() {
 					}
 				},	
 				
-				{name : 'sangname', index : 'sangname', editable: true,
+				{name : 'sangname', index : 'sangname', editable: true, sortable:false,
 					cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
 						if (rowObject.sangstat == "Y") { return 'style="color:#1C1C1C"' }
 						else if (rowObject.sangstat == "S") { return 'style="color:#FE2E2E"' }
@@ -55,14 +55,15 @@ $(document).ready(function() {
 					}
 				},
 				
-				{name : 'price', index : 'price', align : "right", editable: true, formatter: "integer",
+				{name : 'price', index : 'price', align : "right", editable: true, sortable:false, formatter: "integer",
 					cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
 						if (rowObject.sangstat == "Y") { return 'style="color:#1C1C1C"' }
 						else if (rowObject.sangstat == "S") { return 'style="color:#FE2E2E"' }
 						else if (rowObject.sangstat == "D") { return 'style="color:#D8D8D8"' }
 					}
 				},
-				{name : 'sangstat', index : 'sangstat', align : "center", editable: true, formatter: 'select', edittype:"select", 
+				{name : 'sangstat', index : 'sangstat', align : "center", editable: true, sortable:false,
+					formatter: 'select', edittype:"select", 
 					editoptions:{value: "Y:판매중;S:품절;D:단종"}, stype: 'select',
 					cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
 								if (rowObject.sangstat == "Y") { return 'style="color:#1C1C1C"' }
