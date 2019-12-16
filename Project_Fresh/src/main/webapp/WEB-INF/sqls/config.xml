@@ -18,6 +18,7 @@
 		<typeAlias type="com.min.fresh.dto.Jaego_DTO" alias="Jaego"/>
 		<typeAlias type="com.min.fresh.dto.Ipgo_DTO" alias="Ipgo"/>
 		<typeAlias type="com.min.fresh.dto.Pyegi_DTO" alias="Pyegi"/>
+		<typeAlias type="com.min.fresh.dto.Chart_DTO" alias="Chart"/>
 	</typeAliases>
 
 	<mappers>
