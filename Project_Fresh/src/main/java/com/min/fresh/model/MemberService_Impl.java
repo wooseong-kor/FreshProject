@@ -95,4 +95,9 @@ public class MemberService_Impl implements IMemberService{
 		return (dao.updateMemberDelflagTOne(id)>0)?true:false;
 	}
 
+	@Override
+	public boolean resetPassword(Map<String, String> map) {
+		return (dao.resetPassword(map)>0)?true:false;
+	}
+
 }

@@ -140,4 +140,11 @@
 		WHERE ID = #{id}
 	</update>
 	
+	<!-- 비밀번호 초기화 -->
+	<update id="resetPassword" parameterType="java.util.Map">
+		UPDATE "MEMBER"
+		SET PASSWORD = #{password}
+		WHERE ID = #{id}
+	</update>
+	
 </mapper>

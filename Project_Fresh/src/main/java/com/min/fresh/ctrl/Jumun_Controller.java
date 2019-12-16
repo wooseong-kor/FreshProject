@@ -21,10 +21,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IJumun_PaymentService;
+import com.min.fresh.model.IMemberService;
 import com.min.fresh.utils.TossAPI;
 
 @Controller
@@ -40,6 +42,9 @@ public class Jumun_Controller<E> {
 	
 	@Autowired
 	private JavaMailSender mail;
+	
+	@Autowired
+	private IMemberService Ivice;
 	
 	@RequestMapping(value = "/jumun.do",method = {RequestMethod.POST,RequestMethod.GET})
 	public String Jumun() {
@@ -166,5 +171,52 @@ public class Jumun_Controller<E> {
 		
 		return "메일 발송";
 	}
+	
+	@RequestMapping(value = "/sendResetMail.do",method = RequestMethod.POST)
+	@ResponseBody
+	public String sendResetPW(String id) {
+		
+		MimeMessage mimeMessage = mail.createMimeMessage();
+		
+		try {
+			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+			helper.setFrom("ghkdgo868@naver.com");
+			helper.setTo("ghkdgo868@naver.com");
+			helper.setSubject(id+"님의 주문내역");
+			helper.setText("<a href='http://localhost:8099/Project_Fresh/reset.do?id="+id+"'>링크를 눌러 비밀번호를 재설정해 주세요</a>", true);
+			mail.send(mimeMessage);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
+		
+		return "메일 발송";
+	}
+	
+	
+	
+	@RequestMapping(value = "/reset.do",method = RequestMethod.GET)
+	public ModelAndView resetPassword(String id) {
+		log.info("비밀번호 초기화 시작");
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("id", id);
+		mav.setViewName("resetpassword");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/reset.do",method = RequestMethod.POST)
+	public String resetPW(String id,String password) {
+		log.info("비밀번호 초기화 완료");
+		System.out.println("비번"+id+password);
+		Map<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
+		map.put("password", password);
+		log.info("비번 초기화 하겠다");
+		boolean isc = Ivice.resetPassword(map);
+		System.out.println(isc);
+		
+		return null;
+	}
+	
+	
 	
 }

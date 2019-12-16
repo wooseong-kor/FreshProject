@@ -141,5 +141,10 @@ ${lists} ${count}
 <button onclick="mail()">메일</button>
 </form>
 
+<form action="./sendResetMail.do" method="post">
+<input type="text" name="id">
+<input type="submit" value="비밀번호찾기인증번호 전송">
+</form>
+
 </body>
 </html>

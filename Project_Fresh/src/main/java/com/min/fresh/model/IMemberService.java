@@ -40,4 +40,6 @@ public interface IMemberService {
 	public boolean updateMemberDelflagH();
 	//회원 탈퇴
 	public boolean updateMemberDelflagTOne(String id);
+	//비밀번호 재설정
+	public boolean resetPassword(Map<String, String> map);
 }

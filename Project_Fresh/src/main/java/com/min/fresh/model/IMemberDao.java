@@ -40,4 +40,6 @@ public interface IMemberDao {
 	public int updateMemberDelflagH();
 	//회원 탈퇴
 	public int updateMemberDelflagTOne(String id);
+	//비밀번호 재설정
+	public int resetPassword(Map<String, String> map);
 }

@@ -117,4 +117,10 @@ public class MemberDao_Impl implements IMemberDao{
 		return session.update(NS+"updateMemberDelflagTOne", id);
 	}
 
+	@Override
+	public int resetPassword(Map<String, String> map) {
+		log.info("resetPassword 실행");
+		return session.update(NS+"resetPassword", map);
+	}
+
 }
