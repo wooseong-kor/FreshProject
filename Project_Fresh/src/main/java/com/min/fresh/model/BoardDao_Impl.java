@@ -141,16 +141,15 @@ public class BoardDao_Impl implements IBoardDao {
 	}
 
 	@Override
-	public Jumunpage_DTO jumunpageListScroll(String sangcode) {
+	public List<Jumunpage_DTO> jumunpageListScroll(String sangcode) {
 		log.info("jumunpageListScroll 실행");
-		Jumunpage_DTO lists = session.selectOne(NS + "jumunpageListScroll", sangcode);
-		return lists;
+		return session.selectList(NS + "jumunpageListScroll", sangcode);
 	}
 
 	@Override
-	public Jumunpage_DTO jumunpageDeepListScroll(String sangname) {
+	public List<Jumunpage_DTO> jumunpageDeepListScroll(String sangname) {
 		log.info("jumunpageDeepListScroll 실행");
-		return session.selectOne(NS + "jumunpageDeepListScroll", sangname);
+		return session.selectList(NS + "jumunpageDeepListScroll", sangname);
 	}
 
 	@Override
