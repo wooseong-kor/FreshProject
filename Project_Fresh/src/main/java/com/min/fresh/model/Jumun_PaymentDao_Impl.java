@@ -64,6 +64,13 @@ public class Jumun_PaymentDao_Impl implements IJumun_PaymentDao {
 		log.info("deleteJumun 실행");
 		return session.delete(NS+"deleteJumun",jumunnum);
 	}
+	
+	@Override
+	public int deletePayment(String jumunnum) {
+		log.info("deletePatment 실행");
+		return session.delete(NS+"deletePayment", jumunnum);
+	}
+
 
 	@Override
 	public int updateJumstatConfirm(String jumunnum) {
@@ -119,4 +126,11 @@ public class Jumun_PaymentDao_Impl implements IJumun_PaymentDao {
 		return session.selectList(NS+"allPayHistoryList", dto);
 	}
 
+	@Override
+	public String selectJumunnum(String id) {
+		log.info("selectJumunnum 실행");
+		return session.selectOne(NS+"selectJumunnum", id);
+	}
+
+	
 }

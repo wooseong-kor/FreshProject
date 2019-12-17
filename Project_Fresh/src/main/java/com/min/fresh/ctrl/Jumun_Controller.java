@@ -1,11 +1,14 @@
 package com.min.fresh.ctrl;
 
+import java.net.http.HttpRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
 import com.min.fresh.dto.Jumun_DTO;
+import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.dto.RowNum_DTO;
+import com.min.fresh.model.ICouponMileageService;
 import com.min.fresh.model.IJumun_PaymentService;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.utils.TossAPI;
@@ -46,6 +53,9 @@ public class Jumun_Controller<E> {
 	@Autowired
 	private IMemberService Ivice;
 	
+	@Autowired
+	private ICouponMileageService coupon;
+	
 	@RequestMapping(value = "/jumun.do",method = {RequestMethod.POST,RequestMethod.GET})
 	public String Jumun() {
 		log.info("주문 페이지이지만 지금은 테스트용");
@@ -54,7 +64,8 @@ public class Jumun_Controller<E> {
 		return "Test";
 	}
 	
-	@RequestMapping(value = "/cancle.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	@RequestMapping(value = "/cancle.do", method = RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
 	@ResponseBody
 	public String cancle(String jumunnum) {
 		
@@ -65,14 +76,46 @@ public class Jumun_Controller<E> {
 		return "성공";
 	}
 	
+	/**
+	 * 주문 및 결제 테이블에 입력 후 결제 창 호출
+	 * @param attr
+	 * @param dto
+	 * @param pDto
+	 * @return
+	 */
 	@RequestMapping(value = "/insertjumon.do",method = RequestMethod.POST)
-	public String jomon(Jumun_DTO dto) {
+	@ResponseBody
+	public Map<String, Object> insertJumun(/*RedirectAttributes attr,*/Jumun_DTO dto,Payhistory_DTO pDto) {
 		System.out.println(dto);
 		boolean isc= service.insertJumun(dto);
 		System.out.println(isc);
-		return "Test";
+		System.out.println(pDto+"결제 DTO");
+		Map<String, Object> map =new HashMap<String, Object>();
+		if (isc) {
+			String jumunnum = service.selectJumunnum(dto.getId());
+			System.out.println(jumunnum+" : 주문넘");
+			pDto.setJumunnum(jumunnum);
+			pDto.setMileage(dto.getJummoney()-pDto.getPaymoney());
+			System.out.println(pDto+"결제 DTO : 이후");
+			boolean pisc = service.insertPayhistory(pDto);
+			System.out.println(pisc);
+			map.put("orderNo", jumunnum);
+			map.put("amount", pDto.getPaymoney());
+			map.put("productDesc", dto.getSangpgnum());
+			// 주문 완료 페이지로 간다
+//			attr.addFlashAttribute("map", map);
+		}
+		
+		return map;
+//		return "redirect:/toss.do";
 	}
 	
+	/**
+	 * 
+	 * @param model
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/selectJumun.do",method = RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
@@ -139,12 +182,14 @@ public class Jumun_Controller<E> {
 	}
 	
 	@RequestMapping(value = "/toss.do",method = RequestMethod.GET)
-	public String doToss(Model model,String orderNo,String amount,String productDesc) {
-		System.out.println(orderNo+":"+amount+":"+productDesc);
+	public String doToss(HttpServletRequest request,Model model,String orderNo,String amount,String productDesc) {
+//		Map<String, ?> flashMap = RequestContextUtils.getInputFlashMap(request);
+//		Map<String, Object> map = (Map<String, Object>) flashMap.get("map");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("orderNo", orderNo);
-		map.put("amount", Integer.parseInt(amount));
+		map.put("amount", Integer.valueOf(amount));
 		map.put("productDesc", productDesc);
+		System.out.println(map.toString());
 		JSONObject json = toss.doToss(map);
 		
 		model.addAttribute("toss", json);
@@ -152,6 +197,11 @@ public class Jumun_Controller<E> {
 		return "toss";
 	}
 	
+	/**
+	 * 주문을 하면 주문내역을 이메일로 쏴줌
+	 * @param content
+	 * @return
+	 */
 	@RequestMapping(value = "/mail.do",method = RequestMethod.POST)
 	@ResponseBody
 	public String sendMail(String content) {
@@ -172,6 +222,11 @@ public class Jumun_Controller<E> {
 		return "메일 발송";
 	}
 	
+	/**
+	 * 비밀번호 초기화 창으로이동
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/sendResetMail.do",method = RequestMethod.POST)
 	@ResponseBody
 	public String sendResetPW(String id) {
@@ -189,11 +244,15 @@ public class Jumun_Controller<E> {
 			e.printStackTrace();
 		}
 		
-		return "메일 발송";
+		return "메일발송";
 	}
 	
 	
-	
+	/**
+	 * 비밀번호 재설정 
+	 * @param id
+	 * @return
+	 */
 	@RequestMapping(value = "/reset.do",method = RequestMethod.GET)
 	public ModelAndView resetPassword(String id) {
 		log.info("비밀번호 초기화 시작");
@@ -203,6 +262,12 @@ public class Jumun_Controller<E> {
 		return mav;
 	}
 	
+	/**
+	 * 비밀번호 초기화
+	 * @param id
+	 * @param password
+	 * @return
+	 */
 	@RequestMapping(value = "/reset.do",method = RequestMethod.POST)
 	public String resetPW(String id,String password) {
 		log.info("비밀번호 초기화 완료");

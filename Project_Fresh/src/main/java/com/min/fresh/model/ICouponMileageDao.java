@@ -50,4 +50,7 @@ public interface ICouponMileageDao {
 	public int countAllCouponHistory();
 	//쿠폰 내역 전체 개수 페이징
 	public List<Couponhistory_DTO> allCounponHistoryList(RowNum_DTO dto);
+	//아이디별 사용가능한 쿠폰 출력
+	public List<Couponhistory_DTO> memberUseMineCou(String id);
+	
 }

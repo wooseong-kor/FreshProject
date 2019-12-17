@@ -120,4 +120,9 @@ public class CouponMileageService_Impl implements ICouponMileageService {
 		return dao.allCounponHistoryList(dto);
 	}
 
+	@Override
+	public List<Couponhistory_DTO> memberUseMineCou(String id) {
+		return dao.memberUseMineCou(id);
+	}
+
 }

@@ -66,10 +66,14 @@ SELECT BSGNAME,JUSO,PHONE FROM JUMUN JOIN ADDRLIST USING(BSGCODE) WHERE JUMUNNUM
 
 
 
-<!-- 관리자, 회원 주문을 취소한다 회원은 결제 전에만 가능 -->
+<!-- 관리자, 회원 주문을 취소,결제 취소 한다 회원은 결제 전에만 가능 -->
 <delete id="deleteJumun" parameterType="java.lang.String">
 DELETE JUMUN WHERE JUMUNNUM = #{jumunnum}
 </delete>
+<delete id="deletePayment" parameterType="java.lang.String">
+DELETE PAYHISTORY WHERE JUMUNNUM = #{jumunnum}
+</delete> <!-- 추가된 쿼리 -->
+
 
 <!-- 구매확정 진행시 교환불가하다 -->
 <update id="updateJumstatConfirm" parameterType="java.lang.String">
@@ -126,6 +130,14 @@ SELECT PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTA
 (SELECT ROWNUM,PAYNUM,JUMUNNUM,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM
 (SELECT PAYNUM,JUMUNNUM,ID,PAYMONEY,BSGCODE,TO_DATE(PAYDAY,'YYYYMMDD') PAYDAY,PAYSTAT,NVL(MILEAGE,0) MILEAGE FROM PAYHISTORY JOIN JUMUN USING(JUMUNNUM)))
 WHERE ROWNUM BETWEEN #{first} AND #{last}
+</select>
+
+<!-- 결제 추가용 주문번호만 가져오는 쿼리 -->
+<select id="selectJumunnum" parameterType="java.lang.String" resultType="java.lang.String">
+SELECT JUMUNNUM FROM   
+(SELECT ROWNUM RM, JUMUNNUM,ID FROM
+  (SELECT JUMUNNUM,ID FROM JUMUN ORDER BY JUMDATE DESC))
+  WHERE ID=#{id} AND RM = 1
 </select>
 
 </mapper>

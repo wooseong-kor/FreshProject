@@ -25,6 +25,7 @@ public interface IJumun_PaymentDao {
 	public AddrList_DTO addrListOne(String jumunnum);
 	//관리자, 회원 주문을 취소한다 회원은 결제 전에만 가능
 	public int deleteJumun(String jumunnum);
+	public int deletePayment(String jumunnum);
 	//구매확정 진행시 교환불가하다
 	public int updateJumstatConfirm(String jumunnum);
 	//주문일자 기준 1개월 이내 가능하며, 이후 자동으로 확정 처리된다.
@@ -44,6 +45,7 @@ public interface IJumun_PaymentDao {
 	public int countAllPayHistory();
 	//전체 결제 내역 페이징 관리자용
 	public List<Payhistory_DTO> allPayHistoryList(RowNum_DTO dto);
-	
+	//결제 추가용 주문번호만 가져오는 쿼리
+	public String selectJumunnum(String id);
 	
 }

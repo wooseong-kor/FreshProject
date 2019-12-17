@@ -12,16 +12,15 @@
 </head>
 <body>
 <script type="text/javascript">
-	/* function cancle() {
+	 function cancle() {
 		
 		$.ajax({
 			url : "./cancle.do",
-			data : $("#frm").serialize(),
+			data : "jumunnum="+$("#cancleOrder").val(),
 			type : "post",
 			async: true,
-			dataType: "jumunnum="+$("#"),
-			success: function(){
-				swal("작동시험");
+			success: function(s){
+				swal("작동시험"+s);
 			},
 			error: function(){
 				swal("비작동");
@@ -29,7 +28,7 @@
 		});
 		
 		
-	} */
+	} 
 	
 	function seeker(){
 		$.ajax({
@@ -70,7 +69,7 @@
 	function toss(){
 		
 		$.ajax({
-			url : "./toss.do",
+			url : "./insertjumon.do",
 			type: "post",
 			data : $("#toss").serialize(),
 			async: true,
@@ -85,6 +84,24 @@
 			}
 		});
 	}
+/* 	function toss(){
+		
+		$.ajax({
+			url : "./toss.do",
+			type: "post",
+			data : $("#toss").serialize(),
+			async: true,
+			success: function(map){
+				var url = "./toss.do?orderNo="+map.orderNo+"&amount="+map.amount+"&productDesc="+map.productDesc;
+				var title = "결제";
+				var prop = "width=500px, height =500px";
+				open(url,title,prop);
+			},
+			error: function(){
+				swal("실패");
+			}
+		});
+	} */
 	
 	function mail(){
 		
@@ -106,16 +123,19 @@
 </script>
 <div>
 	<form action="#" id="frm">
-		<input type="button" value="주문 취소"  id="cancleOrder" onclick="cancle(this.val)">
+		<input type="text" value="주문 취소"  id="cancleOrder" onclick="cancle(this.val)">
 	</form>
 </div><hr>
-<form action="./insertjumon.do" method="post">
+<form action="#" id="toss">
+<input type="hidden" name="paymoney" value="10000">
+<input type="hidden" name="couseq" value="1">
+<input type="hidden" name="paywhat" value="t">
 <input type="text" name="id" placeholder="id 입력하여라"><br>
 <input type="text" name="sangpgnum" placeholder="sangpgnum 입력하여라"><br>
 <input type="text" name="bsgcode" placeholder="bsgcode 입력하여라"><br>
 <input type="text" name="jummoney" placeholder="jummoney 입력하여라"><br>
 <input type="text" name="jumcnt" placeholder="jumcnt 입력하여라"><br>
-<input type="submit" value="주문입력">
+<button onclick="toss()">입력 부터 결제까지</button>
 </form>
 ${lists} ${count}
 <hr>
@@ -129,12 +149,12 @@ ${lists} ${count}
 <input type="text" id="jumunnum" name="jumunnum"><span id="spanupdate"><button onclick="updatePay()">집에가고 싶구나!</button></span>
 </form>
 <hr>
-<form action="#" id="toss">
+<!-- <form action="#" id="toss">
 <input type="text" id="jumunnum" name="jumunnum">
 <input type="text" id="sangpgnum" name="sangpgnum">
 <input type="text" id="jummoney" name="jummoney">
 <button onclick="toss()">결제</button>
-</form>
+</form> -->
 
 <form action="#" id="mail">
 <input type="text" name="cotent" id="content">

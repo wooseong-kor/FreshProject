@@ -12,7 +12,7 @@
 	
 	<!-- Application Loggers -->
 	<logger name="com.min.fresh">
-		<level value="info" />
+		<level value="TRACE" />
 	</logger>
 	
 	<!-- 3rdparty Loggers -->

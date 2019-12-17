@@ -42,4 +42,6 @@ public interface IJumun_PaymentService {
 	public int countAllPayHistory();
 	//전체 결제 내역 페이징 관리자용
 	public List<Payhistory_DTO> allPayHistoryList(RowNum_DTO dto);
+	//결제 추가용 주문번호만 가져오는 쿼리
+	public String selectJumunnum(String id);
 }

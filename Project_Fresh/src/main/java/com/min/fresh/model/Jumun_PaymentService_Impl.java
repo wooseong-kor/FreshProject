@@ -50,7 +50,9 @@ public class Jumun_PaymentService_Impl implements IJumun_PaymentService{
 
 	@Override
 	public boolean deleteJumun(String jumunnum) {
-		return (dao.deleteJumun(jumunnum)>0)?true:false;
+		boolean p = dao.deletePayment(jumunnum)>0?true:false;
+		boolean j = dao.deleteJumun(jumunnum)>0?true:false;
+		return p&j;
 	}
 
 	@Override
@@ -95,6 +97,11 @@ public class Jumun_PaymentService_Impl implements IJumun_PaymentService{
 	@Override
 	public List<Payhistory_DTO> allPayHistoryList(RowNum_DTO dto) {
 		return dao.allPayHistoryList(dto);
+	}
+
+	@Override
+	public String selectJumunnum(String id) {
+		return dao.selectJumunnum(id);
 	}
 
 }

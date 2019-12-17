@@ -147,4 +147,10 @@ public class CouponMileageDao_Impl implements ICouponMileageDao {
 		return session.selectList(NS+"allCounponHistoryList", dto);
 	}
 
+	@Override
+	public List<Couponhistory_DTO> memberUseMineCou(String id) {
+		log.info("memberUseMineCou 실행");
+		return session.selectList(NS+"memberUseMineCou", id);
+	}
+
 }
