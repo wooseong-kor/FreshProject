@@ -48,12 +48,6 @@ public class Jumun_Controller<E> {
 	private TossAPI toss;
 	
 	@Autowired
-	private JavaMailSender mail;
-	
-	@Autowired
-	private IMemberService Ivice;
-	
-	@Autowired
 	private ICouponMileageService coupon;
 	
 	@RequestMapping(value = "/jumun.do",method = {RequestMethod.POST,RequestMethod.GET})
@@ -168,18 +162,18 @@ public class Jumun_Controller<E> {
 		}
 	}
 	
-	@RequestMapping(value = "/toss.do",method = RequestMethod.POST)
-	@ResponseBody
-	public Map<String, Object> payment(Jumun_DTO dto){
-		log.info("결제 실행");
-		Map<String , Object> map = new HashMap<String, Object>();
-		System.out.println(dto+" : dto");
-		map.put("orderNo", dto.getJumunnum());
-		map.put("amount", dto.getJummoney());
-		map.put("productDesc", dto.getSangpgnum());
-		
-		return map;
-	}
+//	@RequestMapping(value = "/toss.do",method = RequestMethod.POST)
+//	@ResponseBody
+//	public Map<String, Object> payment(Jumun_DTO dto){
+//		log.info("결제 실행");
+//		Map<String , Object> map = new HashMap<String, Object>();
+//		System.out.println(dto+" : dto");
+//		map.put("orderNo", dto.getJumunnum());
+//		map.put("amount", dto.getJummoney());
+//		map.put("productDesc", dto.getSangpgnum());
+//		
+//		return map;
+//	}
 	
 	@RequestMapping(value = "/toss.do",method = RequestMethod.GET)
 	public String doToss(HttpServletRequest request,Model model,String orderNo,String amount,String productDesc) {
@@ -197,4 +191,13 @@ public class Jumun_Controller<E> {
 		return "toss";
 	}
 	
+	@RequestMapping(value = "/success.do")
+	public String success() {
+		return "success";
+	}
+	
+	@RequestMapping(value = "/cancle.do")
+	public String cancle() {
+		return "cancle";
+	}
 }

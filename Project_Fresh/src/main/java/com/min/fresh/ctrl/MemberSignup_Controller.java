@@ -88,7 +88,8 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
     * @param content
     * @return
     */
-   @RequestMapping(value = "/mail.do",method = RequestMethod.POST)
+   @RequestMapping(value = "/mail.do",method = RequestMethod.POST,
+		   produces = "application/text; charset=UTF-8")
    @ResponseBody
    public String sendMail(String content) {
       
@@ -142,6 +143,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
    public ModelAndView resetPassword(String id) {
       log.info("비밀번호 초기화 시작");
       ModelAndView mav = new ModelAndView();
+      System.out.println(id);
       mav.addObject("id", id);
       mav.setViewName("resetpassword");
       return mav;
@@ -153,7 +155,9 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
     * @param password
     * @return
     */
-   @RequestMapping(value = "/reset.do",method = RequestMethod.POST)
+   @RequestMapping(value = "/reset.do",method = RequestMethod.POST,
+		   produces = "application/text; charset=UTF-8")
+   @ResponseBody
    public String resetPW(String id,String password) {
       log.info("비밀번호 초기화 완료");
       System.out.println("비번"+id+password);
@@ -164,6 +168,6 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
       boolean isc = service.resetPassword(map);
       System.out.println(isc);
       
-      return null;
+      return "초기화";
    }
 }
