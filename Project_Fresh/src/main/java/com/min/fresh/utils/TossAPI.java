@@ -66,6 +66,49 @@ public class TossAPI {
 		}
 		return json;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public JSONObject cancle(Map<String, String> map) {
+		URL url = null;
+		URLConnection connection = null;
+		StringBuilder responseBody = new StringBuilder();
+		try {
+			url = new URL("https://pay.toss.im/api/v2/refunds");
+			connection = url.openConnection();
+			connection.addRequestProperty("Content-Type", "application/json");
+			connection.setDoOutput(true);
+			connection.setDoInput(true);
+
+			org.json.simple.JSONObject jsonBody = new JSONObject();
+			jsonBody.put("payToken", map.get("payToken"));
+			jsonBody.put("amount", Integer.parseInt(map.get("amount")));
+			jsonBody.put("apiKey", apiKey);
+
+			BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());
+			
+		    bos.write(jsonBody.toJSONString().getBytes(StandardCharsets.UTF_8));
+			bos.flush();
+			bos.close();
+
+		    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				responseBody.append(line);
+			}
+			br.close();
+		} catch (Exception e) {
+			responseBody.append(e);
+		}
+		System.out.println(responseBody.toString());
+		JSONParser jpar = new JSONParser();
+		JSONObject json =null;
+		try {
+			json = (JSONObject) jpar.parse(responseBody.toString());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return json;
+	}
 
 
 	public void setApiKey(String apiKey) {
