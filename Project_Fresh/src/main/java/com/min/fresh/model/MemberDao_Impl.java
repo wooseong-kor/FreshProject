@@ -28,15 +28,17 @@ public class MemberDao_Impl implements IMemberDao{
 	}
 
 	@Override
-	public int idCheck(String id) {
+	public boolean idCheck(String id) {
 		log.info("idCheck 실행");
-		return session.selectOne(NS+"idCheck", id);
+		int cnt = session.selectOne(NS+"idCheck", id);
+		return (cnt == 1)?false:true;
 	}
 
 	@Override
-	public int emailCheck(String email) {
+	public boolean emailCheck(String email) {
 		log.info("emailCheck 실행");
-		return session.selectOne(NS+"emailCheck", email);
+		int cnt = session.selectOne(NS+"emailCheck", email);
+		return (cnt == 1)?false:true;
 	}
 
 	@Override
