@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+#container {
+	
+}
+
+.agree{
+	padding:20px;
+	border:1px solid #e6e6e6;
+	background:#fff;
+}
+
+.agree p{
+	padding:0 0 17px;
+}	
+	
+.agreeArea{
+	padding:20px 20px 15px 20px;
+	border:1px solid #d7d5d5;
+	color:#747474;
+	font-size:11px;
+	line-height:20px;
+	background:#fbfafa;
+}
+	
+.agreeArea .agree{
+	overflow:auto;
+	height:110px;
+	padding:20px;
+	border:1px solid #e6e6e6;
+	background:#fff;
+}
+
+.agreeArea .agree p{
+	padding:0 0 17px;
+
+}
+
+.agreeArea .check{
+	padding:7px 0 0 0;
+	color:#202020;
+	font-size:12px;
+}

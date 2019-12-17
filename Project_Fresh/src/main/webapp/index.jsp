@@ -7,10 +7,17 @@
 <title>실험용</title>
 </head>
 <body>
-집에 가소 어서 가소
-<a href="./paging.do">집에 가소 어서 가소</a>
-<a href="./jumun.do">주문 테스트용</a>
-<a href="./product.do">상품관리 Test</a>
-<a href="./gochart.do">차트조회</a>
+
+	집에 가소 어서 가소 <a href="./paging.do">집에 가소 어서 가소</a>
+	<br>
+	상품관리 Test <a href="./product.do">전체상품</a>
+	<br>
+	이용약관 Test <a href="./termsOfUse.do">이용약관</a>
+	<br>
+	회원가입 Test <a href="./memberSignup.do">회원가입</a>
+	<br>
+	주문 Test <a href="./jumun.do">주문 테스트용</a>
+	<br>
+	Google Chart <a href="./gochart.do">차트조회</a>
 </body>
 </html>
