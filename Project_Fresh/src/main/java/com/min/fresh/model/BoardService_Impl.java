@@ -139,13 +139,13 @@ public class BoardService_Impl implements IBoardServiceDao {
 	}
 
 	@Override
-	public Jumunpage_DTO jumunpageListScroll(String sangcode) {
+	public List<Jumunpage_DTO> jumunpageListScroll(String sangcode) {
 		log.info("jumunpageListScroll");
 		return dao.jumunpageListScroll(sangcode);
 	}
 
 	@Override
-	public Jumunpage_DTO jumunpageDeepListScroll(String sangname) {
+	public List<Jumunpage_DTO> jumunpageDeepListScroll(String sangname) {
 		log.info("jumunpageDeepListScroll");
 		return dao.jumunpageDeepListScroll(sangname);
 	}

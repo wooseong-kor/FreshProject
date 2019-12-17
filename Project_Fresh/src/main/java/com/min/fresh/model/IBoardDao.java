@@ -52,9 +52,9 @@ public interface IBoardDao {
 //	QnA 답변 글 조회
 	public QA_GO_DTO answerOne(int seq);
 //	카테고리 별 상품 목록 조회
-	public Jumunpage_DTO jumunpageListScroll(String sangcode);
+	public List<Jumunpage_DTO> jumunpageListScroll(String sangcode);
 //	세부 품목 별 상품 목록 조회
-	public Jumunpage_DTO jumunpageDeepListScroll(String sangname);
+	public List<Jumunpage_DTO> jumunpageDeepListScroll(String sangname);
 //	사용자의 상품 검색 
 	public Jumunpage_DTO searchJumunpageList(String sangname);
 //	상품 상세보기(구매페이지)
