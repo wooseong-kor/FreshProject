@@ -21,12 +21,12 @@ public class MemberService_Impl implements IMemberService{
 	}
 
 	@Override
-	public int idCheck(String id) {
+	public boolean idCheck(String id) {
 		return dao.idCheck(id);
 	}
 
 	@Override
-	public int emailCheck(String email) {
+	public boolean emailCheck(String email) {
 		return dao.emailCheck(email);
 	}
 
