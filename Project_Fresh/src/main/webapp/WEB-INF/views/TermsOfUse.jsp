@@ -9,6 +9,7 @@
 	function memberSignupAction(){
 		var serviceChk = document.getElementById("agree_service_check").checked;
 		var privacyChk = document.getElementById("agree_privacy_check").checked;
+		
 		if (serviceChk == true && privacyChk == true) {
 			location.href = "./memberSignup.do";
 		} else if(serviceChk == false && privacyChk == true) {
