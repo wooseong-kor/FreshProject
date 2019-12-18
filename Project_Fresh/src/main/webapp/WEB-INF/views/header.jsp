@@ -7,11 +7,10 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <meta charset="UTF-8">
 <title>헤더</title>
-<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/sweetalert.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap-theme.min.css">
 </head>
