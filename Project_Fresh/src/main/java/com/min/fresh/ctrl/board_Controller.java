@@ -507,6 +507,4 @@ public class board_Controller {
 	
 	
 	
-	
 }
-
