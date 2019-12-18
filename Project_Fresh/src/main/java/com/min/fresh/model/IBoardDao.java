@@ -9,6 +9,7 @@ import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
+import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 
 public interface IBoardDao {
@@ -76,7 +77,7 @@ public interface IBoardDao {
 //	상품 구매 페이지 입력
 	public int insertJumunpage(Jumunpage_DTO jDto);
 //	상품 이미지 입력
-	public int insertProductimg(Jumunpage_DTO jDto);
+	public int insertProductimg(ProductImg_DTO pDto);
 //	장바구니 입력
 	public int cartInsert(Member_DTO mDto);
 //	장바구니 수정

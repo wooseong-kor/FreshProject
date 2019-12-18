@@ -201,11 +201,12 @@
 	<!--카테고리 별 상품 목록 조회 -->
 	<select id="jumunpageListScroll"
 		parameterType="java.lang.String" resultMap="JPageMap">
-		SELECT G.SANGPGNUM SANGPGNUM, S.SANGCODE SANGCODE,S.SANGNAME SANGNAME,
-		G.SANGPNAME SANGPNAME,G.TITLE TITLE,G.CONTENT CONTENT,S.PRICE PRICE 
-		FROM PRODUCT 
-		 S, JUMUNPAGE G WHERE S.SANGCODE LIKE '%'|| #{sangcode}||'%' 
-		AND S.SANGCODE=G.SANGCODE
+		SELECT SANGPGNUM,SANGCODE,SANGPNAME,IMGPATH,TITLE,PRICE
+		FROM JUMUNPAGE JOIN PRODUCTIMG
+		USING(SANGPGNUM) 
+		JOIN PRODUCT 
+		USING (SANGCODE)
+		WHERE SANGCODE LIKE '%'|| #{sangcode}||'%' 
 	</select>
 	<!--상세품목 별 상품 목록조회 -->
 	<select id="jumunpageDeepListScroll" parameterType="java.lang.String" resultMap="JPageMap">
@@ -278,11 +279,19 @@
 		VALUES(#{sangpgnum},#{sangcode},#{sangpname},#{title},#{content})
 	</insert>
 	<!-- 상품 이미지 입력 -->
-	<insert id="insertProductimg" parameterType="JPage">
+	<insert id="insertProductimg" parameterType="PImg">
 		INSERT INTO PRODUCTIMG(SEQ,SANGPGNUM,
 		IMGNAME,SAVENAME,IMGPATH)
 		VALUES(PRODUCTIMG_SEQ.NEXTVAL,#{sangpgnum},#{imgname},#{savename},#{imgpath})
 	</insert>
+	<!-- @@@@@쿼리테스트-이미지 불러오기 추가 @@@@@ -->
+	<!-- <select id="selectProductImg" >
+	SELECT IMGPATH,TITLE,PRICE
+	FROM JUMUNPAGE JOIN PRODUCTIMG
+	USING(SANGPGNUM) 
+	JOIN PRODUCT 
+	USING (SANGCODE)
+	</select> -->
 	<!-- @@@@@쿼리테스트-장바구니 추가 @@@@@ -->
 	<!-- 장바구니 입력 -->
 	<insert id="cartInsert" parameterType="Member">
