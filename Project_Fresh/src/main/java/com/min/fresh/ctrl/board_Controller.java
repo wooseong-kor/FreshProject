@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
+import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 import com.min.fresh.dto.RowNum_DTO;
