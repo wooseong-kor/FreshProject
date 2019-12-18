@@ -14,22 +14,22 @@
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap-theme.min.css">
 </head>
 <style type="text/css">
-.footer{
-	font-size: x-small;
-	position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-	padding: 15px 0;
-	text-align: center;
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 6rem;
+  font-size: x-small;
+  text-align: center;
 }
 </style>
 <body>
 <!--풋터-->
-<footer class="page-footer font-small blue">
+<footer>
 <div class="footer">
-
-	 <div class="footer-copyright text-center py-3">
+	
+	 <div id="wrapper">
 		주소 : 서울특별시 강남구 역삼동<br>
 		<span class="point">고객센터 : 010-4696-5663</span><br>
 		COPYRIGHTⓒ2019 FRESH ALL RIGHTS RESERVED.

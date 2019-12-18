@@ -33,7 +33,6 @@
 				
 					<input type="submit" value="등록">
 			</form>
-					<a href="#">수정하기</a>
 		</div>
 	</div>
 <%@include file="/WEB-INF/views/footer.jsp"%>
