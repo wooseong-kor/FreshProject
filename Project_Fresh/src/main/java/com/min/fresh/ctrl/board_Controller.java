@@ -420,5 +420,15 @@ public class board_Controller {
 		return "jumunpageListScroll";
 	}
 
+	@RequestMapping(value = "/selectJaegoCnt.do",method = RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String jaegocnt(String sangcode,String jumcnt) {
+		String cnt = "";
+		System.out.println("안녕 나는 상품코드야"+sangcode);
+		cnt = String.valueOf(service.selectJaegoCnt(sangcode));
+		System.out.println("상품개수"+cnt);
+		return cnt;
+	}
 	
 }

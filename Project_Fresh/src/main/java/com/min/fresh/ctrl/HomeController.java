@@ -40,7 +40,7 @@ public class HomeController {
 	 * @param session
 	 * @throws UnsupportedEncodingException
 	 */
-	@RequestMapping(value = "/login.do",method = RequestMethod.GET)
+	@RequestMapping(value = "/loginNaver.do",method = RequestMethod.GET)
 	public void login(Model model, HttpSession session) throws UnsupportedEncodingException {
 		logger.info("네이버 로그인 진입");
 		 String clientId = "JM0KTccnO5VR3Agsnv0Q";//애플리케이션 클라이언트 아이디값";

@@ -139,7 +139,7 @@
 </form>
 ${lists} ${count}
 <hr>
-<form action="#" id="frm">
+<form action="#" id="frm2">
 <input type="text" id="id" name="id" onclick="seeker()"><span id="spansel"></span>
 </form>
 <Hr>
