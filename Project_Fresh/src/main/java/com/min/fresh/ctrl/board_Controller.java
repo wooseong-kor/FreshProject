@@ -12,7 +12,6 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
-import com.min.fresh.dto.Jaego_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.ProductImg_DTO;
@@ -510,6 +508,4 @@ public class board_Controller {
 	
 	
 	
-	
 }
-
