@@ -36,6 +36,7 @@ import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IBoardServiceDao;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IPagingService;
+import com.min.fresh.utils.FileUpload;
 
 @Controller
 public class board_Controller {
