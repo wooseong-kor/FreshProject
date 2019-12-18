@@ -19,5 +19,8 @@
 	주문 Test <a href="./jumun.do">주문 테스트용</a>
 	<br>
 	Google Chart <a href="./gochart.do">차트조회</a>
+	<br>
+	배송지 추가 <a href="./insertAddrlist.do?id=MAN">배송지</a> <br>
+	상품 등록 <a href="./insertJumunpage.do">상품 상세</a> 
 </body>
 </html>
