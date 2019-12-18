@@ -31,11 +31,13 @@ import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jaego_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
+import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IBoardServiceDao;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IPagingService;
+import com.min.fresh.utils.FileUpload;
 
 @Controller
 public class board_Controller {
@@ -144,6 +146,7 @@ public class board_Controller {
 		OutputStream out = null;// 파일의 데이터를 저장할 경로에 바이트 형태로 보내주는 스트림
 		PrintWriter printWriter = null;// 출력을 지원해주는 스트림
 		JsonObject json = new JsonObject();// json으로 사용하기 위해.
+		FileUpload fu = new FileUpload();
 
 		String filename = upload.getOriginalFilename();// 화면에서 등록한 파일을 담은 파라미터
 
@@ -153,11 +156,13 @@ public class board_Controller {
 			String attachPath = "C:\\eclipse_fresh\\eclipse-jee-2019-09-R-win32-x86_64\\eclipse\\workspace_fresh\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Project_Fresh\\image\\";
 			// 파일이 업로드 되는 경로(상대
 			String uploadPath = attachPath.replace("/", "\\") + filename;
+			String realPath = "C:\\Users\\user\\git\\FreshProject\\Project_Fresh\\src\\main\\webapp\\image/";
 
 			System.out.println(filename);
 
 			out = new FileOutputStream(new File(uploadPath));
 			out.write(bytes);
+			fu.fileCopy(attachPath + "\\" + filename, realPath + "\\" + filename);
 
 			System.out.println(out);
 
@@ -344,6 +349,7 @@ public class board_Controller {
 		resp.setContentType("text/html;charset=UTF-8");
 		OutputStream out = null;// 파일의 데이터를 저장할 경로에 바이트 형태로 보내주는 스트림
 		PrintWriter printWriter = null;// 출력을 지원해주는 스트림
+		FileUpload fu = new FileUpload();
 		JsonObject json = new JsonObject();// json으로 사용하기 위해.
 
 		String filename = upload.getOriginalFilename();// 화면에서 등록한 파일을 담은 파라미터
@@ -354,11 +360,13 @@ public class board_Controller {
 			String attachPath = "C:\\eclipse_fresh\\eclipse-jee-2019-09-R-win32-x86_64\\eclipse\\workspace_fresh\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Project_Fresh\\image\\";
 			// 파일이 업로드 되는 경로(상대
 			String uploadPath = attachPath.replace("/", "\\") + filename;
+			String realPath = "C:\\Users\\user\\git\\FreshProject\\Project_Fresh\\src\\main\\webapp\\image/";
 
 			System.out.println(filename);
 
 			out = new FileOutputStream(new File(uploadPath));
 			out.write(bytes);
+			fu.fileCopy(attachPath + "\\" + filename, realPath + "\\" + filename);
 
 			System.out.println(out);
 
@@ -411,7 +419,7 @@ public class board_Controller {
 
 	// 카테고리 별 상품 목록 조회
 	@RequestMapping(value = "/jumunpageListScroll.do", method = RequestMethod.GET)
-	public String jumunpageListScroll(Model model,String sangcode) {
+	public String jumunpageListScroll(Model model, String sangcode) {
 		log.info("jumunpageListScroll 카테고리 별 상품 목록 조회");
 		System.out.println(sangcode);
 		List<Jumunpage_DTO> lists = service.jumunpageListScroll(sangcode);
@@ -420,5 +428,78 @@ public class board_Controller {
 		return "jumunpageListScroll";
 	}
 
+	// 상품 목록 페이지용 이미지(썸네일) 등록
+	@RequestMapping(value = "/insertProductimg.do", method = RequestMethod.GET)
+	public String insertProductimg() {
+		log.info("insertProductimg 목록 용 이미지 등록");
+		return "insertProductimg";
+	}
+
+	// 상품 목록 페이지용 이미지(썸네일)
+	@RequestMapping(value = "/insertProductImg.do", method = RequestMethod.POST)
+	public void insertProductImg(HttpServletRequest req, HttpServletResponse resp, @RequestParam MultipartFile upload)
+			throws IOException {
+		log.info("insertProductImg 이미지 업로드");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html;charset=UTF-8");
+		OutputStream out = null;// 파일의 데이터를 저장할 경로에 바이트 형태로 보내주는 스트림
+		PrintWriter printWriter = null;// 출력을 지원해주는 스트림
+		JsonObject json = new JsonObject();// json으로 사용하기 위해.
+		String filename = upload.getOriginalFilename();// 화면에서 등록한 파일을 담은 파라미터
+		FileUpload fu = new FileUpload();
+
+		try {
+			byte[] bytes = upload.getBytes();// byte를 사용하기 때문
+			// 상대경로(was에 저장되는 경로
+			String attachPath = "C:\\eclipse_fresh\\eclipse-jee-2019-09-R-win32-x86_64\\eclipse\\workspace_fresh\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\Project_Fresh\\image\\";
+			// 파일이 업로드 되는 경로(상대
+			String uploadPath = attachPath.replace("/", "\\") + filename;
+			String realPath = "C:\\Users\\user\\git\\FreshProject\\Project_Fresh\\src\\main\\webapp\\image/";
+
+			System.out.println(filename);
+
+			out = new FileOutputStream(new File(uploadPath));
+			out.write(bytes);
+			fu.fileCopy(attachPath + "\\" + filename, realPath + "\\" + filename);
+
+			System.out.println(out);
+
+			printWriter = resp.getWriter();
+			String fileUrl = "http://localhost:8099/Project_Fresh/image/" + filename;
+			System.out.println(fileUrl);
+
+			json.addProperty("uploaded", 1);
+			json.addProperty("fileName", filename);
+			json.addProperty("url", fileUrl);
+
+			printWriter.println(json);
+			req.setAttribute("fileUrl", fileUrl);
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				out.close();
+			}
+			if (printWriter != null) {
+				printWriter.close();
+			}
+		}
+
+	}
+
+	// 상품 구매페이지 등록
+	@RequestMapping(value = "/insertProductImgForm.do", method = RequestMethod.POST)
+	public String insertProductImgForm(ProductImg_DTO pDto) {
+		log.info("insertProductImgForm 이미지 등록");
+		boolean isc = service.insertProductimg(pDto);
+		return isc ? "redirect:/jumunpageDeepOne.do?sangpgnum=" + pDto.getSangpgnum() : "insertProductimg";
+	}
+	
+	
+	
+	
+	
 	
 }
+

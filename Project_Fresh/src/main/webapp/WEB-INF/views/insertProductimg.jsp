@@ -12,28 +12,27 @@
 		CKEDITOR.replace('ckeditor', {
 			width:"100%",
 			height:"300px",
-			filebrowserUploadUrl:"./insertJumunpageImg.do" 
+			filebrowserUploadUrl:"./insertProductImg.do" 
 			
 		});
 	});
 </script>
-<title>상품 구매페이지 등록</title>
+<title>목록 썸네일 등록</title>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <div id="container" style="width:90%; margin: auto;">
 		<div class="col-sm-6">
-			<form action="./insertJumunpageForm.do" class="form-horizontal" role="form" id="editorForm" method="post">
-					<h5>상품 구매페이지 등록</h5>
+			<form action="./insertProductImgForm.do" class="form-horizontal" role="form" id="editorForm" method="post" enctype="multipart/form-data">
+					<h5>목록 썸네일 등록</h5>
 					<input type="text"  class="form-control" name="sangpgnum" placeholder="sangpgnum"><br>
-					<input type="text" class="form-control" id="sangcode" placeholder="sangcode" name="sangcode" required="required"><br>
-					<input type="text" class="form-control" id="sangpname" placeholder="sangpname" name="sangpname" required="required"><br>
-					<input type="text" class="form-control" id="title" placeholder="title" name="title" required="required"><br>
-					<textarea name="content" id="ckeditor"></textarea>
-				
+					<input type="text" class="form-control" id="imgname" placeholder="imgname" name="imgname" required="required"><br>
+					<input type="text" class="form-control" id="savename" placeholder="savename" name="savename" required="required"><br>
+					<textarea name="imgpath" id="ckeditor"></textarea>
 					<input type="submit" value="등록">
 			</form>
 		</div>
 	</div>
-<%@include file="/WEB-INF/views/footer.jsp"%>
+<%-- <%@include file="/WEB-INF/views/footer.jsp"%> --%>
+</body>
 </html>

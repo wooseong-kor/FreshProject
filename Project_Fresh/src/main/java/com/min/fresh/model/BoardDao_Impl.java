@@ -15,6 +15,7 @@ import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
+import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 
 @Repository
@@ -214,9 +215,9 @@ public class BoardDao_Impl implements IBoardDao {
 	}
 
 	@Override
-	public int insertProductimg(Jumunpage_DTO jDto) {
+	public int insertProductimg(ProductImg_DTO pDto) {
 		log.info("insertProductimg 실행");
-		return session.insert(NS + "insertProductimg", jDto);
+		return session.insert(NS + "insertProductimg", pDto);
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
+import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 
 @Service
@@ -211,9 +212,9 @@ public class BoardService_Impl implements IBoardServiceDao {
 	}
 
 	@Override
-	public boolean insertProductimg(Jumunpage_DTO jDto) {
+	public boolean insertProductimg(ProductImg_DTO pDto) {
 		log.info("insertProductimg");
-		return (dao.insertProductimg(jDto)>0)?true:false;
+		return (dao.insertProductimg(pDto)>0)?true:false;
 	}
 
 	@Override
