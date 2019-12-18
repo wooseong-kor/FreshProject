@@ -14,7 +14,7 @@
 </script>
 <style type="text/css">
 .vertical-menu {
-  width: 150px;
+  width: 170px;
   position: absolute;
   left: 30px;
 }
@@ -48,16 +48,19 @@
 			<a href="http://localhost:8099/Project_Fresh/jumunpageListScroll.do?sangcode=TO">Tomato</a>
 		</div>	
 		<div style="margin-left:14%">
-		<div class="col-sm-10">
-		<table>
 		 <c:forEach var="dto" items="${lists}" varStatus="vs">
-			<h5>상품명 -${dto.sangpname}</h5>
+		<div class="col-sm-10">
+		 	<div class="image" style="display: inline; float: left;">
+			<p>${dto.productImg_DTO.imgpath}</p>
+			</div>
+			<div class="content" style="display: inline; float: left; margin-top: 8px; margin-left: 30px; ">
 			<h3>${dto.title}</h3>
-			<p id="image">${dto.productImg_DTO.imgpath}</p>
-			<h5>가격 -${dto.product_DTO.price}</h5>
+			<h4>가격 -${dto.product_DTO.price}</h4>
+			<p>상품명 -${dto.sangpname}</p>
+			<p>배송비-2500원</p>
+			</div>
+			</div>
 			</c:forEach>
-		</table>	
-		</div>
 		</div>
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>

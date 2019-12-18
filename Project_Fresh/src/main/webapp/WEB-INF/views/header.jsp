@@ -49,7 +49,7 @@ a{
 					        PRODUCT
 					      </a>
 					      <div class="dropdown-menu">
-					        <a class="dropdown-item" href="#">&nbsp;&nbsp;&nbsp;CATEGORY</a>
+					        <a class="dropdown-item" href="http://localhost:8099/Project_Fresh/jumunpageListScroll.do?sangcode=0">&nbsp;&nbsp;&nbsp;CATEGORY</a>
 						      </div>
 					    </li>
 						<li class="nav-item dropdown"><a href="#">NOTICE</a></li>
