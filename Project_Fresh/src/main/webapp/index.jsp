@@ -12,9 +12,7 @@
 	<br>
 	상품관리 Test <a href="./product.do">전체상품</a>
 	<br>
-	이용약관 Test <a href="./termsOfUse.do">이용약관</a>
-	<br>
-	회원가입 Test <a href="./memberSignup.do">회원가입</a>
+	이용약관 Test <a href="./termsOfUse.do">회원가입</a>
 	<br>
 	주문 Test <a href="./jumun.do">주문 테스트용</a>
 	<br>

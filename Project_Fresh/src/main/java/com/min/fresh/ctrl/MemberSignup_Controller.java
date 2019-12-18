@@ -14,9 +14,11 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IProductService;
 
@@ -78,9 +80,39 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		log.info("★★★★★ 회원가입 - 이메일 중복 체크 ★★★★★ {}", email);
 		Map<String, String> map = new HashMap<String, String>();
 		boolean isc = service.emailCheck(email);
-		System.out.println("%%%%%%%^^^^^^" + isc);
+		System.out.println("★★★★★ 이메일 중복체크 결과 : " + isc);
 		map.put("isc", isc+"");
 		return map;
+	}
+	
+	/**
+	 * 회원가입
+	 * @param dto 회원정보
+	 * @param password 비밀번호
+	 * @param phone1 핸드폰 앞자리 3자리
+	 * @param phone2 핸드폰 가운데 4자리
+	 * @param phone3 핸드폰 뒷자리 4자리
+	 * @return 회원가입
+	 */
+	@RequestMapping(value = "/memberAdd.do", method = RequestMethod.POST)
+	public String memberAdd(Member_DTO dto, @RequestParam("pswd2") String password,
+			@RequestParam("phone1") String phone1, @RequestParam("phone2") String phone2,
+			@RequestParam("phone3") String phone3 ) {
+		String phone = phone1 +"-"+ phone2 +"-"+ phone3;
+		dto.setPassword(password);
+		dto.setPhone(phone);
+		log.info("★★★★★ 회원가입 - 회원추가 ★★★★★\n {}", dto);
+		return service.insertMember(dto)?"WelcomeFresh":"Error";
+	}
+	
+	/**
+	 * 로그인 페이지 이동
+	 * @return 로그인페이지 이동
+	 */
+	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
+	public String login () {
+		log.info("★★★★★ 로그인 페이지 이동 ★★★★★");
+		return "Login";
 	}
 	
 	/**

@@ -9,8 +9,11 @@
 	function memberSignupAction(){
 		var serviceChk = document.getElementById("agree_service_check").checked;
 		var privacyChk = document.getElementById("agree_privacy_check").checked;
-		
+// 		alert("회원가입");
+// 		alert("이용약관"+serviceChk);
+// 		alert("개인정보"+privacyChk);
 		if (serviceChk == true && privacyChk == true) {
+			alert("약관확인완료\n회원가입 페이지로 이동합니다.")
 			location.href = "./memberSignup.do";
 		} else if(serviceChk == false && privacyChk == true) {
 			alert("이용약관은 필수 동의 사항입니다.")
