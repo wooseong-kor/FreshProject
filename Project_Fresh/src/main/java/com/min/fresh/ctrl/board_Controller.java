@@ -31,13 +31,11 @@ import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jaego_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
-import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IBoardServiceDao;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IPagingService;
-import com.min.fresh.utils.FileUpload;
 
 @Controller
 public class board_Controller {
@@ -497,6 +495,16 @@ public class board_Controller {
 	}
 	
 	
+	@RequestMapping(value = "/selectJaegoCnt.do",method = RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String jaegocnt(String sangcode,String jumcnt) {
+		String cnt = "";
+		System.out.println("안녕 나는 상품코드야"+sangcode);
+		cnt = String.valueOf(service.selectJaegoCnt(sangcode));
+		System.out.println("상품개수"+cnt);
+		return cnt;
+	}
 	
 	
 	
