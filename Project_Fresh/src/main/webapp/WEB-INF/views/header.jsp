@@ -36,7 +36,8 @@ a{
 <script type="text/javascript" src="./js/ProductManagement.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-  $(".dropdown-toggle").dropdown("toggle");
+//  $(".dropdown-toggle").dropdown("toggle");
+	$(".dropdown-menu").hide();
 });
 </script>
 	<header>

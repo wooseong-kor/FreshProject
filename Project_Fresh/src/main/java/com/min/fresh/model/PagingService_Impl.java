@@ -126,20 +126,20 @@ public class PagingService_Impl implements IPagingService {
 //		return dao.addrListOne(jumunnum);
 //	}
 //
-//	@Override
-//	public int countMemberJumun(String id) {
-//		return dao.countMemberJumun(id);
-//	}
+	@Override
+	public int countMemberJumun(String id) {
+		return dao.countMemberJumun(id);
+	}
+
+	@Override
+	public List<Jumun_DTO> memberJumunList(Map<String, Object> map) {
+		return dao.memberJumunList(map);
+	}
 //
-//	@Override
-//	public List<Jumun_DTO> memberJumunList(Map<String, Object> map) {
-//		return dao.memberJumunList(map);
-//	}
-//
-//	@Override
-//	public int countAllJumun() {
-//		return dao.countAllJumun();
-//	}
+	@Override
+	public int countAllJumun() {
+		return dao.countAllJumun();
+	}
 //
 //	@Override
 //	public List<Jumun_DTO> allJumunList(RowNum_DTO dto) {

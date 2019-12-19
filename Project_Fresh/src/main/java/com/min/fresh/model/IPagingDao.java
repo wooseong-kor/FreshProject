@@ -62,11 +62,11 @@ public interface IPagingDao {
 //	//배송지 보기 (주문내역,결제내역에서 배송지코드만 나오게 했는데 버튼을 누르면 상세내용이 아작스로 표출) 다른 매퍼로 이동
 //	public AddrList_DTO addrListOne(String jumunnum);
 //	//회원별 주문 내역
-//	public int countMemberJumun(String id);
+	public int countMemberJumun(String id);
 //	//회원별 주문 내역 페이징
-//	public List<Jumun_DTO> memberJumunList(Map<String, Object> map);
+	public List<Jumun_DTO> memberJumunList(Map<String, Object> map);
 //	//전체 주문내역 수
-//	public int countAllJumun();
+	public int countAllJumun();
 //	//전체 주문내역 페이징 관리자용
 //	public List<Jumun_DTO> allJumunList(RowNum_DTO dto);
 	//상품 상세 페이지 전체 개수
