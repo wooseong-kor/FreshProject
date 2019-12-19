@@ -12,6 +12,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
+import com.min.fresh.dto.Jaego_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.ProductImg_DTO;
@@ -130,7 +132,7 @@ public class board_Controller {
 	// QnA 글 작성
 	@RequestMapping(value = "/insertQago.do", method = RequestMethod.GET)
 	public String insertQago() {
-		log.info("insertQago 글 작성 이동");
+		log.info("insertQago 글 작성 이동");	
 		return "insertQago";
 	}
 
@@ -191,7 +193,6 @@ public class board_Controller {
 	@RequestMapping(value = "/QagoWrite.do", method = RequestMethod.POST)
 	public String QagoWrite(QA_GO_DTO dto) {
 		log.info("QagoWrite");
-		dto.getId();
 		boolean isc = service.insertQago(dto);
 		return isc ? "insertQago" : "insertQago";
 	}
@@ -205,14 +206,14 @@ public class board_Controller {
 
 	// QnA 글 수정 등록
 	@RequestMapping(value = "/updateQagoForm.do", method = RequestMethod.POST)
-	public String updateQagoForm(QA_GO_DTO qDto, Model model) {
+	public String updateQagoForm(Model model,QA_GO_DTO dto) {
 		log.info("updateQagoForm 글 작성 등록");
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("title", qDto.getTitle());
-		map.put("content", qDto.getContent());
-		map.put("seq", null);
-		boolean isc = service.updateQago(qDto);
-		model.addAttribute("dto", qDto);
+		map.put("title", dto.getTitle());
+		map.put("content", dto.getContent());
+		map.put("seq", dto.getSeq());
+		boolean isc = service.updateQago(dto);
+		model.addAttribute("dto", dto);
 		return isc ? "updateQago" : "updateQago";
 	}
 
@@ -225,12 +226,12 @@ public class board_Controller {
 	}
 
 	// QnA,공지 글 상세 조회
-	@RequestMapping(value = "/qagoOne.do", method = RequestMethod.GET)
-	public String qagoOne(int seq, Model model) {
+	@RequestMapping(value = "/QagoOne.do", method = RequestMethod.GET)
+	public String qagoOne(@RequestParam("seq") int seq, Model model) {
 		log.info("qagoOne 글 상세조회", seq);
 		QA_GO_DTO qDto = service.qagoOne(seq);
 		model.addAttribute("qDto", qDto);
-		return "qagoOne";
+		return "QagoOne";
 	}
 
 	// QnA 답글 작성
@@ -493,19 +494,15 @@ public class board_Controller {
 		boolean isc = service.insertProductimg(pDto);
 		return isc ? "redirect:/jumunpageDeepOne.do?sangpgnum=" + pDto.getSangpgnum() : "insertProductimg";
 	}
-	
-	// 아작스로 현재 재고를 불러와 표시해줌
-	@RequestMapping(value = "/selectJaegoCnt.do",method = RequestMethod.POST,
-			produces = "application/text; charset=UTF-8")
+
+	@RequestMapping(value = "/selectJaegoCnt.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String jaegocnt(String sangcode,String jumcnt) {
+	public String jaegocnt(String sangcode, String jumcnt) {
 		String cnt = "";
-		System.out.println("안녕 나는 상품코드야"+sangcode);
+		System.out.println("안녕 나는 상품코드야" + sangcode);
 		cnt = String.valueOf(service.selectJaegoCnt(sangcode));
-		System.out.println("상품개수"+cnt);
+		System.out.println("상품개수" + cnt);
 		return cnt;
 	}
-	
-	
-	
+
 }

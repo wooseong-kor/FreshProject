@@ -24,13 +24,15 @@
 <div id="container" style="width:90%; margin: auto;">
 		<div class="col-sm-6">
 			<form action="./updateQagoForm.do" class="form-horizontal" role="form" id="editorForm" method="post">
-					<h2>QnA 질문 작성</h2>
+					<h2>QnA 질문 수정</h2>
+					<label for="id">번호</label> 
+					<input type="text"  class="form-control" name="seq">
 					<label for="id">아이디</label> 
 					<input type="text"  class="form-control" name="id" placeholder="아이디">
 					<label for="title">제목</label>
 					<input type="text" class="form-control" id="title" placeholder="제목" name="title" required="required"><br>
 					<label for="content">내용</label> 
-					 <textarea name="content" id="ckeditor">${dto.content}</textarea>
+					 <textarea name="content" id="ckeditor">${dto}</textarea>
 				
 					<input type="submit" value="글수정">
 			</form>
