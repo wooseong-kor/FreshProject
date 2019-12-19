@@ -21,26 +21,26 @@ import com.min.fresh.model.IPagingService;
 @Controller
 public class Paging_Controller {
 
-	private Logger log = LoggerFactory.getLogger(Paging_Controller.class);
-	
-	@Autowired
-	private IPagingService service;
-	
-	@Autowired
-	private IJaegoService jservice;
-	
-	@RequestMapping(value = "/paging.do", method = RequestMethod.GET)
-	public String paging(Model model) {
-		log.info("페이징 1차 실험");
-		RowNum_DTO dto = new RowNum_DTO();
-		dto.setTotal(jservice.countAllGoodJaego());
-		int count = dto.getCount();
-		System.out.println(count);
-		System.out.println(dto);
-		List<Jaego_DTO> lists = jservice.allGoodJaegoList(dto);
-		model.addAttribute("lists", lists);
-		model.addAttribute("count", count);
-		return "page";
-	}
+//	private Logger log = LoggerFactory.getLogger(Paging_Controller.class);
+//	
+//	@Autowired
+//	private IPagingService service;
+//	
+//	@Autowired
+//	private IJaegoService jservice;
+//	
+//	@RequestMapping(value = "/paging.do", method = RequestMethod.GET)
+//	public String paging(Model model) {
+//		log.info("페이징 1차 실험");
+//		RowNum_DTO dto = new RowNum_DTO();
+//		dto.setTotal(jservice.countAllGoodJaego());
+//		int count = dto.getCount();
+//		System.out.println(count);
+//		System.out.println(dto);
+//		List<Jaego_DTO> lists = jservice.allGoodJaegoList(dto);
+//		model.addAttribute("lists", lists);
+//		model.addAttribute("count", count);
+//		return "page";
+//	}
 	
 }
