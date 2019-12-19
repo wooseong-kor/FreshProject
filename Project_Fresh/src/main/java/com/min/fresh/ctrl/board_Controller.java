@@ -508,4 +508,5 @@ public class board_Controller {
 		System.out.println("상품개수" + cnt);
 		return cnt;
 	}
+
 }
