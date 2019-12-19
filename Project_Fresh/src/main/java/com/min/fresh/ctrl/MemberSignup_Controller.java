@@ -5,6 +5,7 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		log.info("★★★★★ 회원가입 - 아이디 중복 체크 ★★★★★ {}", id);
 		Map<String, String> map = new HashMap<String, String>();
 		boolean isc = service.idCheck(id);
-		System.out.println("%%%%%%%^^^^^^" + isc);
+		System.out.println("★★★★★ 아이디 중복체크 결과 : " + isc);
 		map.put("isc", isc+"");
 		return map;
 	}
@@ -109,10 +110,105 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 	 * 로그인 페이지 이동
 	 * @return 로그인페이지 이동
 	 */
-	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
-	public String login () {
+	@RequestMapping(value = "/loginPage.do", method = RequestMethod.GET)
+	public String loginPage () {
 		log.info("★★★★★ 로그인 페이지 이동 ★★★★★");
 		return "Login";
+	}
+	
+	/**
+	 * 로그인 가능여부 확인
+	 * @param id 회원 아이디
+	 * @param pw 회원 비밀번호
+	 * @return true 성공 / false 실패
+	 */
+	@RequestMapping(value = "/loginCheck.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, Object> loginCheck (Member_DTO dto) {
+		log.info("★★★★★ 로그인 - 가능여부확인 ★★★★★\n▶▷▶ {}", dto);
+		service.updateMemberDelflagJ(); // 자동 정지처리 (경고횟수 2회 이상)
+		service.updateMemberDelflagH(); // 자동 휴먼처리 (마지막로그인 기준 6개월)
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", dto.getId()); // 로그인시 필요한 id
+		map.put("password", dto.getPassword()); // 로그인시 필요한 password
+		Member_DTO mDto = service.loginMember(map);
+		System.out.println("▶▷▶▶▷▶확인" + mDto);
+		if (mDto == null) {
+			map.put("isc", "실패");
+		} else {
+			map.put("delflag", mDto.getDelflag()); // 회원상태에 따른 처리를 위해 회원상태 필요
+			map.put("name", mDto.getName()); // 휴면계정 회원 이름 띄우려고
+			map.put("isc", "성공");
+		}
+		return map;
+	}
+	
+	@RequestMapping(value = "/login.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
+	public String login(HttpSession session, Member_DTO dto) {
+		log.info("★★★★★ 로그인 ★★★★★\n▶▷▶ {}", dto);
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", dto.getId());
+		map.put("password", dto.getPassword());
+		map.put("delflag", dto.getDelflag());
+		Member_DTO mDto = service.loginMember(map);
+		session.setAttribute("mem", mDto);
+		if (mDto.getDelflag() == "N") {
+			return "header";
+		} else { // 휴면계정 상태
+//			return "PasswordSetting";
+			return "DormantAccountPasswordSetting";
+		}
+	}
+	
+	/**
+	 * 휴면계정 비밀번호 재설정
+	 * @param dto 회원정보
+	 * @return 로그인페이지 이동
+	 */
+	@RequestMapping(value = "/pwCheck.do", method = RequestMethod.POST)
+	@ResponseBody
+	public Map<String, String> resetPwLogin (Member_DTO dto) {
+		log.info("★★★★★ 휴면계정 비밀번호 재설정 확인 ★★★★★");
+		System.out.println("▶▷▶재설정에서 받아온 정보" + dto.getDelflag() + ", " + dto.getId() + ", " + dto.getPassword());
+		Map<String, String> map = new HashMap<String, String>();
+		Member_DTO mDto = service.searchPassword(dto.getId());
+		System.out.println("▶▷▶session에 담긴 id로 검색한 pw&delflag = " + mDto.getPassword() +", " + mDto.getDelflag());
+		if (dto.getPassword().equals(mDto.getPassword())) {
+			System.out.println("★★★이전 비밀번호와 동일함. 사용불가★★★");
+			map.put("isc", "불가");
+		} else {
+			map.put("isc", "가능");
+		}
+		return map;
+	}
+	
+	/**
+	 * 휴면계정 비밀번호 재설정 후 로그인이동
+	 * @return 로그인화면
+	 */
+	@RequestMapping(value = "/loginPage.do", method = RequestMethod.POST)
+	public String dapsLogin (HttpSession session, Member_DTO dto) {
+		log.info("★★★★★ 휴면계정 비밀번호 셋팅 후 로그인 페이지 이동 ★★★★★\n{}", dto);
+		boolean isc = service.updateMemberDelflagN(dto.getId()); // 휴면계정 해제
+		Member_DTO mDto = service.searchPassword(dto.getId()); // id로 비밀번호, 상태 확인 (비밀번호는 변경전꺼)
+
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("id", dto.getId());
+		map.put("password", dto.getPassword()); // 새로 입력한 비밀번호 가져와서 넣어주기
+		map.put("delflag", mDto.getDelflag()); // 휴면계정해제 처리된 상태값 넣어주기
+
+		boolean isc2 = service.resetPassword(map); // 재설정한 비밀번호로 정보변경
+		
+		Member_DTO mDto2 = service.loginMember(map);
+		session.setAttribute("mem", mDto2);
+		
+		System.out.println("▶▷▶휴면계정해제 확인 = " + isc);
+		System.out.println("▶▷▶변경한비번으로 변경여부 확인 = " + isc2);
+		System.out.println("▶▷▶새로 담은 유저 정보 : "+ map.toString());
+		System.out.println("▶▷▶session값 확인 : " + session.getAttribute("mem")); 
+
+		session.invalidate();
+		return "redirect:/loginPage.do";
 	}
 	
 	/**
@@ -194,7 +290,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
    public String resetPW(String id,String password) {
       log.info("비밀번호 초기화 완료");
       System.out.println("비번"+id+password);
-      Map<String, String> map = new HashMap<String, String>();
+      Map<String, Object> map = new HashMap<String, Object>();
       map.put("id", id);
       map.put("password", password);
       log.info("비번 초기화 하겠다");
