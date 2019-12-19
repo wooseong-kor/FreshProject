@@ -8,6 +8,8 @@
 </head>
 <body>
 
+	MainContainer이동!!!! <a href="./Main.do">MainContainer이동하자</a>
+	<br>
 	집에 가소 어서 가소 <a href="./paging.do">집에 가소 어서 가소</a>
 	<br>
 	상품관리 Test <a href="./product.do">전체상품</a>
