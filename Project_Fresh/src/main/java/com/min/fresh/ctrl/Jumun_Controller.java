@@ -28,10 +28,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Couponhistory_DTO;
 import com.min.fresh.dto.Jumun_DTO;
+import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.dto.RowNum_DTO;
+import com.min.fresh.model.IBoardServiceDao;
 import com.min.fresh.model.ICouponMileageService;
 import com.min.fresh.model.IJumun_PaymentService;
 import com.min.fresh.model.IMemberService;
@@ -44,6 +47,9 @@ public class Jumun_Controller<E> {
 	
 	@Autowired
 	private IJumun_PaymentService service;
+	
+	@Autowired
+	private IBoardServiceDao board;
 	
 	@Autowired
 	private TossAPI toss;
@@ -215,4 +221,14 @@ public class Jumun_Controller<E> {
 		model.addAttribute("price", price);
 		return "couponSel";
 	}
+	
+	@RequestMapping(value = "/selectBSG.do",method = RequestMethod.GET)
+	public String selectBSG(Model model,HttpServletRequest request) {
+//		Member_DTO dto = (Member_DTO) request.getSession();
+//		dto.getId();
+		List<AddrList_DTO> list = board.addrlistIdList("MAN");
+		model.addAttribute("lists", list);
+		return "selectBSG";
+	}
+	
 }
