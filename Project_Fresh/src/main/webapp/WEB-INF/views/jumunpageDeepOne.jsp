@@ -9,8 +9,9 @@
 <style type="text/css">
 	.jumunContainer{
 		position : fixed;
-		width: 300px;
-		right: 300px;
+		width: 400px;
+		right: 400px;
+		border: 5px solid rgb(21,21,21);
 	}
 </style>
 </head>
@@ -22,6 +23,7 @@
 		totalmoney = $("#absolprice").val();
 		var sangcode = document.getElementById("realsangcode").value;
 		$("#price").html(sel*totalmoney);
+		$("#jummoney").val(sel*totalmoney);		
 		
 		$.ajax({
 			url : "./selectJaegoCnt.do",
@@ -43,36 +45,49 @@
 	
 	function selOption() {
 		var rbox = document.getElementsByName("couOrMile");
-		var mileageuse = document.getElementById("mileageuse");
+		var mileage = document.getElementById("mileage");
 		var couponuse = document.getElementById("couponuse");
 		var maxmile = document.getElementById("maxmile");
 		var memberMileage = document.getElementById("memberMileage");
 		var resultPrice = document.getElementById("resultPrice");
 		var couseq = document.getElementById("couseq");
 		if(rbox[0].checked) {
-			mileageuse.value = "";
+			mileage.value = "";
 			maxmile.checked = false;
-			mileageuse.disabled = true;
+			mileage.disabled = true;
 			maxmile.disabled = true;
 			couponuse.disabled = false;
 		}else {
 			resultPrice.value = "";
 			couseq.value = "";
-			mileageuse.disabled = false;
+			mileage.disabled = false;
 			maxmile.disabled = false;
 			couponuse.disabled = true;
+			
 		}
 		
 	}
 	
+	function limitMileage(){
+		 var memberMile = $("#memberMileage");
+         var mileage = $("#mileage");
+         var memberMileInt = parseInt(memberMile.val());
+         var mileageInt = parseInt(mileage.val());
+         if(mileageInt > memberMileInt) {
+            alert("회원의 보유 마일리지 한도를 초과 하셨습니다.");
+            mileage.val(memberMile.val());
+         }      
+	
+	}
+	
 	function maxMile() {
-		var mileageuse = document.getElementById("mileageuse");
+		var mileage = document.getElementById("mileage");
 		var maxmile = document.getElementById("maxmile");
 		var memberMileage = document.getElementById("memberMileage");
 		if(maxmile.checked){
-			mileageuse.value = memberMileage.value;
+			mileage.value = memberMileage.value;
 		}else {
-			mileageuse.value = "";
+			mileage.value = "";
 		}
 		
 	}
@@ -87,12 +102,35 @@
 	}
 	
 	window.onload = function() {
-		var mileageuse = document.getElementById("mileageuse");
+		var mileage = document.getElementById("mileage");
 		var couponuse = document.getElementById("couponuse");
 		var maxmile = document.getElementById("maxmile");
-		mileageuse.disabled = true;
+		mileage.disabled = true;
 		couponuse.disabled = true;
 		maxmile.disabled = true;
+	}
+	
+	function payment(){
+		$.ajax({
+			url : "./insertjumon.do",
+			data : $("#payment").serialize(),
+			type: "post",
+			async: true,
+			success : function(){
+				var url = "./toss.do?orderNo="+map.orderNo+"&amount="+map.amount+"&productDesc="+map.productDesc;
+				var title = "결제";
+				var prop = "width=500px, height =500px";
+				open(url,title,prop);
+			},
+			error : function(){
+				alert("실패");
+			}
+		});
+	}
+	
+	function selectBSG(){
+		
+		open("./selectBSG.do","400px","400px");
 	}
 </script>
 	<div id="container" style="width: 90%; margin: auto;">
@@ -111,7 +149,7 @@
 			<h3>상품명 : ${dto.sangpname}</h3>
 			<h1>${dto.title}</h1>
 		</div>
-			<form action="#">
+			<form action="#" id="payment">
 		<div>
 			<h5 id="sangcodetag">상품 코드 - <span id="sangcode">${dto.sangcode}</span></h5>
 			<h3 id="pricetag">가격 - <span id="price">${dto.product_DTO.price}</span></h3>
@@ -129,17 +167,22 @@
 				재고량 - <span id="cnt">${n}</span>
 			</h4>
 		</div>
-			</form>
 		<div>
 			<input type="radio" name="couOrMile" onclick="selOption()">쿠폰 
 			<input type="radio" name="couOrMile" onclick="selOption()">마일리지<br>
 			<input type="button" id="couponuse" value="쿠폰 적용" onclick="couponUse()">
-			<input type="text" id="mileageuse">
+			<input type="text" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
 			<input type="hidden" id="memberMileage" value="${mileage}">
 			<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
-			<input type="hidden" id="resultPrice">
+			결제금액 - <input type="text" name="paymoney" readonly="readonly" id="resultPrice">
 			<input type="hidden" id="couseq">
+			<input type="hidden" name="paywhat" value="1">
+			<input type="hidden" name="sangpgnum" value="${dto.sangpgnum}">
+			<input type="hidden" id="jummoney" name="jummoney">
+			<button onclick="selectBSG()">배송지 설정하기</button>
+			<button onclick="payment()">결제하기</button>
 		</div>
+			</form>
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
