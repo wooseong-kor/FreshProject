@@ -3,20 +3,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fresh_가입축하</title>
+<title>Fresh_Wolrd</title>
 </head>
-<body>	
+<body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
-		<img alt="환영합니다." src="./image/welcome.jpg">
-		<br>
-		<a href="#">
-			<input type="button" value="가입축하 쿠폰받기">
-		</a>
-		<br>
-		<a href="./loginPage.do">
-			<input type="button" value="로그인 하러가기">
-		</a>
+		${mem}
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

@@ -94,7 +94,7 @@ public class MemberService_Impl implements IMemberService{
 	public boolean updateMemberDelflagTOne(String id) {
 		return (dao.updateMemberDelflagTOne(id)>0)?true:false;
 	}
-
+	
 	@Override
 	public boolean resetPassword(Map<String, Object> map) {
 		return (dao.resetPassword(map)>0)?true:false;
@@ -103,13 +103,11 @@ public class MemberService_Impl implements IMemberService{
 	@Override
 	public Member_DTO searchPassword(String id) {
 		return dao.searchPassword(id);
-
 	}
 
 	@Override
 	public boolean updateMemberDelflagN(String id) {
 		return (dao.updateMemberDelflagN(id) > 0)?true:false;
-
 	}
 
 }

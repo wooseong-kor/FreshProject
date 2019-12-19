@@ -53,12 +53,15 @@ $(document).ready(function(){
 		if (pw1.length == 0 && pw2.length == 0) {
 			$("#pswdCheckVal").val("false");
 			$("#pswdResult").html("");
+		} else if (pw1.indexOf(" ") != -1 || pw2.indexOf(" ") != -1) {
+			$("#pswdResult").css("color", "red");
+			$("#pswdResult").html("비밀번호는 공백을 포함 할 수 없습니다.");
+			$("#pswdCheckVal").val("false");
 		} else if (!pwRule.test($("input[id='pswd2']").val())) {
 			// 정규식 test했을때 값이 안맞으면
 			$("#pswdResult").css("color", "red");
 			$("#pswdResult").html("비밀번호는 영문, 숫자, 특수문자 조합이여야 합니다.");
 			$("#pswdCheckVal").val("false");
-			return false;
 		} else {
 // 				alert("1차 성공");
 			if (pw1 == pw2) {
