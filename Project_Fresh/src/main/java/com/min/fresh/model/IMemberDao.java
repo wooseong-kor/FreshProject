@@ -57,6 +57,12 @@ public interface IMemberDao {
 	public int updateMemberDelflagTOne(String id);
 	
 	//비밀번호 재설정
-	public int resetPassword(Map<String, String> map);
+	public int resetPassword(Map<String, Object> map);
+
+	// 이전 비밀번호확인 (비밀번호 재설정시 사용)
+	public Member_DTO searchPassword(String id);
+	
+	// 휴면계정 해제
+	public int updateMemberDelflagN(String id);
 	
 }
