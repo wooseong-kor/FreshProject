@@ -16,6 +16,16 @@ function mulChkDont(chk) {
 		}
 	}
 }
+
+function insert(){
+	var obj = document.getElementsByName("check");
+	for (var i = 0; i < obj.length; i++) {
+		if (obj[i].checked) {
+			opener.document.getElementById("bsg").value=obj[i].value;
+			self.close();
+		}
+	}
+}
 </script>
 <body>
 	<table>
@@ -33,9 +43,14 @@ function mulChkDont(chk) {
 			<td>${dto.bsgname}</td>
 			<td>${dto.juso}</td>
 			<td>${dto.phone}</td>
-			<td><input type="checkbox" name="check" onclick="mulChkDont(this)"></td>
+			<td><input type="checkbox" name="check" onclick="mulChkDont(this)" value="${dto.bsgcode}"></td>
 		</tr>
 		</c:forEach>
+		<tr>
+			<td>
+				<button onclick="insert()">입력</button>
+			</td>
+		</tr>
 	</table>
 </body>
 </html>
