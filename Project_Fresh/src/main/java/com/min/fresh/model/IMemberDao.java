@@ -58,7 +58,7 @@ public interface IMemberDao {
 	
 	//비밀번호 재설정
 	public int resetPassword(Map<String, Object> map);
-
+	
 	// 이전 비밀번호확인 (비밀번호 재설정시 사용)
 	public Member_DTO searchPassword(String id);
 	
