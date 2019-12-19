@@ -5,7 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>배송지 등록</title>
-<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="./js/sweetalert.js"></script>
 <script type="text/javascript" src="./js/bootstrap.js"></script>
 <script type="text/javascript">

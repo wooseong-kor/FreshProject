@@ -199,22 +199,23 @@ public class board_Controller {
 
 	// QnA 글 수정 입력
 	@RequestMapping(value = "/updateQago.do", method = RequestMethod.GET)
-	public String updateQago() {
+	public String updateQago(@RequestParam("seq") int seq,Model model) {
 		log.info("updateQago 글 작성 폼 입력");
+		QA_GO_DTO dto = service.qagoOne(seq);
+		model.addAttribute("dto", dto);
 		return "updateQagoForm";
 	}
 
 	// QnA 글 수정 등록
 	@RequestMapping(value = "/updateQagoForm.do", method = RequestMethod.POST)
-	public String updateQagoForm(Model model,QA_GO_DTO dto) {
+	public String updateQagoForm(QA_GO_DTO dto) {
 		log.info("updateQagoForm 글 작성 등록");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("title", dto.getTitle());
 		map.put("content", dto.getContent());
 		map.put("seq", dto.getSeq());
 		boolean isc = service.updateQago(dto);
-		model.addAttribute("dto", dto);
-		return isc ? "updateQago" : "updateQago";
+		return isc ? "redirect:/QagoOne.do?seq="+dto.getSeq() : "updateQagoForm";
 	}
 
 	// QnA,공지사항 글 삭제
@@ -242,12 +243,12 @@ public class board_Controller {
 	}
 
 	// QnA 답글 작성
-	@RequestMapping(value = "/insertAnswerForm.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/insertAnswerForm.do", method = RequestMethod.POST)
 	public String insertAnswerForm(QA_GO_DTO qDto) {
 		log.info("insertAnswerForm 답글 등록", qDto);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("seq", qDto.getSeq());
-		map.put("content", qDto.getContent());
+		map.put("acontent", qDto.getaContent());
 		boolean isc = service.insertAnswer(map);
 		return isc ? "redirect:/insertAnswer.do" : "redirect:/insertAnswer.do";
 	}

@@ -9,11 +9,19 @@
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <div id="container" style="width:90%; margin: auto;">
-		<div class="col-sm-6">
-					${qDto}
-					<input type="button" value="삭제">
-		</div>
-	</div>
+	<div class="col-sm-6">
+      <label>번호</label> <br>
+      ${qDto.seq}<br>
+      <label>아이디</label> <br>
+      ${qDto.id}<br>
+      <label>제목</label> <br>
+      ${qDto.title}<br>
+      <label>내용</label> <br>
+      ${qDto.content}<br>
+      <label>작성일</label> <br>
+      ${qDto.regdate}
+    </div>
+</div>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

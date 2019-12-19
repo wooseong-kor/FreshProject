@@ -7,7 +7,6 @@
 <meta charset="UTF-8">
 <title>jumunpageListScroll</title>
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="./js/sweetalert.js"></script>
 <script type="text/javascript" src="./js/bootstrap.js"></script>
 <script type="text/javascript">
