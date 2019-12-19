@@ -146,7 +146,8 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
     * @param id
     * @return
     */
-   @RequestMapping(value = "/sendResetMail.do",method = RequestMethod.POST)
+   @RequestMapping(value = "/sendResetMail.do",method = RequestMethod.POST,
+		   produces = "application/text; charset=UTF-8")
    @ResponseBody
    public String sendResetPW(String id) {
       
