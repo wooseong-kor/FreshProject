@@ -132,7 +132,7 @@ public class board_Controller {
 	// QnA 글 작성
 	@RequestMapping(value = "/insertQago.do", method = RequestMethod.GET)
 	public String insertQago() {
-		log.info("insertQago 글 작성 이동");	
+		log.info("insertQago 글 작성 이동");
 		return "insertQago";
 	}
 
@@ -199,7 +199,7 @@ public class board_Controller {
 
 	// QnA 글 수정 입력
 	@RequestMapping(value = "/updateQago.do", method = RequestMethod.GET)
-	public String updateQago(@RequestParam("seq") int seq,Model model) {
+	public String updateQago(@RequestParam("seq") int seq, Model model) {
 		log.info("updateQago 글 작성 폼 입력");
 		QA_GO_DTO dto = service.qagoOne(seq);
 		model.addAttribute("dto", dto);
@@ -215,7 +215,7 @@ public class board_Controller {
 		map.put("content", dto.getContent());
 		map.put("seq", dto.getSeq());
 		boolean isc = service.updateQago(dto);
-		return isc ? "redirect:/QagoOne.do?seq="+dto.getSeq() : "updateQagoForm";
+		return isc ? "redirect:/QagoOne.do?seq=" + dto.getSeq() : "updateQagoForm";
 	}
 
 	// QnA,공지사항 글 삭제
@@ -244,11 +244,12 @@ public class board_Controller {
 
 	// QnA 답글 작성
 	@RequestMapping(value = "/insertAnswerForm.do", method = RequestMethod.POST)
-	public String insertAnswerForm(QA_GO_DTO qDto) {
-		log.info("insertAnswerForm 답글 등록", qDto);
+	public String insertAnswerForm(QA_GO_DTO dto) {
+		log.info("insertAnswerForm 답글 등록");
+		System.out.println(dto);
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("seq", qDto.getSeq());
-		map.put("acontent", qDto.getaContent());
+		map.put("seq", dto.getSeq());
+		map.put("content", dto.getAcontent());
 		boolean isc = service.insertAnswer(map);
 		return isc ? "redirect:/insertAnswer.do" : "redirect:/insertAnswer.do";
 	}
@@ -260,7 +261,7 @@ public class board_Controller {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("seq", qDto.getSeq());
 		map.put("title", qDto.getTitle());
-		map.put("content", qDto.getContent());
+		map.put("content", qDto.getAcontent());
 		boolean isc = service.updateAnswer(map);
 		return isc ? "redirect:/updateAnswer.do" : "redirect:/updateAnswer.do";
 	}
@@ -278,7 +279,7 @@ public class board_Controller {
 	public String answerOne(int seq, Model model) {
 		log.info("answerOne 상세조회", seq);
 		QA_GO_DTO qDto = service.answerOne(seq);
-		model.addAttribute("qDto", qDto);
+		model.addAttribute("dto", qDto);
 		return "answerOne";
 	}
 
@@ -289,7 +290,7 @@ public class board_Controller {
 		RowNum_DTO rDto = new RowNum_DTO(); // 페이징 dto
 		rDto.setTotal(pservice.countAllQa());// total=>count
 		int count = rDto.getCount(); // 페이지 갯수
-		System.out.println(count);
+		System.out.println("페이지 갯수"+count);
 		System.out.println(rDto);
 		List<QA_GO_DTO> lists = pservice.allQaList(rDto);
 		model.addAttribute("lists", lists);
@@ -507,5 +508,4 @@ public class board_Controller {
 		System.out.println("상품개수" + cnt);
 		return cnt;
 	}
-
 }

@@ -4,8 +4,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
-<script type="text/javascript" src="./ckeditor/ckeditor.js"></script>
+<title>QnA 질문 수정</title>
+</head>
+<body>
+<%@include file="/WEB-INF/views/header.jsp"%>
 <script type="text/javascript">
 //json
 	$(function() {
@@ -17,10 +19,6 @@
 		});
 	});
 </script>
-<title>QnA 질문 수정</title>
-</head>
-<body>
-<%@include file="/WEB-INF/views/header.jsp"%>
 <div id="container" style="width:90%; margin: auto;">
 		<div class="col-sm-6">
 			<form action="./updateQagoForm.do" class="form-horizontal" role="form" id="editorForm" method="post">
@@ -37,7 +35,7 @@
 					<input type="submit" value="글수정">
 			</form>
 		</div>
-	</div>
+</div>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

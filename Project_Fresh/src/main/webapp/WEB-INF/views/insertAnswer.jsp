@@ -10,7 +10,7 @@
 <%@include file="/WEB-INF/views/header.jsp"%>
 <form action="./insertAnswerForm.do" method="post" id="formData">
 	<div>
-		<input type="text" name="seq" value="${seq}"><br>
+		<input type="text" name="seq"><br>
 		<input type="text" name="acontent" placeholder="답변"><br>
 		<input type="submit" value="등록">
 	</div>  
