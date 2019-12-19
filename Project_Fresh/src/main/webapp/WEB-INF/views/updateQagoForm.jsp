@@ -26,13 +26,13 @@
 			<form action="./updateQagoForm.do" class="form-horizontal" role="form" id="editorForm" method="post">
 					<h2>QnA 질문 수정</h2>
 					<label for="id">번호</label> 
-					<input type="text"  class="form-control" name="seq">
-					<label for="id">아이디</label> 
-					<input type="text"  class="form-control" name="id" placeholder="아이디">
+					<input type="text" class="form-control" name="seq" id="seq" readonly="readonly" value="${dto.seq}"> 
+					<label for="id">아이디</label>
+					<input type="text" class="form-control" name="id" id="id" readonly="readonly" value="${dto.id}"> 
 					<label for="title">제목</label>
-					<input type="text" class="form-control" id="title" placeholder="제목" name="title" required="required"><br>
+					<input type="text" class="form-control" id="title" placeholder="제목" name="title" value="${dto.title}"><br>
 					<label for="content">내용</label> 
-					 <textarea name="content" id="ckeditor">${dto}</textarea>
+					 <textarea name="content" id="ckeditor">${dto.content}</textarea>
 				
 					<input type="submit" value="글수정">
 			</form>
