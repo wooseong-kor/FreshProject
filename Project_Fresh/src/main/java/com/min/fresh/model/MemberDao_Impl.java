@@ -7,6 +7,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import com.min.fresh.dto.Member_DTO;
@@ -21,12 +22,18 @@ public class MemberDao_Impl implements IMemberDao{
 	@Autowired
 	private SqlSessionTemplate session;
 	
+	// 비밀번호 암호화
+//	@Autowired
+//	private PasswordEncoder passwordEncoder;
+	
+	// 회원가입
 	@Override
 	public int insertMember(Member_DTO dto) {
 		log.info("insertMember 실행");
 		return session.insert(NS+"insertMember", dto);
 	}
 
+	// 아이디 중복
 	@Override
 	public boolean idCheck(String id) {
 		log.info("idCheck 실행");
@@ -34,6 +41,7 @@ public class MemberDao_Impl implements IMemberDao{
 		return (cnt == 1)?false:true;
 	}
 
+	// 이메일 중복
 	@Override
 	public boolean emailCheck(String email) {
 		log.info("emailCheck 실행");
@@ -41,100 +49,116 @@ public class MemberDao_Impl implements IMemberDao{
 		return (cnt == 1)?false:true;
 	}
 
+	// 회원 등급 변경
 	@Override
 	public int updateGradeOne(Map<String, Object> map) {
 		log.info("updateGradeOne 실행");
 		return session.update(NS+"updateGradeOne", map);
 	}
 
+	// 회원 경고 부여
 	@Override
 	public int insertWarning(Map<String, Object> map) {
 		log.info("insertWarning 실행");
 		return session.insert(NS+"insertWarning", map);
 	}
 
+	// 특정회원 경고 횟수 조회
 	@Override
 	public Warning_DTO countOneGyngcntMember(String id) {
 		log.info("countOneGyngcntMember 실행");
 		return session.selectOne(NS+"countOneGyngcntMember", id);
 	}
 
+	// 경고받은 회원 조회
 	@Override
 	public List<Member_DTO> countAllGyungcntMember() {
 		log.info("countAllGyungcntMember 실행");
 		return session.selectList(NS+"countAllGyungcntMember");
 	}
 
+	// 회원 전체 조회
 	@Override
 	public List<Member_DTO> allMemberListScroll() {
 		log.info("allMemberListScroll 실행");
 		return session.selectList(NS+"allMemberListScroll");
 	}
 
+	// 사용중인 회원 전체 조회
 	@Override
 	public List<Member_DTO> memberListScroll() {
 		log.info("memberListScroll 실행");
 		return session.selectList(NS+"memberListScroll");
 	}
 
+	// 회원 검색
 	@Override
 	public Member_DTO memberSearchOne(Map<String, Object> map) {
 		log.info("memberSearchOne 실행");
 		return session.selectOne(NS+"memberSearchOne", map);
 	}
 
+	// 로그인
 	@Override
 	public Member_DTO loginMember(Map<String, Object> map) {
 		log.info("loginMember 실행");
 		return session.selectOne(NS+"loginMember", map);
 	}
 
+	// 암호화 확인 쿼리(시큐리티)
 	@Override
 	public String ecPasswordLogin(String id) {
 		log.info("ecPasswordLogin 실행");
 		return session.selectOne(NS+"ecPasswordLogin", id);
 	}
 
+	// 암호화 로그인(시큐리티)
 	@Override
 	public Member_DTO enLogin(String id) {
 		log.info("enLogin 실행");
 		return session.selectOne(NS+"enLogin", id);
 	}
 
+	// 회원 자동 정지처리
 	@Override
 	public int updateMemberDelflagJ() {
 		log.info("updateMemberDelflagJ 실행");
 		return session.update(NS+"updateMemberDelflagJ");
 	}
 
+	// 회원 자동 휴먼 처리
 	@Override
 	public int updateMemberDelflagH() {
 		log.info("updateMemberDelflagH 실행");
 		return session.update(NS+"updateMemberDelflagH");
 	}
 
+	// 회원 탈퇴
 	@Override
 	public int updateMemberDelflagTOne(String id) {
 		log.info("updateMemberDelflagTOne 실행");
 		return session.update(NS+"updateMemberDelflagTOne", id);
 	}
 
+	// 비밀번호 초기화
 	@Override
 	public int resetPassword(Map<String, Object> map) {
 		log.info("resetPassword 실행");
 		return session.update(NS+"resetPassword", map);
 	}
 
+	// 이전 비밀번호확인 (비밀번호 재설정시 사용)
 	@Override
 	public Member_DTO searchPassword(String id) {
 		log.info("searchPassword 실행");
 		return session.selectOne(NS+"searchPassword", id);
 	}
 
+	// 휴면계정 해제
 	@Override
 	public int updateMemberDelflagN(String id) {
 		log.info("updateMemberDelflagN 실행");
 		return session.update(NS+"updateMemberDelflagN", id);
 	}
-
+	
 }
