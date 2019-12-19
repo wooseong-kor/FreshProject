@@ -13,7 +13,3 @@ function memberSignupAction(){
 			alert("약관 정보 확인 후 동의 진행바랍니다.")
 		}
 }
-	
-function cancleSignup(){
-	location.href = "./index.jsp";
-}

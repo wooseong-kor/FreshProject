@@ -1,5 +1,6 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- 화면 줄였을 때 스크린 넓이를 디바이스에 맞춤,원래 비율 사용 -->
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <link rel="stylesheet" type="text/css" href="http://ajax.aspnetcdn.com/ajax/jquery.ui/1.8.20/themes/redmond/jquery-ui.css" />
@@ -48,7 +49,7 @@ $(document).ready(function(){
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand" href="#"><img src="./image/logo.png" width="auto" height="42px" id="png"></a>
+					<a class="navbar-brand" href="./Main.do"><img src="./image/logo.png" width="auto" height="42px" id="png"></a>
 				</div>
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav navbar-left">
@@ -65,7 +66,7 @@ $(document).ready(function(){
 						<li class="nav-item dropdown"><a href="#">FAQ</a></li>
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li id="navSignUp"><a href="#">LOGIN</a></li>
+						<li id="navSignUp"><a href="./loginPage.do">LOGIN</a></li>
 						<li id="navSignUp"><a href="#">CART</a></li>
 					</ul>
 				</div>
