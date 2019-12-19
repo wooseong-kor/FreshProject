@@ -76,115 +76,91 @@ public class QA_GO_DTO implements Serializable{
 		this.savename = savename;
 		this.filepath = filepath;
 	}
-
 	@Override
 	public String toString() {
 		return "QA_GO_DTO [seq=" + seq + ", id=" + id + ", regdate=" + regdate + ", title=" + title + ", content="
 				+ content + ", gubun=" + gubun + ", fileseq=" + fileseq + ", filename=" + filename + ", savename="
-				+ savename + ", filepath=" + filepath + ", savedate=" + savedate + "]";
+				+ savename + ", filepath=" + filepath + ", savedate=" + savedate + ", acontent=" + acontent
+				+ ", aregdate=" + aregdate + "]";
 	}
-
 	public String getSeq() {
 		return seq;
 	}
-
 	public void setSeq(String seq) {
 		this.seq = seq;
 	}
-
 	public String getId() {
 		return id;
 	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
-
 	public Date getRegdate() {
 		return regdate;
 	}
-
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
-
 	public String getTitle() {
 		return title;
 	}
-
 	public void setTitle(String title) {
 		this.title = title;
 	}
-
 	public String getContent() {
 		return content;
 	}
-
 	public void setContent(String content) {
 		this.content = content;
 	}
-
 	public String getGubun() {
 		return gubun;
 	}
-
 	public void setGubun(String gubun) {
 		this.gubun = gubun;
 	}
-
 	public String getFileseq() {
 		return fileseq;
 	}
-
 	public void setFileseq(String fileseq) {
 		this.fileseq = fileseq;
 	}
-
 	public String getFilename() {
 		return filename;
 	}
-
 	public void setFilename(String filename) {
 		this.filename = filename;
 	}
-
 	public String getSavename() {
 		return savename;
 	}
-
 	public void setSavename(String savename) {
 		this.savename = savename;
 	}
-
 	public String getFilepath() {
 		return filepath;
 	}
-
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
-
 	public Date getSavedate() {
 		return savedate;
 	}
-
 	public void setSavedate(Date savedate) {
 		this.savedate = savedate;
 	}
-	public String getaContent() {
+	public String getAcontent() {
 		return acontent;
 	}
-	public void setaContent(String acontent) {
+	public void setAcontent(String acontent) {
 		this.acontent = acontent;
 	}
-	public Date getaRegdate() {
+	public Date getAregdate() {
 		return aregdate;
 	}
-	public void setaRegdate(Date aregdate) {
+	public void setAregdate(Date aregdate) {
 		this.aregdate = aregdate;
 	}
-	
-	
 
 	
 }

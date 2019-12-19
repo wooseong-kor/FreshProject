@@ -9,7 +9,7 @@
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container" style="width: 90%; margin: auto;">
-		${dto} 
+		${aDto} 
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
