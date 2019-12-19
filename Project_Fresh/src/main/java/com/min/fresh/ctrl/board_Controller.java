@@ -407,12 +407,14 @@ public class board_Controller {
 	@RequestMapping(value = "/jumunpageDeepOne.do", method = RequestMethod.GET)
 	public String jumunpageDeepOne(Model model, String sangpgnum) {
 		log.info("jumunpageDeepOne 상품 구매 페이지");
+		String mileage = "1000"; // 나중에 session에서 회원 mileage가져오는거 수정해욥
 		Jumunpage_DTO dto = service.jumunpageDeepOne(sangpgnum);
 		System.out.println(sangpgnum);
 		System.out.println(dto);
 		int n = service.selectJaegoCnt(dto.getSangcode());
 		model.addAttribute("dto", dto);
 		model.addAttribute("n", n);
+		model.addAttribute("mileage", mileage);
 		return "jumunpageDeepOne";
 	}
 

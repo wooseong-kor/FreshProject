@@ -40,6 +40,60 @@
 		});
 		
 	}
+	
+	function selOption() {
+		var rbox = document.getElementsByName("couOrMile");
+		var mileageuse = document.getElementById("mileageuse");
+		var couponuse = document.getElementById("couponuse");
+		var maxmile = document.getElementById("maxmile");
+		var memberMileage = document.getElementById("memberMileage");
+		var resultPrice = document.getElementById("resultPrice");
+		var couseq = document.getElementById("couseq");
+		if(rbox[0].checked) {
+			mileageuse.value = "";
+			maxmile.checked = false;
+			mileageuse.disabled = true;
+			maxmile.disabled = true;
+			couponuse.disabled = false;
+		}else {
+			resultPrice.value = "";
+			couseq.value = "";
+			mileageuse.disabled = false;
+			maxmile.disabled = false;
+			couponuse.disabled = true;
+		}
+		
+	}
+	
+	function maxMile() {
+		var mileageuse = document.getElementById("mileageuse");
+		var maxmile = document.getElementById("maxmile");
+		var memberMileage = document.getElementById("memberMileage");
+		if(maxmile.checked){
+			mileageuse.value = memberMileage.value;
+		}else {
+			mileageuse.value = "";
+		}
+		
+	}
+	
+	function couponUse() {
+		var price = document.getElementById("absolprice");
+		var jumcnt = document.getElementById("count");
+		var url="./couponUse.do?price="+price.value+"&jumcnt="+jumcnt.value;
+		var title="쿠폰적용";
+		var prop = "width=500px, height=500px";
+		open(url,title,prop);
+	}
+	
+	window.onload = function() {
+		var mileageuse = document.getElementById("mileageuse");
+		var couponuse = document.getElementById("couponuse");
+		var maxmile = document.getElementById("maxmile");
+		mileageuse.disabled = true;
+		couponuse.disabled = true;
+		maxmile.disabled = true;
+	}
 </script>
 	<div id="container" style="width: 90%; margin: auto;">
 		<div class="col-sm-10">
@@ -76,6 +130,16 @@
 			</h4>
 		</div>
 			</form>
+		<div>
+			<input type="radio" name="couOrMile" onclick="selOption()">쿠폰 
+			<input type="radio" name="couOrMile" onclick="selOption()">마일리지<br>
+			<input type="button" id="couponuse" value="쿠폰 적용" onclick="couponUse()">
+			<input type="text" id="mileageuse">
+			<input type="hidden" id="memberMileage" value="${mileage}">
+			<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
+			<input type="hidden" id="resultPrice">
+			<input type="hidden" id="couseq">
+		</div>
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

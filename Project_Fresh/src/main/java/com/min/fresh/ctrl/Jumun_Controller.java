@@ -28,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+import com.min.fresh.dto.Couponhistory_DTO;
 import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.dto.RowNum_DTO;
@@ -199,5 +200,19 @@ public class Jumun_Controller<E> {
 	@RequestMapping(value = "/cancle.do")
 	public String cancle() {
 		return "cancle";
+	}
+	
+	@RequestMapping(value = "/couponUse.do",method = RequestMethod.GET)
+	public String couponUseList(Model model, String price, String jumcnt) {
+		String id = "MAN";// 나중에 세션처리 해야함, 세션완성되면 바꿔줘욥
+		List<Couponhistory_DTO> list = coupon.memberUseMineCou(id);
+		System.out.println(price);
+		System.out.println(jumcnt);
+		int result = Integer.parseInt(price) * Integer.parseInt(jumcnt);
+		String resultStr = String.valueOf(result);
+		model.addAttribute("lists", list);
+		model.addAttribute("result", resultStr);
+		model.addAttribute("price", price);
+		return "couponSel";
 	}
 }
