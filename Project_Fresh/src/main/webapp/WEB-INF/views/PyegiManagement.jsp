@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>상품 관리 페이지</title>
+<title>폐기 관리 페이지</title>
 
 <style type="text/css">
 	html, body { font-size: 75%; }
@@ -13,50 +13,56 @@
 	$.jgrid.no_legacy_api = true;
 	$.jgrid.useJSON = true;
 
-$(document).ready(function() {
-	$("#jaegoList").jqGrid({
-		url : "./jaegoJSON.do",
+$(document).ready(function() { 
+	$("#pyegiList").jqGrid({
+		url : "./pyegiJSON.do",
 		datatype: "json", // 데이터 타입
 		mtype: "POST", // 데이터 전송방식
-		caption: "재고관리", // 그리드의 제목
+		caption: "폐기관리", // 그리드의 제목
 		loadtext: "잠시만 기다려주세요~♡", // 로딩메시지
 		loadError: function() {alert("Error");}, // 로딩에러 메시지
-
-		colNames : ['재고코드', '상품코드', '재고량', '재고상태'],
+		
+		colNames : ['폐기번호', '재고코드', '폐기수량', '폐기여부','폐기사유'],
 		
 		colModel: [
-			{name : 'jaegocode', index : 'jaegocode', width : 100, editable: true, sortable:false,
+			{name : 'pyeginum', index : 'pyeginum', width : 100, editable: true, sortable:false,
 				cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
-					if (rowObject.jaegostat == "GOOD") { return 'style="color:#1C1C1C"' }
-					else if (rowObject.jaegostat == "BAD") { return 'style="color:#FE2E2E"' }
+					if (rowObject.pyeflag == "Y") { return 'style="color:#1C1C1C"' }
+					else if (rowObject.pyeflag == "N") { return 'style="color:#FE2E2E"' }
 				}
 			},	
 			
-			{name : 'sangcode', index : 'sangcode', editable: true, sortable:false,
+			{name : 'jaegocode', index : 'jaegocode', editable: true, sortable:false,
 				cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
-					if (rowObject.jaegostat == "GOOD") { return 'style="color:#1C1C1C"' }
-					else if (rowObject.jaegostat == "BAD") { return 'style="color:#FE2E2E"' }
+					if (rowObject.pyeflag == "Y") { return 'style="color:#1C1C1C"' }
+					else if (rowObject.pyeflag == "N") { return 'style="color:#FE2E2E"' }
 				}
 			},
 			
-			{name : 'jaegocnt', index : 'jaegocnt', align : "right", editable: true, sortable:false, formatter: "integer",
+			{name : 'pyegicnt', index : 'pyegicnt', align : "right", editable: true, sortable:false, formatter: "integer",
 				cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
-					if (rowObject.jaegostat == "GOOD") { return 'style="color:#1C1C1C"' }
-					else if (rowObject.jaegostat == "BAD") { return 'style="color:#FE2E2E"' }
+					if (rowObject.pyeflag == "Y") { return 'style="color:#1C1C1C"' }
+					else if (rowObject.pyeflag == "N") { return 'style="color:#FE2E2E"' }
 				}
 			},
-			{name : 'jaegostat', index : 'jaegostat', align : "center", editable: true, sortable:false,
-				formatter: 'select', edittype:"select", 
-				editoptions:{value: "GOOD:출고가능;BAD:폐기"}, stype: 'select',
+			{name : 'pyegisayu', index : 'pyegisayu', align : "right", editable: true, sortable:false, formatter: "integer",
 				cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
-							if (rowObject.jaegostat == "GOOD") { return 'style="color:#1C1C1C"' }
-							else if (rowObject.jaegostat == "BAD") { return 'style="color:#FE2E2E"' }
+					if (rowObject.pyeflag == "Y") { return 'style="color:#1C1C1C"' }
+					else if (rowObject.pyeflag == "N") { return 'style="color:#FE2E2E"' }
+				}
+			},
+			{name : 'pyeflag', index : 'pyeflag', align : "center", editable: true, sortable:false,
+				formatter: 'select', edittype:"select", 
+				editoptions:{value: "Y:폐기 처리된 상태;N:폐기 미처리 상태"}, stype: 'select',
+				cellattr: function ( rowId , tv , rowObject , cm , rdata ) { 
+							if (rowObject.pyeflag == "Y") { return 'style="color:#1C1C1C"' }
+							else if (rowObject.pyeflag == "N") { return 'style="color:#FE2E2E"' }
 						}
 			},
 		],
 		
 		jsonReader: { // json형태의 data읽기위해 필요
-			root : "jaegoAllList",
+			root : "pyegiAllList",
 			page: "currpage",
 			total: "totalpages",
 			records: "totalrecords",
@@ -73,6 +79,8 @@ $(document).ready(function() {
 		// 부가옵션
 		rownumbers : true, // row number 활성화 여부 좌측 행번호
 		gridview: true, // 성능향상
+		formatter: {
+		},
 
 	}).jqGrid('navGrid', '#pageOption',
 					{
@@ -83,25 +91,25 @@ $(document).ready(function() {
 						refresh : true, // body 새로고침
 					},
 					
-					// 수정
-					{
-						url: "./jaegoEdit.do",
-						editCaption: "재고 수정", // 수정form title
-						bSubmit: "수정", // submit 버튼 이름 변경
-						bCancel: "취소", // cancel 버튼 이름 변경
-						bClose: "Close",
+//	 				// 수정
+//	 				{
+//	 					url: "./productEdit.do",
+//	 					editCaption: "상품 수정", // 수정form title
+//	 					bSubmit: "수정", // submit 버튼 이름 변경
+//	 					bCancel: "취소", // cancel 버튼 이름 변경
+//	 					bClose: "Close",
 						
-						recreateForm: true,
-						savekey: [true, 13], // form에서 13(Enter) 확인 버튼작동시키기
-						reloadAfterSubmit: true, // 서버 Ajax 후 그리드 데이터 다시 로드
-						closeAfterEdit: true, // submit 후 form닫기
-						closeOnEscape: true // ESC키를 이용해 모달창을 닫을 수 있다.
-					},
+//	 					recreateForm: true,
+//	 					savekey: [true, 13], // form에서 13(Enter) 확인 버튼작동시키기
+//	 					reloadAfterSubmit: true, // 서버 Ajax 후 그리드 데이터 다시 로드
+//	 					closeAfterEdit: true, // submit 후 form닫기
+//	 					closeOnEscape: true // ESC키를 이용해 모달창을 닫을 수 있다.
+//	 				},
 					
 					// 추가
 					{
-						url: "./jaegoAdd.do",
-						addCaption: "재고 등록", // 등록form title
+						url: "./pyegiAdd.do",
+						addCaption: "폐기등록", // 등록form title
 						bSubmit: "등록", // submit 버튼 이름 변경
 						bCancel: "취소", // cancel 버튼 이름 변경
 						bClose: "Close",
@@ -114,12 +122,13 @@ $(document).ready(function() {
 					}
 			
 		) // jqGrid
-});
+	});
 </script>
 </head>
 <body>
-<%@include file="/WEB-INF/views/header.jsp"%>    
-	<table id="jaegoList">
+<%@include file="/WEB-INF/views/header.jsp"%>
+
+	<table id="pyegiList">
 		<tr>
 			<td></td>
 		</tr>
