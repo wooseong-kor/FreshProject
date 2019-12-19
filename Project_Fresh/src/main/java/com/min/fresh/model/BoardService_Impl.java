@@ -112,7 +112,7 @@ public class BoardService_Impl implements IBoardServiceDao {
 	@Override
 	public QA_GO_DTO qagoOne(int seq) {
 		log.info("qagoOne");
-		return qagoOne(seq);
+		return dao.qagoOne(seq);
 	}
 
 	@Override
