@@ -152,23 +152,23 @@ public class PagingDao_Impl implements IPagingDao {
 //		return session.selectOne(NS+"addrListOne", jumunnum);
 //	}
 //
-//	@Override
-//	public int countMemberJumun(String id) {
-//		log.info("countMemberJumun 실행");
-//		return session.selectOne(NS+"countMemberJumun", id);
-//	}
+	@Override
+	public int countMemberJumun(String id) {
+		log.info("countMemberJumun 실행");
+		return session.selectOne(NS+"countMemberJumun", id);
+	}
 //
-//	@Override
-//	public List<Jumun_DTO> memberJumunList(Map<String, Object> map) {
-//		log.info("memberJumunList 실행");
-//		return session.selectList(NS+"memberJumunList", map);
-//	}
+	@Override
+	public List<Jumun_DTO> memberJumunList(Map<String, Object> map) {
+		log.info("memberJumunList 실행");
+		return session.selectList(NS+"memberJumunList", map);
+	}
 //
-//	@Override
-//	public int countAllJumun() {
-//		log.info("countAllJumun 실행");
-//		return session.selectOne(NS+"countAllJumun");
-//	}
+	@Override
+	public int countAllJumun() {
+		log.info("countAllJumun 실행");
+		return session.selectOne(NS+"countAllJumun");
+	}
 //
 //	@Override
 //	public List<Jumun_DTO> allJumunList(RowNum_DTO dto) {

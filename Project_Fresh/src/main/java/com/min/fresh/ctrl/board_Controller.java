@@ -29,12 +29,14 @@ import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
 import com.min.fresh.dto.Jaego_DTO;
+import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IBoardServiceDao;
+import com.min.fresh.model.IJumun_PaymentService;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IPagingService;
 import com.min.fresh.utils.FileUpload;
@@ -48,7 +50,7 @@ public class board_Controller {
 	private IBoardServiceDao service;
 
 	@Autowired
-	private IMemberService mservice;
+	private IJumun_PaymentService jservice;
 
 	@Autowired
 	private IPagingService pservice;
@@ -56,8 +58,9 @@ public class board_Controller {
 	// 배송지 관리
 	// 배송지 추가하기(배송지 이름,연락처,주소 )
 	@RequestMapping(value = "/insertAddrlist.do", method = RequestMethod.GET)
-	public String insertAddrlist() {
+	public String insertAddrlist(Model model,AddrList_DTO dto) {
 		log.info("insertAddrlist 배송지 등록폼 이동", new Date());
+		model.addAttribute("dto", dto);
 		return "insertAddrlist";
 	}
 
@@ -82,17 +85,18 @@ public class board_Controller {
 
 	// 배송지 수정 폼
 	@RequestMapping(value = "/updateAddrlist.do", method = RequestMethod.GET)
-	public String updateAddrlist(AddrList_DTO aDto) {
+	public String updateAddrlist(AddrList_DTO aDto,Model model) {
 		log.info("updateAddrlist 배송지 수정");
+		model.addAttribute("dto", aDto);
 		return "updateAddrlist";
 	}
 
 	// 배송지 수정
 	@RequestMapping(value = "/updateAddrlistForm.do", method = RequestMethod.POST)
-	public String updateAddrlistForm(AddrList_DTO aDto) {
+	public String updateAddrlistForm(AddrList_DTO aDto,Model model) {
 		log.info("updateAddrlistForm 배송지 수정");
 		boolean isc = service.updateAddrlist(aDto);
-		return isc ? "redirect:/updateAddrlist.do" : "redirect:/updateAddrlist.do";
+		return isc ? "redirect:/addrListOne.do?id="+aDto.getId()+"bsgcode"+aDto.getBsgcode() : "redirect:/updateAddrlist.do";
 	}
 
 	// 배송지 삭제
@@ -131,8 +135,9 @@ public class board_Controller {
 	// QnA
 	// QnA 글 작성
 	@RequestMapping(value = "/insertQago.do", method = RequestMethod.GET)
-	public String insertQago() {
+	public String insertQago(Model model,QA_GO_DTO dto) {
 		log.info("insertQago 글 작성 이동");
+		model.addAttribute("dto", dto);
 		return "insertQago";
 	}
 
@@ -194,7 +199,7 @@ public class board_Controller {
 	public String QagoWrite(QA_GO_DTO dto) {
 		log.info("QagoWrite");
 		boolean isc = service.insertQago(dto);
-		return isc ? "insertQago" : "insertQago";
+		return isc ? "redirect:/QagoOne.do?id="+dto.getId()+"&seq="+dto.getSeq() : "insertQago";
 	}
 
 	// QnA 글 수정 입력
@@ -237,8 +242,9 @@ public class board_Controller {
 
 	// QnA 답글 작성
 	@RequestMapping(value = "/insertAnswer.do", method = RequestMethod.GET)
-	public String insertAnswer() {
+	public String insertAnswer(QA_GO_DTO dto,Model model) {
 		log.info("insertAnswer 답글 등록");
+		model.addAttribute("dto", dto);
 		return "insertAnswer";
 	}
 
@@ -508,5 +514,25 @@ public class board_Controller {
 		System.out.println("상품개수" + cnt);
 		return cnt;
 	}
-
+	
+	@RequestMapping(value = "/memberJumunList.do", method = RequestMethod.GET)
+	public String memberJumunList(Model model,String id) {
+		log.info("memberJumunList 주문 리스트");
+		RowNum_DTO rDto=new RowNum_DTO();
+		rDto.setTotal(pservice.countMemberJumun(id));
+		int count=rDto.getCount();
+		System.out.println("페이지 갯수"+count);
+		System.out.println(rDto);
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("id", id);
+		map.put("first", rDto.getFirst());
+		map.put("last", rDto.getLast());
+		List<Jumun_DTO> lists=jservice.memberJumunList(map);
+		model.addAttribute("lists", lists);
+		return "memberJumunList";
+	}
 }
+
+
+
+
