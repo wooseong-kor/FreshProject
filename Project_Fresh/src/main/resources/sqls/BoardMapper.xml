@@ -115,7 +115,7 @@
 	</delete>
 	<!-- 배송지 목록 조회 -->
 	<select id="addrlistIdList" parameterType="java.lang.String"
-		resultType="java.util.LinkedHashMap">
+		resultType="Addr">
 		SELECT ID,BSGCODE,BSGNAME,JUSO,PHONE
 		FROM ADDRLIST
 		WHERE ID=#{id}
@@ -131,7 +131,7 @@
 	<!-- 배송지 상세 조회 -->
 	<select id="addrListOne" parameterType="java.util.Map"
 		resultType="Addr">
-		SELECT M.ID,M.NAME,B.BSGNAME,B.JUSO,B.PHONE
+		SELECT M.ID ID,M.NAME NAME,B.BSGNAME BSGNAME,B.JUSO JUSO,B.PHONE PHONE
 		FROM ADDRLIST B JOIN "MEMBER" M
 		ON B.ID=M.ID
 		WHERE M.ID=#{id} AND B.BSGCODE=#{bsgcode}
