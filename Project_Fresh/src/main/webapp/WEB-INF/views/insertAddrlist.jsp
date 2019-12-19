@@ -32,8 +32,8 @@ function insertAddr() {
 	<div>
 		<input type="text" name="id" id="id" placeholder="아이디"><br>
 		<input type="text" name="bsgname" placeholder="배송지 이름"><br>
-		<input type="text" name="juso" placeholder="주소지"><br>
-		<input type="text" name="phone" placeholder="휴대폰"><br>
+		<input type="text" name="juso" placeholder="주소지" required="required"><br>
+		<input type="text" name="phone" placeholder="휴대폰" required="required"><br>
 		<input type="button" value="등록" onclick="insertAddr()">
 	</div>  
 </form>
