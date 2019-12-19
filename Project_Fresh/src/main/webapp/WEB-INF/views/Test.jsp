@@ -120,20 +120,6 @@
 		
 	}
 	
-	function sendPw(){
-		$.ajax({
-			url : "./sendResetMail.do",
-			data : $("#sendmail").serialize(),
-			type: "post",
-			success: function(x){
-				alert("메일발송 성공?"+x);
-			},
-			error : function(){
-				alert("실패");
-			}
-		});
-	}
-	
 </script>
 <div>
 	<form action="#" id="frm">

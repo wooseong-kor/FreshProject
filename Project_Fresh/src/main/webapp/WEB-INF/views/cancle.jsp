@@ -7,7 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-<%@include file="/WEB-INF/views/header.jsp"%>
 주문 취소
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

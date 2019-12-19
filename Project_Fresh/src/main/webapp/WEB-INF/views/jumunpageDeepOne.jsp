@@ -29,10 +29,6 @@
 			data : "sangcode="+sangcode,
 			success : function(cnt){
 				$("#cnt").html(cnt);
-				if (cnt==='0') {
-				$("#cnt").html("품절").css("color", "tomato");
-					//주문버튼 비활성화
-				}
 			},
 			error : function(){
 				alert("실패");
