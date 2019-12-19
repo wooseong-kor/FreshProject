@@ -494,7 +494,7 @@ public class board_Controller {
 		return isc ? "redirect:/jumunpageDeepOne.do?sangpgnum=" + pDto.getSangpgnum() : "insertProductimg";
 	}
 	
-	
+	// 아작스로 현재 재고를 불러와 표시해줌
 	@RequestMapping(value = "/selectJaegoCnt.do",method = RequestMethod.POST,
 			produces = "application/text; charset=UTF-8")
 	@ResponseBody
