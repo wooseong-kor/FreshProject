@@ -23,7 +23,7 @@
 		totalmoney = $("#absolprice").val();
 		var sangcode = document.getElementById("realsangcode").value;
 		$("#price").html(sel*totalmoney);
-		$("#jummoney").val(sel*totalmoney);		
+		$("#jummoney").val(Number(sel*totalmoney));		
 		
 		$.ajax({
 			url : "./selectJaegoCnt.do",
@@ -111,26 +111,33 @@
 	}
 	
 	function payment(){
-		$.ajax({
-			url : "./insertjumon.do",
-			data : $("#payment").serialize(),
-			type: "post",
-			async: true,
-			success : function(){
-				var url = "./toss.do?orderNo="+map.orderNo+"&amount="+map.amount+"&productDesc="+map.productDesc;
-				var title = "결제";
-				var prop = "width=500px, height =500px";
-				open(url,title,prop);
-			},
-			error : function(){
-				alert("실패");
-			}
-		});
+		var bsg = $("#bsg");
+		if (bsg.val() == 'null') {
+			alert("배송지를 입력해주세요");
+		}else{
+			$.ajax({
+				url : "./insertjumon.do",
+				data : $("#payment").serialize(),
+				type: "post",
+				async: true,
+				success : function(map){
+					var url = "./toss.do?orderNo="+map.orderNo+"&amount="+map.amount+"&productDesc="+map.productDesc;
+					var title = "결제";
+					var prop = "width=500px, height =500px";
+					open(url,title,prop);
+				},
+				error : function(){
+					alert("실패");
+				}
+			});
+		}
 	}
 	
 	function selectBSG(){
-		
-		open("./selectBSG.do","400px","400px");
+		var url = "./selectBSG.do";
+		var title = "배송지";
+		var prop = "width=600px, height=500px";
+		open(url,title,prop);
 	}
 </script>
 	<div id="container" style="width: 90%; margin: auto;">
@@ -174,13 +181,14 @@
 			<input type="text" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
 			<input type="hidden" id="memberMileage" value="${mileage}">
 			<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
-			결제금액 - <input type="text" name="paymoney" readonly="readonly" id="resultPrice">
-			<input type="hidden" id="couseq">
+			결제금액 - <input type="text" name="paymoney" readonly="readonly" id="resultPrice" value="0">
+			<input type="hidden" id="couseq" name="couseq">
 			<input type="hidden" name="paywhat" value="1">
 			<input type="hidden" name="sangpgnum" value="${dto.sangpgnum}">
-			<input type="hidden" id="jummoney" name="jummoney">
-			<button onclick="selectBSG()">배송지 설정하기</button>
-			<button onclick="payment()">결제하기</button>
+			<input type="hidden" id="jummoney" name="jummoney" value="0">
+			<input type="hidden" name="bsgcode" id="bsg" value="null">
+			<input type="button" onclick="selectBSG()" value="배송지 설정하기">
+			<input type="button" onclick="payment()" value="결제하기">
 		</div>
 			</form>
 	</div>
