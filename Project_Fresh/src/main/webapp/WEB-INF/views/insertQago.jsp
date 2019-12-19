@@ -25,13 +25,12 @@
 		<div class="col-sm-6">
 			<form action="./QagoWrite.do" class="form-horizontal" role="form" id="editorForm" method="post">
 					<h5>QnA 질문 작성</h5>
-					<label for="id">아이디</label> 
-					<input type="text"  class="form-control" name="id" placeholder="아이디">
+					<label for="id">아이디 </label> 
+					<input type="text"  class="form-control" name="id" placeholder="">
 					<label for="title">제목</label>
 					<input type="text" class="form-control" id="title" placeholder="제목" name="title" required="required"><br>
 					<label for="content">내용</label> 
 					 <textarea name="content" id="ckeditor"></textarea>
-				
 					<input type="submit" value="글등록">
 			</form>
 					<a href="./updateQagoForm.do">수정하기</a>

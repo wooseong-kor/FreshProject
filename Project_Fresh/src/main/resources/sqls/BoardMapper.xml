@@ -284,14 +284,6 @@
 		IMGNAME,SAVENAME,IMGPATH)
 		VALUES(PRODUCTIMG_SEQ.NEXTVAL,#{sangpgnum},#{imgname},#{savename},#{imgpath})
 	</insert>
-	<!-- @@@@@쿼리테스트-이미지 불러오기 추가 @@@@@ -->
-	<!-- <select id="selectProductImg" >
-	SELECT IMGPATH,TITLE,PRICE
-	FROM JUMUNPAGE JOIN PRODUCTIMG
-	USING(SANGPGNUM) 
-	JOIN PRODUCT 
-	USING (SANGCODE)
-	</select> -->
 	<!-- @@@@@쿼리테스트-장바구니 추가 @@@@@ -->
 	<!-- 장바구니 입력 -->
 	<insert id="cartInsert" parameterType="Member">

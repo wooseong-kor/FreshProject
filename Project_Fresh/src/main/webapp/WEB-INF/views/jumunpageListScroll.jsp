@@ -51,7 +51,7 @@
 		 <c:forEach var="dto" items="${lists}" varStatus="vs">
 		<div class="col-sm-10">
 		 	<div class="image" style="display: inline; float: left;">
-			<p>${dto.productImg_DTO.imgpath}</p>
+			<a href="http://localhost:8099/Project_Fresh/jumunpageDeepOne.do?sangpgnum=${dto.sangpgnum}"><p>${dto.productImg_DTO.imgpath}</p></a>
 			</div>
 			<div class="content" style="display: inline; float: left; margin-top: 8px; margin-left: 30px; ">
 			<h3>${dto.title}</h3>
