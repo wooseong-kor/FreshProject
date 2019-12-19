@@ -1,5 +1,6 @@
 package com.min.fresh.ctrl;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,6 +34,12 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 	
 	@Autowired
 	private JavaMailSender mail;
+	
+	@RequestMapping(value = "/Main.do", method = RequestMethod.GET)
+	public String loginForm() {
+		log.info("Welcome loginForm.do : \t{}", new Date());
+		return "MainContainer";
+	}
 	
 	/**
 	 * 회원가입 - 1단계 이동
@@ -155,7 +162,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		session.setAttribute("mem", mDto);
 		System.out.println("▶▷▶ 로그인 정보 확인 = " + map.toString());
 		if (mDto.getDelflag().equals("N")) {
-			return "Main"; // 로그인 성공시 임의로 이동함 main.jsp생기면 이동필요
+			return "LoginMain"; // 로그인 성공시 임의로 이동함 main.jsp생기면 이동필요
 		} else { 
 			return "DormantAccountPasswordSetting"; // 휴면계정 상태
 		}
