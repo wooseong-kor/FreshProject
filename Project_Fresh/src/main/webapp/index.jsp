@@ -12,7 +12,9 @@
 	<br>
 	상품관리 Test <a href="./product.do">전체상품</a>
 	<br>
-	이용약관 Test <a href="./termsOfUse.do">회원가입</a>
+	회원가입 Test <a href="./termsOfUse.do">회원가입</a>
+	<br>
+	로그인 Test <a href="./loginPage.do">로그인</a>
 	<br>
 	주문 Test <a href="./jumun.do">주문 테스트용</a>
 	<br>
@@ -21,6 +23,7 @@
 	재고가이소 <a href="./jaego.do">재고가이소 어서가시오</a>
 	<br>
 	배송지 추가 <a href="./insertAddrlist.do?id=MAN">배송지</a> <br>
+	<br>
 	상품 등록 <a href="./insertJumunpage.do">상품 상세</a>
 	<br>
 

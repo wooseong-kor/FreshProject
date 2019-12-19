@@ -120,9 +120,21 @@ public class MemberDao_Impl implements IMemberDao{
 	}
 
 	@Override
-	public int resetPassword(Map<String, String> map) {
+	public int resetPassword(Map<String, Object> map) {
 		log.info("resetPassword 실행");
 		return session.update(NS+"resetPassword", map);
+	}
+
+	@Override
+	public Member_DTO searchPassword(String id) {
+		log.info("searchPassword 실행");
+		return session.selectOne(NS+"searchPassword", id);
+	}
+
+	@Override
+	public int updateMemberDelflagN(String id) {
+		log.info("updateMemberDelflagN 실행");
+		return session.update(NS+"updateMemberDelflagN", id);
 	}
 
 }

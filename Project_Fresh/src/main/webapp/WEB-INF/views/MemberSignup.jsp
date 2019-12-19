@@ -28,7 +28,7 @@
 		<input type="hidden" id="emailCheckVal" value="false">
 		<input type="hidden" id="nameCheckVal" value="false">
 		
-        <form action="./memberAdd.do" method="post" id="memberInfo" name="memberInfo"> <!-- " onsubmit="return check() -->
+        <form action="./memberAdd.do" method="post"> <!-- " onsubmit="return check() -->
             <!-- tg-text=title -->
             <div class="join_content">
                 <!-- 필수 정보 입력 -->

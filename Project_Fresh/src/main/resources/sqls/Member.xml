@@ -98,7 +98,7 @@
 	<select id="loginMember" parameterType="java.util.Map" resultType="Member">
 		SELECT NAME, ID, GCODE, EMAIL, PHONE, AGREE, LLOGIN, LPWCHANGE, DELFLAG, SNS, MILEAGE, HIREDATE
 		FROM MEMBER
-		WHERE ID = #{id} AND PASSWORD = #{password} AND DELFLAG = 'N'
+		WHERE ID = #{id} AND PASSWORD = #{password}
 	</select>
 	
 	<!-- 비밀번호는 시큐리티 사용 -->
@@ -113,7 +113,7 @@
 	<select id="enLogin" parameterType="java.lang.String" resultType="Member">
 		SELECT ID, NAME, DELFLAG
 		FROM "MEMBER"
-		WHERE ID = #{id} AND DELFLAG = 'N'
+		WHERE ID = #{id}
 	</select>	
 	
 	<!-- 회원 자동 정지처리 -->
@@ -145,6 +145,20 @@
 		UPDATE "MEMBER"
 		SET PASSWORD = #{password}
 		WHERE ID = #{id}
+	</update>
+	
+	<!-- (비밀번호 재설정시 사용) 비밀번호, 상태확인 -->
+	<select id="searchPassword" parameterType="java.lang.String" resultType="Member">
+		SELECT PASSWORD, DELFLAG
+		FROM "MEMBER" 
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 휴면계정 해제 -->
+	<update id="updateMemberDelflagN" parameterType="java.lang.String">
+		UPDATE "MEMBER"
+		SET DELFLAG = 'N', LLOGIN = SYSDATE, LPWCHANGE = SYSDATE
+		WHERE ID = #{id} AND DELFLAG = 'H'
 	</update>
 	
 </mapper>
