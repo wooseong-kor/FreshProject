@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>통계 조회</title>
 </head>
-<%@include file="/WEB-INF/views/header.jsp"%>
+<%-- <%@include file="/WEB-INF/views/header.jsp"%> --%>
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
