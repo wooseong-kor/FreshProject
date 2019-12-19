@@ -131,12 +131,13 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", dto.getId()); // 로그인시 필요한 id
 		map.put("password", dto.getPassword()); // 로그인시 필요한 password
+		map.put("delflag", dto.getDelflag()); // 처음에 무조건N
 		Member_DTO mDto = service.loginMember(map);
-		System.out.println("▶▷▶▶▷▶확인" + mDto);
+		System.out.println("▶▷▶▶▷▶확인 = " + mDto);
 		if (mDto == null) {
 			map.put("isc", "실패");
 		} else {
-			map.put("delflag", mDto.getDelflag()); // 회원상태에 따른 처리를 위해 회원상태 필요
+			map.put("delflag", mDto.getDelflag()); // 로그인 후 받아온 회원상태로 업데이트
 			map.put("name", mDto.getName()); // 휴면계정 회원 이름 띄우려고
 			map.put("isc", "성공");
 		}
@@ -152,11 +153,11 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		map.put("delflag", dto.getDelflag());
 		Member_DTO mDto = service.loginMember(map);
 		session.setAttribute("mem", mDto);
-		if (mDto.getDelflag() == "N") {
-			return "header";
-		} else { // 휴면계정 상태
-//			return "PasswordSetting";
-			return "DormantAccountPasswordSetting";
+		System.out.println("▶▷▶ 로그인 정보 확인 = " + map.toString());
+		if (mDto.getDelflag().equals("N")) {
+			return "Main"; // 로그인 성공시 임의로 이동함 main.jsp생기면 이동필요
+		} else { 
+			return "DormantAccountPasswordSetting"; // 휴면계정 상태
 		}
 	}
 	
