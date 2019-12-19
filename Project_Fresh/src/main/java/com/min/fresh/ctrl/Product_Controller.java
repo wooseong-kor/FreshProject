@@ -78,7 +78,7 @@ public class Product_Controller {
 	public String productEdit(Product_DTO pDto) {
 		log.info("★★★★★상품 Edit 후 DTO확인★★★★★");
 		int pEdit = service.updateProductPriceSangstat(pDto); // 상품 - 판매가, 상태 수정
-		return (pEdit > 0)?"redirect:/productJSON.do":"error";
+		return (pEdit > 0)?"redirect:/productJSON.do":"Error";
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class Product_Controller {
 	public String productAdd(Product_DTO pDto) {
 		log.info("★★★★★상품 Edit 후 DTO확인★★★★★");
 		int cntP = service.insertProduct(pDto);
-		return (cntP > 0)?"redirect:/productJSON.do":"error";
+		return (cntP > 0)?"redirect:/productJSON.do":"Error";
 	}
 	
 }
