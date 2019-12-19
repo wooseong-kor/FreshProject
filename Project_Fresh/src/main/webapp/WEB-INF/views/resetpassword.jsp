@@ -6,32 +6,32 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript">
-	function submit(){
+	
+	function transfer(){
 		$.ajax({
 			url : "./reset.do",
-			data : "id="+$("#id").val()+"&password="+$("$pw").val(),
+			data : $("#from").serialize(),
 			type: "post",
-			async: true,
-			success :function(x){
+			success : function(x){
 				alert(x);
-				if (x=="초기화") {
-					alert(x+"초기화");
-					self.close();
+				if (x=="true") {
+					self.location.href="./login.do";
 				}
 			},
 			error: function(){
 				alert("실패");
-			},
+			}
 		});
 		
 	}
 </script>
 <body>
-<form action="#" id="from">
+<form id="from">
 <input type="hidden" name="id" id="id" value="${id}">
 <input type="text" name="password" id="pw" placeholder="비밀번호 재설정">
-<input type="button" onclick="submit()" value="변경">
+<input type="button" onclick="transfer()" value="변경">
 </form>
 </body>
 </html>
