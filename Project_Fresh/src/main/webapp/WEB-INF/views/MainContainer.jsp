@@ -3,12 +3,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fresh_Wolrd</title>
+<title>Fresh</title>
+<style type="text/css">
+	#seulrene {
+		margin-top: 50px;
+		margin-left: 600px;
+	}
+</style>
 </head>
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
-		${mem}
+		<img alt="슬린" src="./image/seulrene.png" id="seulrene">
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
