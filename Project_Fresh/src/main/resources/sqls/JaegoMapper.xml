@@ -20,36 +20,65 @@
 <select id="countAllGoodJaego" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM JAEGO WHERE JAEGOSTAT = 'GOOD'
 </select>
-<!-- Good 상태인 재고 페이징-->
-<select id="allGoodJaegoList" parameterType="RowNum" resultMap="JaegoMap">
-SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
-(SELECT ROWNUM,JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM
-(SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM JAEGO JOIN PRODUCT USING(SANGCODE) ORDER BY SANGNAME))
-WHERE JAEGOSTAT = 'GOOD' AND ROWNUM BETWEEN #{first} AND #{last}
+
+<!-- Good 상태인 재고 조회-->
+<select id="allGoodJaegoList" resultType="Jaego">
+SELECT JAEGOCODE,SANGCODE,JAEGOCNT,JAEGOSTAT FROM JAEGO
+
 </select>
+
+<!-- Good 상태인 재고 페이징 -->
+<!-- <select id="allGoodJaegoList" parameterType="RowNum" resultMap="JaegoMap"> -->
+<!-- SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM -->
+<!-- (SELECT ROWNUM,JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM -->
+<!-- (SELECT JAEGOCODE,SANGCODE,SANGNAME,JAEGOCNT,JAEGOSTAT FROM JAEGO JOIN PRODUCT USING(SANGCODE) ORDER BY SANGNAME)) -->
+<!-- WHERE JAEGOSTAT = 'GOOD' AND ROWNUM BETWEEN #{first} AND #{last} -->
+<!-- </select> -->
+
+<!-- 재고관리 - 재고량&재고상태수정 -->
+<update id="updateJaegostat" parameterType="Jaego">
+	UPDATE JAEGO
+	SET JAEGOCNT = #{jaegocnt}, JAEGOSTAT = #{jaegostat}
+	WHERE JAEGOCODE = #{jaegocode}
+</update>
 
 <!-- 입고 개수-->
 <select id="countAllIpgo" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM IPGO
 </select>
-<!-- 입고 페이징-->
-<select id="allIpgoList" parameterType="RowNum" resultType="Ipgo">
-SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
-(SELECT ROWNUM,IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM
-(SELECT IPGONUM,JAEGOCODE,TO_CHAR(IPGODATE,'YYYYMMDD') IPGODATE,IPGOCNT,TO_CHAR(EXPDATE,'YYYYMMDD') EXPDATE FROM IPGO ORDER BY IPGODATE DESC))
-WHERE ROWNUM BETWEEN #{first} AND #{last}
+
+<!-- 입고 조회-->
+<select id="allIpgoList" resultType="Ipgo">
+SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM IPGO
+
 </select>
+
+<!-- 입고 페이징 -->
+<!-- <select id="allIpgoList" parameterType="RowNum" resultType="Ipgo"> -->
+<!-- SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM -->
+<!-- (SELECT ROWNUM,IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM -->
+<!-- (SELECT IPGONUM,JAEGOCODE,TO_CHAR(IPGODATE,'YYYYMMDD') IPGODATE,IPGOCNT,TO_CHAR(EXPDATE,'YYYYMMDD') EXPDATE FROM IPGO ORDER BY IPGODATE DESC)) -->
+<!-- WHERE ROWNUM BETWEEN #{first} AND #{last} -->
+<!-- </select> -->
+
 <!-- 폐기 개수-->
 <select id="countAllPyegi" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM PYEGI
 </select>
-<!-- 폐기 페이징-->
-<select id="allPyegiList" parameterType="RowNum" resultType="Pyegi">
-SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
-(SELECT ROWNUM,PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM
-(SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM PYEGI))
-WHERE ROWNUM BETWEEN #{first} AND #{last}
+
+<!-- 폐기 조회-->
+<select id="allPyegiList" resultType="Pyegi">
+SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEFLAG,PYEGISAYU FROM PYEGI
+
 </select>
+
+<!-- 폐기 페이징 -->
+<!-- <select id="allPyegiList" parameterType="RowNum" resultType="Pyegi"> -->
+<!-- SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM -->
+<!-- (SELECT ROWNUM,PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM -->
+<!-- (SELECT PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU FROM PYEGI)) -->
+<!-- WHERE ROWNUM BETWEEN #{first} AND #{last} -->
+<!-- </select> -->
 
 
 <!-- 재고 - 재고정보를 입력한다. -->
@@ -57,11 +86,13 @@ WHERE ROWNUM BETWEEN #{first} AND #{last}
 INSERT INTO JAEGO(JAEGOCODE,SANGCODE,JAEGOCNT,JAEGOSTAT) 
 VALUES('JA'||LPAD(JAEGO_SEQ.NEXTVAL,'8','0') ,#{sangcode},#{jaegocnt},'GOOD')
 </insert>
+
 <!-- 입고 - 입고정보를 입력한다 -->
 <insert id="insertIpgo" parameterType="Ipgo">
 INSERT INTO IPGO(IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE)
  VALUES('IP'||LPAD(IPGO_SEQ.NEXTVAL,'8','0'),#{jaegocode},SYSDATE,#{ipgocnt},SYSDATE+30)
 </insert>
+
 <!-- 재고 - 출고 (수정) -->
 <update id="updateJaegoMinus" parameterType="java.lang.String">
 UPDATE JAEGO J SET JAEGOCNT = (SELECT JAEGOCNT-JAE.JUM FROM
@@ -72,11 +103,13 @@ UPDATE JAEGO J SET JAEGOCNT = (SELECT JAEGOCNT-JAE.JUM FROM
   AND JU.SANGPGNUM=S.SANGPGNUM 
   AND SG.SANGCODE=S.SANGCODE)
 </update>
+
 <!-- 재고 - 폐기할 상품의 정보를 입력한다. -->
 <insert id="insertPyegi" parameterType="Pyegi">
 INSERT INTO PYEGI(PYEGINUM,JAEGOCODE,PYEGICNT,PYEGISAYU,PYEGIFLAG) 
 VALUES('PG'||TO_CHAR(SYSDATE,'YYYYMMDD')||LPAD(PYEGI_SEQ.NEXTVAL,'4','0'),#{jaegocode},#{pyegicnt},#{pyegisayu},'N')
 </insert>
+
 <!-- 재고 - 폐기처리된 수량만큼 재고량을 감소 시킨다. -->
 <update id="updateJaecountPyegiOne" parameterType="java.lang.String">
 UPDATE JAEGO J
@@ -91,12 +124,14 @@ WHERE J.JAEGOCODE = (SELECT P.JAEGOCODE
 	AND P.JAEGOCODE=J.JAEGOCODE 
 	AND P.PYEGIFLAG = 'N')
 </update>
+
 <!-- 재고 - 재고량에 반영된 폐기품의 상태를 변경한다. -->
 <update id="updatePyegiflagOne" parameterType="java.lang.String">
 UPDATE PYEGI 
 SET PYEGIFLAG = 'Y'
 WHERE PYEGINUM = #{pyeginum}
 </update>
+
 <!-- 재고 - 재고상태 수정 (출고 불가) -->
 <update id="updateJaegostatOne">
 UPDATE JAEGO

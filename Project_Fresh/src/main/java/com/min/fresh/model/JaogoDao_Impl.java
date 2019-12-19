@@ -29,9 +29,9 @@ public class JaogoDao_Impl implements IJaegoDao {
 	}
 
 	@Override
-	public List<Jaego_DTO> allGoodJaegoList(RowNum_DTO dto) {
+	public List<Jaego_DTO> allGoodJaegoList() {
 		log.info("allGoodJaegoList 실행");
-		return session.selectList(NS+"allGoodJaegoList", dto);
+		return session.selectList(NS+"allGoodJaegoList");
 	}
 
 	@Override
@@ -41,10 +41,11 @@ public class JaogoDao_Impl implements IJaegoDao {
 	}
 
 	@Override
-	public List<Ipgo_DTO> allIpgoList(RowNum_DTO dto) {
+	public List<Ipgo_DTO> allIpgoList() {
 		log.info("allIpgoList 실행");
-		return session.selectList(NS+"allIpgoList", dto);
+		return session.selectList(NS+"allIpgoList");
 	}
+
 
 	@Override
 	public int countAllPyegi() {
@@ -53,9 +54,9 @@ public class JaogoDao_Impl implements IJaegoDao {
 	}
 
 	@Override
-	public List<Pyegi_DTO> allPyegiList(RowNum_DTO dto) {
+	public List<Pyegi_DTO> allPyegiList() {
 		log.info("allPyegiList 실행");
-		return session.selectList(NS+"allPyegiList", dto);
+		return session.selectList(NS+"allPyegiList");
 	}
 
 	@Override
@@ -101,15 +102,39 @@ public class JaogoDao_Impl implements IJaegoDao {
 	}
 
 	@Override
-	public List<Jaego_DTO> jaegoCodeList() { // 실행여부 불투명 매퍼확인바람
-		log.info("jaegoCodeList 실행");
-		return session.selectList(NS+"jaegoCodeList");
+	public int updateJaegostat(Jaego_DTO dto) {
+		log.info("updateJaegostat 실행");
+		return session.update(NS+"updateJaegostat", dto);
 	}
 
-	@Override
-	public List<Jaego_DTO> jaegoExpdateList() { // 실행여부 불투명 매퍼확인바람
-		log.info("jaegoExpdateList 실행");
-		return session.selectList(NS+"jaegoExpdateList");
-	}
+//	@Override
+//	public List<Jaego_DTO> allGoodJaegoList(RowNum_DTO dto) {
+//		log.info("allGoodJaegoList 실행");
+//		return session.selectList(NS+"allGoodJaegoList", dto);
+//	}
+//	@Override
+//	public List<Ipgo_DTO> allIpgoList(RowNum_DTO dto) {
+//		log.info("allIpgoList 실행");
+//		return session.selectList(NS+"allIpgoList", dto);
+//	}	
+	
+//	@Override
+//	public List<Pyegi_DTO> allPyegiList(RowNum_DTO dto) {
+//		log.info("allPyegiList 실행");
+//		return session.selectList(NS+"allPyegiList", dto);
+//	}
+
+	
+//	@Override
+//	public List<Jaego_DTO> jaegoCodeList() { // 실행여부 불투명 매퍼확인바람
+//		log.info("jaegoCodeList 실행");
+//		return session.selectList(NS+"jaegoCodeList");
+//	}
+//
+//	@Override
+//	public List<Jaego_DTO> jaegoExpdateList() { // 실행여부 불투명 매퍼확인바람
+//		log.info("jaegoExpdateList 실행");
+//		return session.selectList(NS+"jaegoExpdateList");
+//	}c
 
 }
