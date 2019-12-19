@@ -248,7 +248,7 @@
 			<input type="button" class="btn btn-success" value="회원가입" onclick="memberSignupAction()">	
 	<!-- 		<input type="button" class="btn btn-primary" value="돌아가기" onclick="javascript:history.back(-1)"> -->
 			<!-- 뒤로가기 막으면 사용할 버튼 -->
-			<input type="button" class="btn btn-primary" value="돌아가기" onclick="cancleSignup()">
+			<input type="button" class="btn btn-primary" value="돌아가기" onclick="location.href='./Main.do'">
 	    </div>
 	</div>
 	

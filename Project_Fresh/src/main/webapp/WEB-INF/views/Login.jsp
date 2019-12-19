@@ -35,7 +35,7 @@
 				<p class="link">
 			        아직 회원이 아니신가요?<br>
 			        고객님을 위한 다양한 혜택이 준비되어 있습니다.<br>
-			        <input type="button" id="SignUp" name="signup" value="회원가입" onclick="location.href='./memberSignup.do'">
+			        <input type="button" id="SignUp" name="signup" value="회원가입" onclick="location.href='./termsOfUse.do'">
 				</p>
 			</fieldset>
 		</form>
