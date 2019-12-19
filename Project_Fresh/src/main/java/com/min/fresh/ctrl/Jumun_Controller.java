@@ -86,8 +86,11 @@ public class Jumun_Controller<E> {
 	 */
 	@RequestMapping(value = "/insertjumon.do",method = RequestMethod.POST)
 	@ResponseBody
-	public Map<String, Object> insertJumun(/*RedirectAttributes attr,*/Jumun_DTO dto,Payhistory_DTO pDto) {
-		System.out.println(dto);
+	public Map<String, Object> insertJumun(HttpServletRequest request,Jumun_DTO dto,Payhistory_DTO pDto) {
+		System.out.println("주문 DTO--------------"+dto);
+		System.out.println("-------------결제 DTO"+pDto);
+//		Member_DTO mem = (Member_DTO) request.getSession();
+		dto.setId("MAN");
 		boolean isc= service.insertJumun(dto);
 		System.out.println(isc);
 		System.out.println(pDto+"결제 DTO");
@@ -96,7 +99,7 @@ public class Jumun_Controller<E> {
 			String jumunnum = service.selectJumunnum(dto.getId());
 			System.out.println(jumunnum+" : 주문넘");
 			pDto.setJumunnum(jumunnum);
-			pDto.setMileage(dto.getJummoney()-pDto.getPaymoney());
+//			pDto.setMileage(dto.getJummoney()-pDto.getPaymoney());
 			System.out.println(pDto+"결제 DTO : 이후");
 			boolean pisc = service.insertPayhistory(pDto);
 			System.out.println(pisc);
