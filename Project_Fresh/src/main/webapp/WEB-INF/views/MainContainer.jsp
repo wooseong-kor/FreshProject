@@ -14,7 +14,7 @@
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
-		<img alt="슬린" src="./image/seulrene.png" id="seulrene">
+		<img alt="Fresh" src="./image/MainImage.png" id="seulrene">
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

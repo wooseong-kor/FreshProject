@@ -5,20 +5,12 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Welcome_Fresh_Wolrd</title>
+<title>회원정보 뿌리기</title>
 </head>
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
-		<!-- 관리자 -->
-		<c:if test="${fn:trim(mem.gcode) eq 'A'}">
-			${mem.name} (${mem.gcode}) 관리자 모드로 로그인 되었습니다.
-		</c:if>
-		<!-- 회원 -->
-		<c:if test="${fn:trim(mem.gcode) ne 'A'}">
-			${mem.name} (${mem.gcode}) 님 반갑습니다~♥
-		</c:if>
-		<br>
+		<h2>" ${mem.name} " 님</h2>
 		${mem}
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
