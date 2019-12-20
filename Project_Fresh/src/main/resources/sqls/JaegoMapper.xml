@@ -47,11 +47,23 @@ SELECT JAEGOCODE,SANGCODE,JAEGOCNT,JAEGOSTAT FROM JAEGO
 SELECT COUNT(*) FROM IPGO
 </select>
 
-<!-- 입고 조회-->
-<select id="allIpgoList" resultType="Ipgo">
-SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM IPGO
 
+<!-- 입고 조회-->
+<!-- <select id="allIpgoList" resultType="Ipgo"> -->
+<!-- SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM IPGO JOIN JAEGO USING(JAEGOCODE) -->
+<!-- JOIN PRODUCT USING(SANGCODE) -->
+<!-- </select> -->
+
+
+<select id="allIpgoList" resultType="Ipgo">
+SELECT IPGONUM,J.JAEGOCODE JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM PRODUCT P, JAEGO J,IPGO I
+WHERE P.SANGCODE = J.SANGCODE
+AND J.JAEGOCODE = I.JAEGOCODE
 </select>
+
+<!-- SELECT IPGONUM,JAEGOCODE,IPGODATE,IPGOCNT,EXPDATE FROM () -->
+
+
 
 <!-- 입고 페이징 -->
 <!-- <select id="allIpgoList" parameterType="RowNum" resultType="Ipgo"> -->
