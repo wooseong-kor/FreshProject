@@ -38,7 +38,7 @@ public class TossAPI {
 			jsonBody.put("productDesc", String.valueOf(map.get("productDesc"))); // 상품 설명
 			jsonBody.put("apiKey", apiKey); // 가맹점 키 (추후 실 거래시 발급받은 키 사용)
 		    jsonBody.put("autoExecute", true); // 자동 승인 여부 (true 를 사용하는 경우, 구매자 인증이 완료되면 토스가 알아서 승인을 진행합니다. 가맹점의 판매 상품에 따라 활용해 주시면 됩니다.)
-		    jsonBody.put("retUrl", retUrl); // Web 결제 완료 후 연결할 웹페이지의 URL
+		    jsonBody.put("retUrl", retUrl+"?jumunnum="+map.get("orderNo")); // Web 결제 완료 후 연결할 웹페이지의 URL
 		    jsonBody.put("retCancelUrl", retCancelUrl); // 토스 브릿지 페이지에서 사용자가 결제를 중단할때 사용자를 이동시킬 가맹점 페이지
 
 			BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());

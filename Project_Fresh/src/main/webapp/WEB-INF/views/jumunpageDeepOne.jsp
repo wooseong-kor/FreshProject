@@ -183,7 +183,7 @@
 			<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
 			결제금액 - <input type="text" name="paymoney" readonly="readonly" id="resultPrice" value="0">
 			<input type="hidden" id="couseq" name="couseq">
-			<input type="hidden" name="paywhat" value="1">
+			<input type="hidden" name="paywhat" value="t">
 			<input type="hidden" name="sangpgnum" value="${dto.sangpgnum}">
 			<input type="hidden" id="jummoney" name="jummoney" value="0">
 			<input type="hidden" name="bsgcode" id="bsg" value="null">

@@ -201,8 +201,13 @@ public class Jumun_Controller<E> {
 		return "toss";
 	}
 	
+	//결제 성공 페이지
 	@RequestMapping(value = "/success.do")
-	public String success() {
+	public String success(Model model,String jumunnum) {
+		log.info("결제 성공시 주문번호를 출력한다 {}",jumunnum);
+		System.out.println(jumunnum);
+		boolean isc = service.updateJumunPayhistoryDeposit(jumunnum);
+		model.addAttribute("isc", isc);
 		return "success";
 	}
 	
