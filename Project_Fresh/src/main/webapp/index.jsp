@@ -22,9 +22,13 @@
 	<br>
 	Google Chart <a href="./gochart.do">차트조회</a>
 	<br>
-	재고가이소 <a href="./jaego.do">재고가이소 어서가시오</a>
+	재고관리 <a href="./jaego.do">재고관리</a>
 	<br>
-	배송지 추가 <a href="./insertAddrlist.do?id=MAN">배송지</a> <br>
+	입고관리<a href="./ipgo.do">입고관리</a>
+	<br>
+	폐기관리<a href="./pyegi.do">폐기관리</a>
+	<br>
+	배송지 추가 <a href="./insertAddrlist.do?id=MAN">배송지</a>
 	<br>
 	상품 등록 <a href="./insertJumunpage.do">상품 상세</a>
 	<br>
