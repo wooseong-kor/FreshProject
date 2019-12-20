@@ -102,6 +102,8 @@ public class Jumun_Controller<E> {
 //			pDto.setMileage(dto.getJummoney()-pDto.getPaymoney());
 			System.out.println(pDto+"결제 DTO : 이후");
 			boolean pisc = service.insertPayhistory(pDto);
+			boolean cisc = coupon.updateUseflagOne(pDto.getCouseq());
+			System.out.println(cisc);
 			System.out.println(pisc);
 			map.put("orderNo", jumunnum);
 			map.put("amount", pDto.getPaymoney());
@@ -206,6 +208,26 @@ public class Jumun_Controller<E> {
 	public String success(Model model,String jumunnum) {
 		log.info("결제 성공시 주문번호를 출력한다 {}",jumunnum);
 		System.out.println(jumunnum);
+		String gcode = "R";
+		String id = "MAN";
+		Map<String, Object> milemap = new HashMap<String, Object>();
+		milemap.put("jumunnum", jumunnum);
+		milemap.put("id", id); //-> 세션 받아와서 처리
+		boolean mileisc = false;
+		if (gcode.equalsIgnoreCase("R")) {
+			mileisc = coupon.updateMileageRMember(milemap);
+		}else if (gcode.equalsIgnoreCase("B")) {
+			mileisc = coupon.updateMileageBMember(milemap);
+		}else if (gcode.equalsIgnoreCase("S")) {
+			mileisc = coupon.updateMileageSMember(milemap);
+		}else if (gcode.equalsIgnoreCase("V")){
+			mileisc = coupon.updateMileageVMember(milemap);
+		}else {
+			mileisc = false;
+		}
+		System.out.println(mileisc);
+		boolean memisc = coupon.updateMileageOneMember(milemap);
+		System.out.println(memisc);
 		boolean isc = service.updateJumunPayhistoryDeposit(jumunnum);
 		model.addAttribute("isc", isc);
 		return "success";
