@@ -17,6 +17,18 @@
 	<result column="SANGSTAT" property="sangstat"/>
 </resultMap>
 
+<resultMap type="com.min.fresh.dto.Jumun_DTO" id="JumunMap">
+	<result column="JUMUNNUM" property="jumunnum"/>
+	<result column="ID" property="id"/>
+	<result column="SANGPGNUM" property="sangpgnum"/>
+	<result column="BSGCODE" property="bsgcode"/>
+	<result column="JUMMONEY" property="jummoney"/>
+	<result column="JUMCNT" property="jumcnt"/>
+	<result column="JUMSTAT" property="jumstat"/>
+	<result column="JUMDATE" property="jumdate"/>
+	<collection property="jumunpage_DTO" resultMap="JPageMap"/>
+</resultMap>
+
 <resultMap type="com.min.fresh.dto.Jumunpage_DTO" id="JPageMap">
 	<result column="SANGPGNUM" property="sangpgnum"/>
 	<result column="SANGCODE" property="sangcode"/>
@@ -53,17 +65,6 @@
 	<collection property="jumun_DTO" resultMap="JumunMap"/>
 </resultMap>
 
-<resultMap type="com.min.fresh.dto.Jumun_DTO" id="JumunMap">
-	<result column="JUMUNNUM" property="jumunnum"/>
-	<result column="ID" property="id"/>
-	<result column="SANGPGNUM" property="sangpgnum"/>
-	<result column="BSGCODE" property="bsgcode"/>
-	<result column="JUMMONEY" property="jummoney"/>
-	<result column="JUMCNT" property="jumcnt"/>
-	<result column="JUMSTAT" property="jumstat"/>
-	<result column="JUMDATE" property="jumdate"/>
-	<collection property="jumunpage_DTO" resultMap="JPageMap"/>
-</resultMap>
 
 
 <!-- 전체 회원 수-->

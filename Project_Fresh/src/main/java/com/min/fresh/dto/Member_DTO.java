@@ -91,12 +91,38 @@ public class Member_DTO implements Serializable {
 		this.cartcnt = cartcnt;
 	}
 
+	public Member_DTO(String id, String password, String gcode, String name, String email, String phone, String agree,
+			Date llogin, Date lpwchange, String delflag, String sns, int mileage, Date hiredate, int seq,
+			String sangpgnum, int cartcnt, String grade, Warning_DTO warning_DTO, Payhistory_DTO payhistory_DTO) {
+		super();
+		this.id = id;
+		this.password = password;
+		this.gcode = gcode;
+		this.name = name;
+		this.email = email;
+		this.phone = phone;
+		this.agree = agree;
+		this.llogin = llogin;
+		this.lpwchange = lpwchange;
+		this.delflag = delflag;
+		this.sns = sns;
+		this.mileage = mileage;
+		this.hiredate = hiredate;
+		this.seq = seq;
+		this.sangpgnum = sangpgnum;
+		this.cartcnt = cartcnt;
+		this.grade = grade;
+		this.warning_DTO = warning_DTO;
+		this.payhistory_DTO = payhistory_DTO;
+	}
+
 	@Override
 	public String toString() {
 		return "Member_DTO [id=" + id + ", password=" + password + ", gcode=" + gcode + ", name=" + name + ", email="
 				+ email + ", phone=" + phone + ", agree=" + agree + ", llogin=" + llogin + ", lpwchange=" + lpwchange
 				+ ", delflag=" + delflag + ", sns=" + sns + ", mileage=" + mileage + ", hiredate=" + hiredate + ", seq="
-				+ seq + ", sangpgnum=" + sangpgnum + ", cartcnt=" + cartcnt + "grade" + grade + "]";
+				+ seq + ", sangpgnum=" + sangpgnum + ", cartcnt=" + cartcnt + ", grade=" + grade + ", warning_DTO="
+				+ warning_DTO + ", payhistory_DTO=" + payhistory_DTO + "]";
 	}
 
 	public String getId() {
@@ -235,6 +261,21 @@ public class Member_DTO implements Serializable {
 		this.grade = grade;
 	}
 
+	public Warning_DTO getWarning_DTO() {
+		return warning_DTO;
+	}
+
+	public void setWarning_DTO(Warning_DTO warning_DTO) {
+		this.warning_DTO = warning_DTO;
+	}
+
+	public Payhistory_DTO getPayhistory_DTO() {
+		return payhistory_DTO;
+	}
+
+	public void setPayhistory_DTO(Payhistory_DTO payhistory_DTO) {
+		this.payhistory_DTO = payhistory_DTO;
+	}
 	
 	
 }
