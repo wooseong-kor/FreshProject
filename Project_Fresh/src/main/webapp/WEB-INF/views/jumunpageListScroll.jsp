@@ -47,10 +47,11 @@
 			<a href="http://localhost:8099/Project_Fresh/jumunpageListScroll.do?sangcode=TO">Tomato</a>
 		</div>	
 		<div style="margin-left:14%">
+		
 		 <c:forEach var="dto" items="${lists}" varStatus="vs">
-		<div class="col-sm-10">
+		<div class="col-sm-10" onclick="jumunDeep(${dto.sangpgnum})">
 		 	<div class="image" style="display: inline; float: left;">
-			<a href="http://localhost:8099/Project_Fresh/jumunpageDeepOne.do?sangpgnum=${dto.sangpgnum}"><p>${dto.productImg_DTO.imgpath}</p></a>
+			<p>${dto.productImg_DTO.imgpath}</p>
 			</div>
 			<div class="content" style="display: inline; float: left; margin-top: 8px; margin-left: 30px; ">
 			<h3>${dto.title}</h3>
@@ -62,6 +63,11 @@
 			</c:forEach>
 		</div>
 	</div>
+	<script type="text/javascript">
+	function jumunDeep(val) {
+		location.href="./jumunpageDeepOne.do?sangpgnum="+val;
+	}
+	</script>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

@@ -21,7 +21,7 @@ public class Jumun_DTO implements Serializable{
 	}
 
 	public Jumun_DTO(String jumunnum, String id, String sangpgnum, String bsgcode, int jummoney, int jumcnt,
-			String jumstat, Date jumdate) {
+			String jumstat, Date jumdate, Jumunpage_DTO jumunpage_DTO) {
 		super();
 		this.jumunnum = jumunnum;
 		this.id = id;
@@ -31,6 +31,7 @@ public class Jumun_DTO implements Serializable{
 		this.jumcnt = jumcnt;
 		this.jumstat = jumstat;
 		this.jumdate = jumdate;
+		this.jumunpage_DTO = jumunpage_DTO;
 	}
 
 	@Override
@@ -103,7 +104,14 @@ public class Jumun_DTO implements Serializable{
 	public void setJumdate(Date jumdate) {
 		this.jumdate = jumdate;
 	}
-	
-	
+
+	public Jumunpage_DTO getJumunpage_DTO() {
+		return jumunpage_DTO;
+	}
+
+	public void setJumunpage_DTO(Jumunpage_DTO jumunpage_DTO) {
+		this.jumunpage_DTO = jumunpage_DTO;
+	}
+
 
 }

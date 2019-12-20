@@ -17,7 +17,7 @@ public interface IBoardDao {
 //	마이페이지-쿠폰 내역 조회
 	public List<Couponhistory_DTO> couhistoryList(String id);
 //	마이페이지-등급 조회
-	public Payhistory_DTO gradeList(String id);
+	public Member_DTO gradeList(String id);
 //	배송지 입력
 	public int insertAddrlist(AddrList_DTO aDto);
 //	배송지 수정
