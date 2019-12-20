@@ -49,6 +49,7 @@ public class Jumun_PaymentService_Impl implements IJumun_PaymentService{
 	}
 
 	@Override
+	@Transactional
 	public boolean deleteJumun(String jumunnum) {
 		boolean p = dao.deletePayment(jumunnum)>0?true:false;
 		boolean j = dao.deleteJumun(jumunnum)>0?true:false;
