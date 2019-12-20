@@ -66,6 +66,7 @@ $(document).ready(function(){
 								<li class="nav-item dropdown"><a href="#">재고관리</a></li>
 								<li class="nav-item dropdown"><a href="#">폐기관리</a></li>
 								<li class="nav-item dropdown"><a href="./memberManagement.do">회원관리</a></li>
+								<li class="nav-item dropdown"><a href="#">통계</a></li>
 							</c:when>
 							<c:otherwise>
 							</c:otherwise>
