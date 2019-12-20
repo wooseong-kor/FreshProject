@@ -3,12 +3,9 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Fresh_관리자</title>
+<title>관리자_회원관리</title>
 </head>
 <body>
-	<%@include file="/WEB-INF/views/header.jsp"%>
-	<div id="container">
-	</div>
-	<%@include file="/WEB-INF/views/footer.jsp"%>
+회원관리 
 </body>
 </html>

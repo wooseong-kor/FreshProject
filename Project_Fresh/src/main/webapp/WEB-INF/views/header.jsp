@@ -25,17 +25,13 @@ a{
 }
 </style>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./js/IpgoManagement.js"></script>
-<script type="text/javascript" src="./js/JaegoManagement.js"></script>
-<script type="text/javascript" src="./js/PyegiManagement.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
-//  $(".dropdown-toggle").dropdown("toggle");
 	$(".dropdown-menu").hide();
 });
 </script>
 	<header>
-		<nav class="navbar navbar-default navbar-expand-sm">
+		<nav class="navbar navbar-default">
 			<div class="container-fluid">
 				<!-- heder 좌측 -->
 				<div class="navbar-header">
@@ -43,12 +39,10 @@ $(document).ready(function(){
 						<span class="sr-only"></span>
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>                        
 					</button>
 					<a class="navbar-brand" href="./Main.do">
-						<span>
-							<img src="./image/logo.png" id="png">
-						</span>
+						<span><img src="./image/logo.png" id="png"></span>
 					</a>
 				</div>
 				<!-- 좌측항목 -->
@@ -56,30 +50,47 @@ $(document).ready(function(){
 					<ul class="nav navbar-nav navbar-left">
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
-							PRODUCT
-						    </a>
-						    <div class="dropdown-menu">
+							PRODUCT 
+							</a>
+							<div class="dropdown-menu">
 								<a class="dropdown-item" href="http://localhost:8099/Project_Fresh/jumunpageListScroll.do?sangcode=0">&nbsp;&nbsp;&nbsp;CATEGORY</a>
 							</div>
 						</li>
 						<li class="nav-item dropdown"><a href="#">NOTICE</a></li>
 						<li class="nav-item dropdown"><a href="#">Q&A</a></li>
 						<li class="nav-item dropdown"><a href="#">FAQ</a></li>
+						<c:choose>
+							<c:when test="${mem.gcode eq 'A'}">
+								<li class="nav-item dropdown"><a href="./product.do">상품관리</a></li>
+								<li class="nav-item dropdown"><a href="#">입고관리</a></li>
+								<li class="nav-item dropdown"><a href="#">재고관리</a></li>
+								<li class="nav-item dropdown"><a href="#">폐기관리</a></li>
+								<li class="nav-item dropdown"><a href="./memberManagement.do">회원관리</a></li>
+							</c:when>
+							<c:otherwise>
+							</c:otherwise>
+						</c:choose>
 					</ul>
 					<!-- heder 우측 -->
 					<ul class="nav navbar-nav navbar-right">
-						<li id="navSignUp">
-							<a href="./loginPage.do">
-								<span><img src="./image/Member.png" alt="member"> LOGIN</span>
-							</a>
-						</li>
-						<li id="navSignUp">
-							<a href="#">
-								<span>
-									<img src="./image/Cart.png" alt="cart"> CART
-								</span>
-							</a>
-						</li>
+						 <!-- 세션여부확인 -->
+						 <c:choose>
+						 	<c:when test="${empty mem}">
+						 		<li><a href="./loginPage.do"><span><img src="./image/Member.png" alt="member">LOG IN</span></a></li>
+						 	</c:when>
+						 	<c:otherwise>
+						 		<li><span>${mem.name} 님</span></li>
+								<!-- 관리자 사용자 구분해서 장바구니 출력 -->
+								<c:choose>
+									<c:when test="${mem.gcode eq 'A'}"></c:when>
+									<c:otherwise>
+										<li><a href="#"><span><img src="./image/Cart.png" alt="cart"> CART</span></a></li>
+										<li><a href="./myPage.do"><span><img src="./image/MemberEdit.png" alt="My_page"> My_page</span></a></li>
+									</c:otherwise>
+								</c:choose>
+						 		<li><a href="./logout.do"><span><img src="./image/Member.png" alt="member">LOG OUT</span></a></li>
+						 	</c:otherwise>
+						 </c:choose>
 					</ul>
 				</div>
 			</div>
