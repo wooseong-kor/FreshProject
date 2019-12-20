@@ -158,11 +158,16 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		map.put("id", dto.getId());
 		map.put("password", dto.getPassword());
 		map.put("delflag", dto.getDelflag());
+		map.put("gcode", dto.getGcode()); // 회원등급 (관리자, 회원 구분을 위해)
 		Member_DTO mDto = service.loginMember(map);
 		session.setAttribute("mem", mDto);
 		System.out.println("▶▷▶ 로그인 정보 확인 = " + map.toString());
 		if (mDto.getDelflag().equals("N")) {
-			return "LoginMain"; // 로그인 성공시 임의로 이동함 main.jsp생기면 이동필요
+			if (mDto.getGcode().equals("A")) { // 관리자
+				return "AdminMain"; // 관리자 메인
+			} else {
+				return "MyPage"; // 사용자 메인
+			}
 		} else { 
 			return "DormantAccountPasswordSetting"; // 휴면계정 상태
 		}

@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>Fresh_로그인</title>
 </head>
+<script type="text/javascript" src="./js/Login.js"></script>
 <body>	
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">

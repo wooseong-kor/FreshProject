@@ -5,6 +5,7 @@
 <meta charset="UTF-8">
 <title>Fresh_비밀번호_재설정</title>
 </head>
+<script type="text/javascript" src="./js/DormantAccount.js"></script>
 <body>	
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
