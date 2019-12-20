@@ -34,6 +34,9 @@ a{
 <script type="text/javascript" src="./js/DormantAccount.js"></script>
 <script type="text/javascript" src="./js/TermsOfUse.js"></script>
 <script type="text/javascript" src="./js/ProductManagement.js"></script>
+<script type="text/javascript" src="./js/IpgoManagement.js"></script>
+<script type="text/javascript" src="./js/JaegoManagement.js"></script>
+<script type="text/javascript" src="./js/PyegiManagement.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 //  $(".dropdown-toggle").dropdown("toggle");
