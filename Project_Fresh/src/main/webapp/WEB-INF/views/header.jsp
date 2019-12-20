@@ -85,7 +85,7 @@ $(document).ready(function(){
 									<c:when test="${mem.gcode eq 'A'}"></c:when>
 									<c:otherwise>
 										<li><a href="#"><span><img src="./image/Cart.png" alt="cart"> CART</span></a></li>
-										<li><a href="./myPage.do"><span><img src="./image/MemberEdit.png" alt="My_page"> My_page</span></a></li>
+										<li><a href="./myPage.do"><span><img src="./image/MemberEdit.png" alt="My_page"> MyPage</span></a></li>
 									</c:otherwise>
 								</c:choose>
 						 		<li><a href="./logout.do"><span><img src="./image/Member.png" alt="member">LOG OUT</span></a></li>

@@ -166,7 +166,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 			if (mDto.getGcode().equals("A")) { // 관리자
 				return "AdminMain"; // 관리자 메인
 			} else {
-				return "MyPage"; // 사용자 메인
+				return "MainContainer"; // 사용자 메인
 			}
 		} else { 
 			return "DormantAccountPasswordSetting"; // 휴면계정 상태
