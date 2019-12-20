@@ -112,7 +112,4 @@ public class Payhistory_DTO implements Serializable{
 	public void setJumun_DTO(Jumun_DTO jumun_DTO) {
 		this.jumun_DTO = jumun_DTO;
 	}
-	
-	
-
 }

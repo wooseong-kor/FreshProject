@@ -42,6 +42,7 @@
 		<result column="ID" property="id" />
 		<result column="GRADE" property="grade" />
 		<result column="GCODE" property="gcode" />
+		<collection property="payhistory_DTO" resultMap="PaymentMap" />
 	</resultMap>
 
 	<resultMap type="com.min.fresh.dto.Jumunpage_DTO"
@@ -55,8 +56,7 @@
 		<collection property="product_DTO" resultMap="ProductMap" />
 	</resultMap>
 
-	<resultMap type="com.min.fresh.dto.ProductImg_DTO"
-		id="PImgMap">
+	<resultMap type="com.min.fresh.dto.ProductImg_DTO" id="PImgMap">
 		<result column="SEQ" property="seq" />
 		<result column="SANGPGNUM" property="sangpgnum" />
 		<result column="IMGNAME" property="imgname" />
@@ -86,9 +86,9 @@
 		ORDER BY JGNALZA
 	</select>
 	<!-- 사용자 등급 조회 -->
-	<select id="gradeList" parameterType="java.lang.String" resultMap="PaymentMap">
+	<select id="gradeList" parameterType="java.lang.String" resultMap="MemberPayMap">
 		SELECT
-		SUM(PAYMONEY) PAYMONEY,GRADE
+		SUM(PAYMONEY) PAYMONEY,GRADE,ID
 		FROM MEMBER JOIN JUMUN
 		USING(ID)
 		JOIN PAYHISTORY
@@ -96,6 +96,8 @@
 		JOIN GRADE
 		USING(GCODE)
 		WHERE ID=#{id}
+		AND PAYSTAT='결제완료'
+		GROUP BY GRADE,ID
 		</select>
 	<!-- 배송지 입력 -->
 	<insert id="insertAddrlist" parameterType="Addr">

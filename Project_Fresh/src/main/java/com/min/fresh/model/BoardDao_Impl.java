@@ -34,7 +34,7 @@ public class BoardDao_Impl implements IBoardDao {
 	}
 
 	@Override
-	public Payhistory_DTO gradeList(String id) {
+	public Member_DTO gradeList(String id) {
 		log.info("gradeList 실행");
 		return session.selectOne(NS + "gradeList", id);
 	}

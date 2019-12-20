@@ -32,8 +32,9 @@ public class BoardService_Impl implements IBoardServiceDao {
 	}
 
 	@Override
-	public Payhistory_DTO gradeList(String id) {
+	public Member_DTO gradeList(String id) {
 		log.info("gradeList");
+		System.out.println(dao.gradeList(id));
 		return dao.gradeList(id);
 	}
 
