@@ -6,6 +6,8 @@
 <title>Fresh_회원가입_이용약관</title>
 <link rel="stylesheet" type="text/css" href="./css/TermsOfUse.css">
 </head>
+<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/TermsOfUse.js"></script>
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>

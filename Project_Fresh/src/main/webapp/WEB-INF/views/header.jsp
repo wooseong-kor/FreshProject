@@ -5,8 +5,6 @@
 <meta name='viewport' content='width=device-width, initial-scale=1'>
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap-theme.min.css">
-<link type="text/css" rel="stylesheet" href ="./css/bootstrap.min.css">
-<link type="text/css" rel="stylesheet" href ="./css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="./css/footer.css">
 <style type="text/css">
 #container{
@@ -26,9 +24,6 @@ a{
   width: 5px;
 }
 </style>
-<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-<script type="text/javascript" src="./js/bootstrap.min.js"></script>
-<script type="text/javascript" src="./js/sweetalert.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/IpgoManagement.js"></script>
 <script type="text/javascript" src="./js/JaegoManagement.js"></script>

@@ -1,16 +1,13 @@
+<%@page import="com.min.fresh.dto.Member_DTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Fresh</title>
-<style type="text/css">
-	#seulrene {
-		margin-top: 50px;
-		margin-left: 600px;
-	}
-</style>
 </head>
+<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
