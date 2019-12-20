@@ -225,6 +225,38 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 	}
 	
 	/**
+	 * 로그아웃
+	 * @param session 회원정보를 담고 있다.
+	 * @return 메인화면 이동
+	 */
+	@RequestMapping(value = "/logout.do", method = RequestMethod.GET)
+	public String logout(HttpSession session) {
+		log.info("★★★★★ 로그아웃 처리 ★★★★★");
+		session.invalidate();
+		return "redirect:/Main.do";
+	}
+	
+	/**
+	 * 사용자 마이페이지
+	 * @return 마이페이지 이동
+	 */
+	@RequestMapping(value = "/myPage.do")
+	public String myPage() {
+		log.info("★★★★★ 회원 마이페이지 이동 ★★★★★");
+		return "MyPage";
+	}
+	
+	/**
+	 * 관리자 회원관리
+	 * @return 회원관리 페이지 이동
+	 */
+	@RequestMapping(value = "/memberManagement.do")
+	public String memberManagement() {
+		log.info("★★★★★ 관리자 회원관리 이동 ★★★★★");
+		return "MemberManagement";
+	}
+	
+	/**
     * 주문을 하면 주문내역을 이메일로 쏴줌
     * @param content
     * @return
