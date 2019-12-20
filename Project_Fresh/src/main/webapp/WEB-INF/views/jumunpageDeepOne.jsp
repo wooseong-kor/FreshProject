@@ -53,6 +53,7 @@
 		var couseq = document.getElementById("couseq");
 		if(rbox[0].checked) {
 			mileage.value = "";
+			resultPrice.value = "";
 			maxmile.checked = false;
 			mileage.disabled = true;
 			maxmile.disabled = true;
@@ -73,10 +74,16 @@
          var mileage = $("#mileage");
          var memberMileInt = parseInt(memberMile.val());
          var mileageInt = parseInt(mileage.val());
+         var price = document.getElementById("price");
+         var priceInt = parseInt(price.textContent);
+         alert(priceInt);
          if(mileageInt > memberMileInt) {
             alert("회원의 보유 마일리지 한도를 초과 하셨습니다.");
             mileage.val(memberMile.val());
-         }      
+         }
+         var resultprice = document.getElementById("resultPrice");
+         var resultpriceInt = priceInt - parseInt(mileage.val());
+         resultprice.value = resultpriceInt.toString();
 	
 	}
 	
@@ -84,10 +91,16 @@
 		var mileage = document.getElementById("mileage");
 		var maxmile = document.getElementById("maxmile");
 		var memberMileage = document.getElementById("memberMileage");
+		var price = document.getElementById("price");
+        var priceInt = parseInt(price.textContent);
+        var resultprice = document.getElementById("resultPrice");
 		if(maxmile.checked){
 			mileage.value = memberMileage.value;
+        	var resultpriceInt = priceInt - parseInt(mileage.value);
+        	resultprice.value = resultpriceInt.toString();
 		}else {
 			mileage.value = "";
+			resultprice.value = "";
 		}
 		
 	}
@@ -111,6 +124,11 @@
 	}
 	
 	function payment(){
+		var couseq = $("#couseq");
+		alert(couseq.val());
+		if (couseq.val() == "") {
+			couseq.val("0");
+		}
 		var bsg = $("#bsg");
 		if (bsg.val() == 'null') {
 			alert("배송지를 입력해주세요");
@@ -178,7 +196,7 @@
 			<input type="radio" name="couOrMile" onclick="selOption()">쿠폰 
 			<input type="radio" name="couOrMile" onclick="selOption()">마일리지<br>
 			<input type="button" id="couponuse" value="쿠폰 적용" onclick="couponUse()">
-			<input type="text" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
+			<input type="text" name="mileage" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
 			<input type="hidden" id="memberMileage" value="${mileage}">
 			<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
 			결제금액 - <input type="text" name="paymoney" readonly="readonly" id="resultPrice" value="0">

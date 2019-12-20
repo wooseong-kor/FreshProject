@@ -4,25 +4,25 @@
   
   <!-- 마일리지 적립 R -->
   <update id="updateMileageRMember" parameterType="java.util.Map">
-  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.01) FROM PAYHISTORY WHERE PAYNUM = #{paynum})
+  UPDATE "MEMBER" SET MILEAGE = MILEAGE + (SELECT ROUND(PAYMONEY*0.01) FROM PAYHISTORY WHERE JUMUNNUM = #{jumunnum})
         WHERE ID = #{id}
   </update>
   
   <!-- 마일리지 적립 B -->
   <update id="updateMileageBMember" parameterType="java.util.Map">
-  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.03) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+  UPDATE "MEMBER" SET MILEAGE = MILEAGE + (SELECT ROUND(PAYMONEY*0.03) FROM PAYHISTORY WHERE JUMUNNUM = #{jumunnum})
         WHERE ID = #{id}
   </update>
   
   <!-- 마일리지 적립 S -->
   <update id="updateMileageSMember" parameterType="java.util.Map">
-  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.05) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+  UPDATE "MEMBER" SET MILEAGE = MILEAGE + (SELECT ROUND(PAYMONEY*0.05) FROM PAYHISTORY WHERE JUMUNNUM = #{jumunnum})
         WHERE ID = #{id}
   </update>
   
   <!-- 마일리지 적립 V -->
   <update id="updateMileageVMember" parameterType="java.util.Map">
-  UPDATE "MEMBER" SET MILEAGE = (SELECT ROUND(PAYMONEY*0.1) FROM PAYHISTORY WHERE PAYNUM =  #{paynum})
+  UPDATE "MEMBER" SET MILEAGE = MILEAGE + (SELECT ROUND(PAYMONEY*0.1) FROM PAYHISTORY WHERE JUMUNNUM = #{jumunnum})
 	WHERE ID = #{id}
   </update>
   
@@ -48,8 +48,7 @@
   <!-- 쿠폰 사용시 쿠폰 상태 변경-->
   <update id="updateUseflagOne" parameterType="java.lang.Integer">
   UPDATE COUPONHISTORY SET USEFLAG = 'Y'
-        WHERE ID = 'MAN'
-                AND COUSEQ = #{couseq};
+        WHERE COUSEQ = #{couseq}
   </update>
   
   <!-- 가입 쿠폰 지급, 쿼리수정  -->
@@ -63,13 +62,13 @@
   <insert id="insertCouponhistoryB" parameterType="java.lang.String">
   INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
 (SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU02'), 
-(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N');
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N')
   </insert>
   
   <insert id="insertCouponhistoryS" parameterType="java.lang.String">
   INSERT INTO COUPONHISTORY VALUES(COUPON_SEQ.NEXTVAL, 
 (SELECT COUCODE FROM COUPON WHERE COUCODE = 'COU03'), 
-(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N');
+(SELECT ID FROM "MEMBER" WHERE ID = #{id}), 1 , SYSDATE, 'N')
   </insert>
   
   <insert id="insertCouponhistoryV" parameterType="java.lang.String">
@@ -80,7 +79,7 @@
   
   <!-- 결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(가입) -->
   <update id="updatePaymoneyGOne" parameterType="java.util.Map">
-  "UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT-3000))
+  UPDATE PAYHISTORY P SET P.PAYMONEY = (SELECT ((J.JUMMONEY*JUMCNT)-ROUND(J.JUMMONEY*JUMCNT-3000))
      FROM JUMUN J, 
         (SELECT C.LIMITE LIMITE, M.ID ID, C.CODE CODE
             FROM ""MEMBER"" M, (SELECT C.LIMITE LIMITE, CH.ID ID, CH.COUSEQ CSEQ, C.COUCODE CODE

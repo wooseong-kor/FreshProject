@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <title>통계 조회</title>
 </head>
-<%-- <%@include file="/WEB-INF/views/header.jsp"%> --%>
+
 <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script type="text/javascript">
@@ -16,11 +16,11 @@
 
 	function chartSubmit() {
 // 		return false;
-		if ($("div").length > 0) {
+		if ($("#top_x_div").length > 0) {
 			var preDiv = document.getElementById("top_x_div");
 			var preDiv2 = document.getElementsByTagName("div"); 
 			document.body.removeChild(preDiv);	
-			document.body.removeChild(preDiv2[0]);
+			document.body.removeChild(preDiv2[6]);
 		}
 		var selectCheck = document.getElementById("selPOrA");
 		var sangList = document.getElementById("sangNameList");
@@ -114,6 +114,7 @@
 </script>
 
 <body>
+<%@include file="/WEB-INF/views/header.jsp"%>
 <!--  	<div id="top_x_div" style="width: 900px; height: 300px;"></div> -->
 	<form action="#" id="chart" method="post">
 		<select name="options" id="options">
@@ -140,5 +141,6 @@
 		</select>
 	</form>
 		<input type="button" value="차트보기" onclick="chartSubmit()">
+<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>
