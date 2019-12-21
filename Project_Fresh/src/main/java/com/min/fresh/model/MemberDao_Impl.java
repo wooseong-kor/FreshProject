@@ -23,8 +23,8 @@ public class MemberDao_Impl implements IMemberDao{
 	private SqlSessionTemplate session;
 	
 	// 비밀번호 암호화
-//	@Autowired
-//	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	// 회원가입
 	@Override
@@ -144,6 +144,9 @@ public class MemberDao_Impl implements IMemberDao{
 	@Override
 	public int resetPassword(Map<String, Object> map) {
 		log.info("resetPassword 실행");
+		String encodePW = passwordEncoder.encode((CharSequence)map.get("password"));
+		map.put("password", encodePW);
+		System.out.println("바뀐비밀번호"+encodePW);
 		return session.update(NS+"resetPassword", map);
 	}
 
