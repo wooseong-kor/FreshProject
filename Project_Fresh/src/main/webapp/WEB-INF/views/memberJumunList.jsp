@@ -11,7 +11,6 @@
 function goPage(i){
 	location.href="./jumunpageDeepOne.do?sangpgnum="+i;
 }
-
 </script>
 <style type="text/css">
 table{
@@ -47,8 +46,7 @@ th,td{
 </tr>
 </c:forEach>
 </table>
-<c:forEach var="i" begin="${rDto.pageNum}" end="${rDto.listNum}">
-	<a href="http://localhost:8099/Project_Fresh/memberJumunList.do?id=MAN&page=${i}">${i}</a>
+<c:forEach var="j" begin="${rDto.pageNum}" end="${rDto.listNum}">
 </c:forEach>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

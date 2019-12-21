@@ -518,10 +518,15 @@ public class board_Controller {
 	}
 
 	@RequestMapping(value = "/memberJumunList.do", method = RequestMethod.GET)
-	public String memberJumunList(Model model, String id) {
+	public String memberJumunList(Model model, String id, int page,RowNum_DTO rDto) {
 		log.info("memberJumunList 주문 리스트");
-		RowNum_DTO rDto = new RowNum_DTO();
-		rDto.setTotal(pservice.countMemberJumun(id));
+		if (rDto == null) {
+			rDto.setTotal(pservice.countMemberJumun(id));
+			System.out.println("처음 받은 페이징 디티오 : "+rDto);
+		}else{
+			System.out.println("다시 받은 페이징 디티오 : "+rDto);
+		}
+		
 		int count = rDto.getCount();
 		System.out.println("페이지 갯수" + count);
 		System.out.println(rDto);
@@ -544,4 +549,6 @@ public class board_Controller {
 		model.addAttribute("dto", dto);
 		return "memberPage";
 	}
+
+	
 } 
