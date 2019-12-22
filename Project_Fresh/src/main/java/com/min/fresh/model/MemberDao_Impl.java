@@ -48,7 +48,80 @@ public class MemberDao_Impl implements IMemberDao{
 		int cnt = session.selectOne(NS+"emailCheck", email);
 		return (cnt == 1)?false:true;
 	}
+	
+	// 로그인
+	@Override
+	public Member_DTO loginMember(Map<String, Object> map) {
+		log.info("loginMember 실행");
+		return session.selectOne(NS+"loginMember", map);
+	}
+	
+	// 회원 자동 정지처리
+	@Override
+	public int updateMemberDelflagJ() {
+		log.info("updateMemberDelflagJ 실행");
+		return session.update(NS+"updateMemberDelflagJ");
+	}
+	
+	// 회원 자동 휴먼 처리
+	@Override
+	public int updateMemberDelflagH() {
+		log.info("updateMemberDelflagH 실행");
+		return session.update(NS+"updateMemberDelflagH");
+	}
+	
+	// 비밀번호 초기화
+	@Override
+	public int resetPassword(Map<String, Object> map) {
+		log.info("resetPassword 실행");
+		String encodePW = passwordEncoder.encode((CharSequence)map.get("password"));
+		map.put("password", encodePW);
+		System.out.println("바뀐비밀번호"+encodePW);
+		return session.update(NS+"resetPassword", map);
+	}
 
+	// (비밀번호 재설정시 사용) 비밀번호, 상태확인
+	@Override
+	public Member_DTO searchPassword(String id) {
+		log.info("searchPassword 실행");
+		return session.selectOne(NS+"searchPassword", id);
+	}
+
+	// 휴면계정 해제
+	@Override
+	public int updateMemberDelflagN(String id) {
+		log.info("updateMemberDelflagN 실행");
+		return session.update(NS+"updateMemberDelflagN", id);
+	}
+	
+	// 회원 전체 조회
+	@Override
+	public List<Member_DTO> allMemberListScroll() {
+		log.info("allMemberListScroll 실행");
+		return session.selectList(NS+"allMemberListScroll");
+	}
+
+	// 사용중인 회원 전체 조회
+	@Override
+	public List<Member_DTO> memberListScroll() {
+		log.info("memberListScroll 실행");
+		return session.selectList(NS+"memberListScroll");
+	}
+	
+	// 경고받은 회원 조회
+	@Override
+	public List<Member_DTO> countAllGyungcntMember() {
+		log.info("countAllGyungcntMember 실행");
+		return session.selectList(NS+"countAllGyungcntMember");
+	}
+	
+	// 회원 검색
+	@Override
+	public Member_DTO memberSearchOne(Map<String, Object> map) {
+		log.info("memberSearchOne 실행");
+		return session.selectOne(NS+"memberSearchOne", map);
+	}
+	
 	// 회원 등급 변경
 	@Override
 	public int updateGradeOne(Map<String, Object> map) {
@@ -70,39 +143,11 @@ public class MemberDao_Impl implements IMemberDao{
 		return session.selectOne(NS+"countOneGyngcntMember", id);
 	}
 
-	// 경고받은 회원 조회
+	// 회원 탈퇴
 	@Override
-	public List<Member_DTO> countAllGyungcntMember() {
-		log.info("countAllGyungcntMember 실행");
-		return session.selectList(NS+"countAllGyungcntMember");
-	}
-
-	// 회원 전체 조회
-	@Override
-	public List<Member_DTO> allMemberListScroll() {
-		log.info("allMemberListScroll 실행");
-		return session.selectList(NS+"allMemberListScroll");
-	}
-
-	// 사용중인 회원 전체 조회
-	@Override
-	public List<Member_DTO> memberListScroll() {
-		log.info("memberListScroll 실행");
-		return session.selectList(NS+"memberListScroll");
-	}
-
-	// 회원 검색
-	@Override
-	public Member_DTO memberSearchOne(Map<String, Object> map) {
-		log.info("memberSearchOne 실행");
-		return session.selectOne(NS+"memberSearchOne", map);
-	}
-
-	// 로그인
-	@Override
-	public Member_DTO loginMember(Map<String, Object> map) {
-		log.info("loginMember 실행");
-		return session.selectOne(NS+"loginMember", map);
+	public int updateMemberDelflagTOne(String id) {
+		log.info("updateMemberDelflagTOne 실행");
+		return session.update(NS+"updateMemberDelflagTOne", id);
 	}
 
 	// 암호화 확인 쿼리(시큐리티)
@@ -111,57 +156,12 @@ public class MemberDao_Impl implements IMemberDao{
 		log.info("ecPasswordLogin 실행");
 		return session.selectOne(NS+"ecPasswordLogin", id);
 	}
-
+	
 	// 암호화 로그인(시큐리티)
 	@Override
 	public Member_DTO enLogin(String id) {
 		log.info("enLogin 실행");
 		return session.selectOne(NS+"enLogin", id);
-	}
-
-	// 회원 자동 정지처리
-	@Override
-	public int updateMemberDelflagJ() {
-		log.info("updateMemberDelflagJ 실행");
-		return session.update(NS+"updateMemberDelflagJ");
-	}
-
-	// 회원 자동 휴먼 처리
-	@Override
-	public int updateMemberDelflagH() {
-		log.info("updateMemberDelflagH 실행");
-		return session.update(NS+"updateMemberDelflagH");
-	}
-
-	// 회원 탈퇴
-	@Override
-	public int updateMemberDelflagTOne(String id) {
-		log.info("updateMemberDelflagTOne 실행");
-		return session.update(NS+"updateMemberDelflagTOne", id);
-	}
-
-	// 비밀번호 초기화
-	@Override
-	public int resetPassword(Map<String, Object> map) {
-		log.info("resetPassword 실행");
-		String encodePW = passwordEncoder.encode((CharSequence)map.get("password"));
-		map.put("password", encodePW);
-		System.out.println("바뀐비밀번호"+encodePW);
-		return session.update(NS+"resetPassword", map);
-	}
-
-	// 이전 비밀번호확인 (비밀번호 재설정시 사용)
-	@Override
-	public Member_DTO searchPassword(String id) {
-		log.info("searchPassword 실행");
-		return session.selectOne(NS+"searchPassword", id);
-	}
-
-	// 휴면계정 해제
-	@Override
-	public int updateMemberDelflagN(String id) {
-		log.info("updateMemberDelflagN 실행");
-		return session.update(NS+"updateMemberDelflagN", id);
 	}
 	
 }
