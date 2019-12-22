@@ -24,6 +24,7 @@ a{
   width: 5px;
 }
 </style>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
@@ -65,7 +66,20 @@ $(document).ready(function(){
 								<li class="nav-item dropdown"><a href="#">입고관리</a></li>
 								<li class="nav-item dropdown"><a href="#">재고관리</a></li>
 								<li class="nav-item dropdown"><a href="#">폐기관리</a></li>
-								<li class="nav-item dropdown"><a href="./memberManagement.do">회원관리</a></li>
+<!-- 								<li class="nav-item dropdown"><a href="./memberManagement.do">회원관리</a></li> -->
+								
+								<li class="nav-item dropdown">
+<!-- 									<a class="nav-link dropdown-toggle" href="./memberManagement.do" id="navbardrop" data-toggle="dropdown"> -->
+									<a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">
+									회원관리
+									</a>
+									<div class="dropdown-menu">
+										<a class="dropdown-item" href="./allMemberList.do">&nbsp;&nbsp;&nbsp;전체 회원</a>
+										<br>
+										<a class="dropdown-item" href="./memberList.do">&nbsp;&nbsp;&nbsp;사용중 회원</a>
+									</div>
+								</li>
+								
 								<li class="nav-item dropdown"><a href="#">통계</a></li>
 							</c:when>
 							<c:otherwise>

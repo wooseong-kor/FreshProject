@@ -35,86 +35,12 @@
 		WHERE EMAIL = #{email}
 	</select>
 
-	<!-- 회원 등급 변경 -->
-	<update id="updateGradeOne" parameterType="java.util.Map">
-		UPDATE "MEMBER"
-		SET GCODE = #{gcode}
-		WHERE ID = #{id}
-	</update>
-	
-	<!-- 회원 경고 부여 -->
-	<insert id="insertWarning" parameterType="java.util.Map">
-		INSERT INTO WARNING
-		VALUES (WARNING_SEQ.NEXTVAL, (SELECT ID FROM MEMBER WHERE ID = #{id}), 1, #{gyuncont}, SYSDATE)
-	</insert>
-	
-	<!-- 특정회원 경고 횟수 조회 -->
-	<select id="countOneGyngcntMember" parameterType="java.lang.String" resultType="Warning">
-		SELECT ID, (SELECT COUNT(ID) FROM WARNING WHERE ID = #{id}) GYUNGCNT
-		FROM "MEMBER" WHERE ID = #{id}
-	</select>
-	
-	<!-- 경고받은 회원 조회 -->
-	<select id="countAllGyungcntMember" resultMap="memberMap">
-		SELECT M.ID ID, M.NAME NAME, COUNT(W.GYUNGCNT) GYUNGCNT 
-		FROM "MEMBER" M, WARNING W
-		WHERE M.ID = W.ID
-		GROUP BY M.ID, M.NAME
-		ORDER BY NAME
-	</select>
-	
-	<!-- 회원 전체 조회 -->
-	<select id="allMemberListScroll" resultType="Member">
-		SELECT ID, GCODE, NAME, EMAIL, PHONE, AGREE, LLOGIN, LPWCHANGE, DELFLAG, SNS, MILEAGE, HIREDATE
-		FROM "MEMBER"
-		ORDER BY NAME
-	</select>
-	
-	<!-- 사용중 회원 전체 조회 -->
-	<select id="memberListScroll" resultType="Member">
-		SELECT ID, GCODE, EMAIL
-		FROM "MEMBER"
-		WHERE DELFLAG = 'N'
-		ORDER BY NAME
-	</select>
-	
-	<!-- 회원 검색 -->
-	<select id="memberSearchOne" parameterType="java.util.Map" resultType="Member">
-		SELECT NAME, ID, GCODE, EMAIL, PHONE, AGREE, LLOGIN, LPWCHANGE, DELFLAG, SNS, MILEAGE, HIREDATE
-		FROM "MEMBER"
-		<where>
-			<choose>
-				<when test="name!=null">
-					 NAME = #{name}
-				</when>
-				<when test="id!=null">
-					ID = #{id}
-				</when>
-			</choose>
-		</where>			
-	</select>
-	
 	<!-- 로그인 -->
 	<select id="loginMember" parameterType="java.util.Map" resultType="Member">
 		SELECT NAME, ID, GCODE, EMAIL, PHONE, AGREE, LLOGIN, LPWCHANGE, DELFLAG, SNS, MILEAGE, HIREDATE
 		FROM MEMBER
 		WHERE ID = #{id} AND PASSWORD = #{password}
 	</select>
-	
-	<!-- 비밀번호는 시큐리티 사용 -->
-	<!-- 암호화 확인 쿼리 -->
-	<select id="ecPasswordLogin" parameterType="java.lang.String" resultType="java.lang.String">
-		SELECT PASSWORD
-		FROM "MEMBER"
-		WHERE ID = #{id}
-	</select>
-	
-	<!-- 암호화 로그인 -->
-		<select id="enLogin" parameterType="java.lang.String" resultType="Member">
-		SELECT ID, NAME, DELFLAG
-		FROM "MEMBER"
-		WHERE ID = #{id}
-	</select>	
 	
 	<!-- 회원 자동 정지처리 -->
 	<update id="updateMemberDelflagJ">
@@ -133,13 +59,6 @@
 		WHERE ADD_MONTHS(SYSDATE, -6) >= LLOGIN 
 	</update>
 		
-	<!-- 회원 탈퇴 -->
-	<update id="updateMemberDelflagTOne" parameterType="java.lang.String">
-		UPDATE "MEMBER"
-		SET DELFLAG = 'T'
-		WHERE ID = #{id}
-	</update>
-	
 	<!-- 비밀번호 초기화 -->
 	<update id="resetPassword" parameterType="java.util.Map">
 		UPDATE "MEMBER"
@@ -160,5 +79,90 @@
 		SET DELFLAG = 'N', LLOGIN = SYSDATE, LPWCHANGE = SYSDATE
 		WHERE ID = #{id} AND DELFLAG = 'H'
 	</update>
+	
+	<!-- 회원 전체 조회 -->
+	<select id="allMemberListScroll" resultType="Member">
+		SELECT ID, GCODE, NAME, EMAIL, PHONE, AGREE, 
+			TO_CHAR(LLOGIN, 'YYYY-MM-DD') LLOGIN, TO_CHAR(LPWCHANGE, 'YYYY-MM-DD') LPWCHANGE, 
+			DELFLAG, SNS, MILEAGE, TO_CHAR(HIREDATE, 'YYYY-MM-DD') HIREDATE
+		FROM "MEMBER"
+		WHERE GCODE != 'A'
+		ORDER BY NAME
+	</select>
+	
+	<!-- 사용중 회원 전체 조회 -->
+	<select id="memberListScroll" resultType="Member">
+		SELECT ID, NAME, GCODE, EMAIL, PHONE, MILEAGE, HIREDATE
+		FROM "MEMBER"
+		WHERE DELFLAG = 'N'
+		AND GCODE != 'A'
+		ORDER BY NAME
+	</select>
+	
+	<!-- 경고받은 회원 조회 -->
+	<select id="countAllGyungcntMember" resultMap="memberMap">
+		SELECT M.ID ID, M.NAME NAME, COUNT(W.GYUNGCNT) GYUNGCNT 
+		FROM "MEMBER" M, WARNING W
+		WHERE M.ID = W.ID
+		GROUP BY M.ID, M.NAME
+		ORDER BY NAME
+	</select>
+
+	<!-- 회원 검색 -->
+	<select id="memberSearchOne" parameterType="java.util.Map" resultType="Member">
+		SELECT NAME, ID, GCODE, EMAIL, PHONE, AGREE, LLOGIN, LPWCHANGE, DELFLAG, SNS, MILEAGE, HIREDATE
+		FROM "MEMBER"
+		<where>
+			<choose>
+				<when test="name!=null">
+					 NAME = #{name}
+				</when>
+				<when test="id!=null">
+					ID = #{id}
+				</when>
+			</choose>
+		</where>			
+	</select>
+	
+	<!-- 회원 등급 변경 -->
+	<update id="updateGradeOne" parameterType="java.util.Map">
+		UPDATE "MEMBER"
+		SET GCODE = #{gcode}
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 회원 경고 부여 -->
+	<insert id="insertWarning" parameterType="java.util.Map">
+		INSERT INTO WARNING
+		VALUES (WARNING_SEQ.NEXTVAL, (SELECT ID FROM MEMBER WHERE ID = #{id}), 1, #{gyuncont}, SYSDATE)
+	</insert>
+	
+	<!-- 특정회원 경고 횟수 조회 -->
+	<select id="countOneGyngcntMember" parameterType="java.lang.String" resultType="Warning">
+		SELECT ID, (SELECT COUNT(ID) FROM WARNING WHERE ID = #{id}) GYUNGCNT
+		FROM "MEMBER" WHERE ID = #{id}
+	</select>
+	
+	<!-- 회원 탈퇴 -->
+	<update id="updateMemberDelflagTOne" parameterType="java.lang.String">
+		UPDATE "MEMBER"
+		SET DELFLAG = 'T'
+		WHERE ID = #{id}
+	</update>
+	
+	<!-- 비밀번호는 시큐리티 사용 -->
+	<!-- 암호화 확인 쿼리 -->
+	<select id="ecPasswordLogin" parameterType="java.lang.String" resultType="java.lang.String">
+		SELECT PASSWORD
+		FROM "MEMBER"
+		WHERE ID = #{id}
+	</select>
+	
+	<!-- 암호화 로그인 -->
+		<select id="enLogin" parameterType="java.lang.String" resultType="Member">
+		SELECT ID, NAME, DELFLAG
+		FROM "MEMBER"
+		WHERE ID = #{id}
+	</select>	
 	
 </mapper>
