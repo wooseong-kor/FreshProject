@@ -166,11 +166,7 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		session.setAttribute("mem", mDto);
 		System.out.println("▶▷▶ 로그인 정보 확인 = " + map.toString());
 		if (mDto.getDelflag().equals("N")) {
-			if (mDto.getGcode().equals("A")) { // 관리자
-				return "AdminMain"; // 관리자 메인
-			} else {
-				return "MainContainer"; // 사용자 메인
-			}
+			return "MainContainer"; // 사용자, 관리자 메인
 		} else { 
 			return "DormantAccountPasswordSetting"; // 휴면계정 상태
 		}
