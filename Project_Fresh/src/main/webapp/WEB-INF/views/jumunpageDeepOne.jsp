@@ -152,6 +152,20 @@
 					type : "post",
 					async : true,
 					success : function(map) {
+						
+						jQuery.ajax({
+							url : "./mail.do",
+							data : $("#payment").serialize(),
+							type: "post",
+							async: true,
+							success: function (){
+								
+							},
+							error: function (){
+								
+							}
+						});
+						
 						var url = "./toss.do?orderNo=" + map.orderNo
 								+ "&amount=" + map.amount + "&productDesc="
 								+ map.productDesc;

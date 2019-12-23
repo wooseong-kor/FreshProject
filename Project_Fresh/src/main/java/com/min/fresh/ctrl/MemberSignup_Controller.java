@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -20,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.Member_DTO;
+import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IProductService;
 
@@ -264,16 +267,18 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
    @RequestMapping(value = "/mail.do",method = RequestMethod.POST,
 		   produces = "application/text; charset=UTF-8")
    @ResponseBody
-   public String sendMail(String content) {
-      
+   public String sendMail(HttpServletRequest request,Jumun_DTO dto,Payhistory_DTO pDto) {
+      Member_DTO mDto = (Member_DTO) request.getSession();
+	  
+	   
       MimeMessage mimeMessage = mail.createMimeMessage();
       
       try {
          MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
          helper.setFrom("ghkdgo868@naver.com");
          helper.setTo("ghkdgo868@naver.com");
-         helper.setSubject("지방이"+"님의 주문내역");
-         helper.setText("회원님의 주문내역을 알려드립니다"+content, true);
+         helper.setSubject(dto.getId()+"님의 주문내역");
+         helper.setText("회원님의 주문내역을 알려드립니다"+pDto.getJumunnum()+pDto.getJumun_DTO().getJummoney(), true);
          mail.send(mimeMessage);
       } catch (MessagingException e) {
          e.printStackTrace();
