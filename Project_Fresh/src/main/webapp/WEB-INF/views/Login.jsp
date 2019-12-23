@@ -4,10 +4,20 @@
 <head>
 <meta charset="UTF-8">
 <title>Fresh_로그인</title>
+<style type="text/css">
+/* #g-recaptcha{ */
+/* text-align: center; */
+/* width: 100%; */
+/* } */
+</style>
 </head>
 <script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript" src="./js/Login.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js'></script>
+
+ 
 <body>	
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	<div id="container">
@@ -32,8 +42,11 @@
 						<a href="#">아이디찾기</a> / <a href="#">비밀번호찾기</a>
 					</li>
 				</ul>
+				 	<div align="center" class="g-recaptcha" data-sitekey="6LeLA8kUAAAAANC5zbH4I2jO2joJaJwFpJWmPdKn"></div>
+						<input type="button" id="login_Captcha" name="captcha" value="캡차" >
 				<div>
 					<input type="button" id="login" name="login" value="로그인" onclick="loginCheck()">
+					
 				</div>
 				<p class="link">
 			        아직 회원이 아니신가요?<br>
