@@ -1,5 +1,6 @@
 package com.min.fresh.ctrl;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IProductService;
+import com.min.fresh.recaptcha.VerifyRecaptcha;
 
 @Controller
 public class MemberSignup_Controller {
@@ -169,6 +171,25 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 			return "MainContainer"; // 사용자, 관리자 메인
 		} else { 
 			return "DormantAccountPasswordSetting"; // 휴면계정 상태
+		}
+	}
+	/**
+	 * 로그인 capcha
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/VerifyRecaptcha.do", method = RequestMethod.POST)
+	public int VerifyRecaptcha(HttpServletRequest request) {
+		VerifyRecaptcha.setSecretKey("6LeLA8kUAAAAAJ1CAsIUqhCnD0Q6bKZj3-NTMeqN");
+		String gRecaptchaResponse = request.getParameter("recaptcha");
+		System.out.println(gRecaptchaResponse);
+		 //0 = 성공, 1 = 실패, -1 = 오류
+		try {
+			if(VerifyRecaptcha.verify(gRecaptchaResponse))
+				return 0;
+			else return 1;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return -1;
 		}
 	}
 	
