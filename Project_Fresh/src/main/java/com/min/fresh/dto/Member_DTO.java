@@ -31,6 +31,8 @@ public class Member_DTO implements Serializable {
 	//경고 join
 	private Warning_DTO warning_DTO;
 	
+	private Payhistory_DTO payhistory_DTO;
+	
 	public Member_DTO() {
 	}
 
@@ -241,6 +243,14 @@ public class Member_DTO implements Serializable {
 
 	public void setWarning_DTO(Warning_DTO warning_DTO) {
 		this.warning_DTO = warning_DTO;
+	}
+
+	public Payhistory_DTO getPayhistory_DTO() {
+		return payhistory_DTO;
+	}
+
+	public void setPayhistory_DTO(Payhistory_DTO payhistory_DTO) {
+		this.payhistory_DTO = payhistory_DTO;
 	}
 	
 }

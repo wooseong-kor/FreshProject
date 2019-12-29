@@ -5,8 +5,8 @@
 <head>
 <meta charset="UTF-8">
 <title>배송지 등록</title>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
-	<script type="text/javascript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
+<script type="text/javascript" src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script type="text/javascript">
 function openDaumZipAddress() {
 	new daum.Postcode({

@@ -133,7 +133,7 @@
 	<!-- 배송지 상세 조회 -->
 	<select id="addrListOne" parameterType="java.util.Map"
 		resultType="Addr">
-		SELECT M.ID ID,M.NAME NAME,B.BSGNAME BSGNAME,B.JUSO JUSO,B.PHONE PHONE
+		SELECT M.ID ID,M.NAME NAME,B.BSGCODE BSGCODE,B.BSGNAME BSGNAME,B.JUSO JUSO,B.PHONE PHONE
 		FROM ADDRLIST B JOIN "MEMBER" M
 		ON B.ID=M.ID
 		WHERE M.ID=#{id} AND B.BSGCODE=#{bsgcode}
