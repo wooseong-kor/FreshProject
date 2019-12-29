@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.min.fresh</groupId>
 	<artifactId>Project_Fresh</artifactId>
@@ -236,9 +236,38 @@
 			<artifactId>jackson-databind</artifactId>
 			<version>2.9.5</version>
 		</dependency>
-      
-		
-		     
+		<!-- OAuth2 Login을 쓰기 편하게 사용  -->
+		<dependency> 
+			<groupId>com.github.scribejava</groupId>		    
+			<artifactId>scribejava-apis</artifactId>
+			<version>5.6.0</version>
+		</dependency>
+
+        <dependency>
+			<groupId>com.github.scribejava</groupId>		    
+			<artifactId>scribejava-core</artifactId>
+			<version>5.6.0</version>
+        </dependency>
+		<!-- 구글 -->
+  		<dependency>
+	        <groupId>org.springframework.social</groupId>
+	        <artifactId>spring-social-google</artifactId>
+	        <version>1.0.0.RELEASE</version>
+  		</dependency>
+  		<!-- lombok -->
+  		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <version>1.18.8</version>
+		    <scope>provided</scope>
+		</dependency>
+		<!-- Apache Commons Lang -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.4</version>
+		</dependency>
+  			     
 	</dependencies>
     <build>
         <plugins>
