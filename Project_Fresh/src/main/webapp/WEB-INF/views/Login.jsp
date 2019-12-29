@@ -43,9 +43,9 @@
 					</li>
 				</ul>
 				 	<div align="center" class="g-recaptcha" data-sitekey="6LeLA8kUAAAAANC5zbH4I2jO2joJaJwFpJWmPdKn"></div>
-						<input type="button" id="login_Captcha" name="captcha" value="캡차" >
+<!-- 						<input type="button" id="login_Captcha" name="captcha" value="캡차" > -->
 				<div>
-					<input type="button" id="login" name="login" value="로그인" onclick="loginCheck()">
+					<input type="button" id="login_Captcha" name="login" value="로그인" onclick="loginCheck()">
 					
 				</div>
 				<p class="link">
@@ -59,8 +59,8 @@
 		<ul class="snsArea">
 			<!-- 네이버 로그인 -->
 			<li class="displaynone">
-				<a href="#none" onclick="">
-					<img src="http://img.echosting.cafe24.com/skin/base_ko_KR/member/btn_naver_login.gif" alt="네이버 로그인">
+				<a href="${ naver_url }">
+					<img src="http://img.echosting.cafe24.com/skin/base_ko_KR/member/btn_naver_login.gif" alt="Naver Login">
 				</a>
 	        </li>
 			<!-- 카카오 로그인 -->        
