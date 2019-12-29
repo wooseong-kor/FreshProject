@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
@@ -518,28 +519,65 @@ public class board_Controller {
 	}
 
 	@RequestMapping(value = "/memberJumunList.do", method = RequestMethod.GET)
-	public String memberJumunList(Model model, String id, int page,RowNum_DTO rDto) {
+	public String memberJumunList(HttpSession session,Model model) {
 		log.info("memberJumunList 주문 리스트");
-		if (rDto == null) {
-			rDto.setTotal(pservice.countMemberJumun(id));
-			System.out.println("처음 받은 페이징 디티오 : "+rDto);
-		}else{
-			System.out.println("다시 받은 페이징 디티오 : "+rDto);
+		Member_DTO mDto = (Member_DTO) session.getAttribute("mem");
+		List<Jumun_DTO> lists = null;
+		RowNum_DTO rDto = null;
+		if (session.getAttribute("rDto")==null) {
+			rDto = new RowNum_DTO();
+			System.out.println("처음 받은 페이징 디티오 : "+rDto); 
+		}
+		else{
+			rDto = (RowNum_DTO) session.getAttribute("rDto");
+			System.out.println("다시 받은 페이징 디티오 : "+rDto); 
 		}
 		
 		int count = rDto.getCount();
 		System.out.println("페이지 갯수" + count);
 		System.out.println(rDto);
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", id);
-		map.put("first", rDto.getFirst());
-		map.put("last", rDto.getLast());
-		List<Jumun_DTO> lists = pservice.memberJumunList(map);
+		if (mDto.getGcode().equalsIgnoreCase("A")) {
+			rDto.setTotal(jservice.countAllJumun());
+			lists = jservice.allJumunList(rDto);
+		}else {			
+			rDto.setTotal(jservice.countMemberJumun(mDto.getId()));
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("id", mDto.getId());
+			map.put("first", rDto.getFirst());
+			map.put("last", rDto.getLast());
+			lists = pservice.memberJumunList(map);
+		}
 		System.out.println(lists);
 		model.addAttribute("lists", lists);
 		model.addAttribute("rDto", rDto);
 		return "memberJumunList";
 	}
+	
+	@RequestMapping(value = "/memberJumunListpaging.do",method = RequestMethod.POST,
+			produces = "application/text; charset=UTF-8")
+	@ResponseBody
+	public String memberJumunListpaging(Model model,HttpSession session,RowNum_DTO rDto) {
+		log.info("주문내역 페이징");
+		JsonObject json = new JsonObject();
+		Member_DTO mDto = (Member_DTO) session.getAttribute("mem");
+		System.out.println("mDto : "+mDto+"// rDto : "+rDto);
+		Map<String, Object> map = new HashMap<String, Object>();
+		if (mDto.getGcode().equalsIgnoreCase("A")) {
+			rDto.setTotal(jservice.countAllJumun());
+			json = makeJson(jservice.allJumunList(rDto), rDto, mDto);
+		}else {
+			rDto.setTotal(jservice.countMemberJumun(mDto.getId()));
+			map.put("id", mDto.getId());
+			map.put("first", rDto.getFirst());
+			map.put("last", rDto.getLast());
+			List<Jumun_DTO> mList = jservice.memberJumunList(map);
+			json = makeJson(mList, rDto, mDto);
+		}
+		model.addAttribute("rDto", rDto);
+		
+		return json.toString();
+	}
+	
 	@RequestMapping(value = "/memberPage.do", method = RequestMethod.GET)
 	public String memberPage(String id,Model model) {
 		log.info("memberPage");
@@ -550,5 +588,39 @@ public class board_Controller {
 		return "memberPage";
 	}
 
+	@SuppressWarnings("unused")
+	private JsonObject makeJson(List<Jumun_DTO> lists,RowNum_DTO rDto,Member_DTO mDto) {
+		JsonObject json = new JsonObject(); // {}
+		JsonArray jlist = new JsonArray(); // []
+		JsonObject jdto = null; // [{},{}]
+		
+		for (Jumun_DTO dto : lists) { // [{dto들},{dto들}] // {"lists":"[{dto들},{dto들}]"}
+			jdto = new JsonObject();
+			jdto.addProperty("jumunnum", dto.getJumunnum());
+			jdto.addProperty("id", dto.getId());
+			jdto.addProperty("sangpgnum", dto.getSangpgnum());
+			jdto.addProperty("bsgcode", dto.getBsgcode());
+			jdto.addProperty("jummoney", dto.getJummoney());
+			jdto.addProperty("jumcnt", dto.getJumcnt());
+			jdto.addProperty("jumstat", dto.getJumstat());
+			jdto.addProperty("jumdate", String.valueOf(dto.getJumdate()));
+			jdto.addProperty("id", mDto.getId());
+			jlist.add(jdto);
+		}
+		
+		jdto = new JsonObject();
+		jdto.addProperty("pageList", rDto.getPageList());
+		jdto.addProperty("index", rDto.getIndex());
+		jdto.addProperty("pageNum", rDto.getPageNum());
+		jdto.addProperty("listNum", rDto.getListNum());
+		jdto.addProperty("total", rDto.getTotal());
+		jdto.addProperty("count", rDto.getCount());
+		
+		json.add("lists", jlist);
+		json.add("rDto", jdto);
+		
+		System.out.println(json.toString());
+		return json;
+	}
 	
 } 

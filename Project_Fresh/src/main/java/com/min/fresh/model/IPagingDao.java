@@ -66,7 +66,7 @@ public interface IPagingDao {
 //	//회원별 주문 내역 페이징
 	public List<Jumun_DTO> memberJumunList(Map<String, Object> map);
 //	//전체 주문내역 수
-	public int countAllJumun();
+//	public int countAllJumun();
 //	//전체 주문내역 페이징 관리자용
 //	public List<Jumun_DTO> allJumunList(RowNum_DTO dto);
 	//상품 상세 페이지 전체 개수
