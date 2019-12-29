@@ -81,22 +81,22 @@ public class MemberService_Impl implements IMemberService{
 		return dao.memberListScroll();
 	}
 	
+	//회원 검색
+	@Override
+	public Member_DTO memberSearchOne(String id) {
+		return dao.memberSearchOne(id);
+	}
+	
+	//회원 마일리지 추가 지급
+	@Override
+	public boolean updateMileageMemberOne(Map<String, Object> map) {
+		return dao.updateMileageMemberOne(map);
+	}
+	
 	//경고받은 회원 조회
 	@Override
 	public List<Member_DTO> countAllGyungcntMember() {
 		return dao.countAllGyungcntMember();
-	}
-	
-	//회원 검색
-	@Override
-	public Member_DTO memberSearchOne(Map<String, Object> map) {
-		return dao.memberSearchOne(map);
-	}
-	
-	//회원 등급 변경
-	@Override
-	public boolean updateGradeOne(Map<String, Object> map) {
-		return (dao.updateGradeOne(map)>0)?true:false;
 	}
 	
 	//회원 경고 부여
