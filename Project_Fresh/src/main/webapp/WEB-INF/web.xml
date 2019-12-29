@@ -16,6 +16,7 @@ version="3.1">
 		<param-value>
 			/WEB-INF/spring/appServlet/applicationContext.xml
 			/WEB-INF/spring/appServlet/spring-security.xml
+			/WEB-INF/spring/appServlet/spring-quartz.xml
 		</param-value>
 	</context-param>
 	
