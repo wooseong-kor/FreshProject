@@ -519,27 +519,26 @@ public class board_Controller {
 	}
 
 	@RequestMapping(value = "/memberJumunList.do", method = RequestMethod.GET)
-	public String memberJumunList(HttpSession session,Model model) {
+	public String memberJumunList(HttpSession session, Model model) {
 		log.info("memberJumunList 주문 리스트");
 		Member_DTO mDto = (Member_DTO) session.getAttribute("mem");
 		List<Jumun_DTO> lists = null;
 		RowNum_DTO rDto = null;
-		if (session.getAttribute("rDto")==null) {
+		if (session.getAttribute("rDto") == null) {
 			rDto = new RowNum_DTO();
-			System.out.println("처음 받은 페이징 디티오 : "+rDto); 
-		}
-		else{
+			System.out.println("처음 받은 페이징 디티오 : " + rDto);
+		} else {
 			rDto = (RowNum_DTO) session.getAttribute("rDto");
-			System.out.println("다시 받은 페이징 디티오 : "+rDto); 
+			System.out.println("다시 받은 페이징 디티오 : " + rDto);
 		}
-		
+
 		int count = rDto.getCount();
 		System.out.println("페이지 갯수" + count);
 		System.out.println(rDto);
 		if (mDto.getGcode().equalsIgnoreCase("A")) {
 			rDto.setTotal(jservice.countAllJumun());
 			lists = jservice.allJumunList(rDto);
-		}else {			
+		} else {
 			rDto.setTotal(jservice.countMemberJumun(mDto.getId()));
 			Map<String, Object> map = new HashMap<String, Object>();
 			map.put("id", mDto.getId());
@@ -548,25 +547,24 @@ public class board_Controller {
 			lists = pservice.memberJumunList(map);
 		}
 
-		System.out.println("리스트  => "+lists);
+		System.out.println("리스트  => " + lists);
 		model.addAttribute("lists", lists);
 		model.addAttribute("rDto", rDto);
 		return "memberJumunList";
 	}
-	
-	@RequestMapping(value = "/memberJumunListpaging.do",method = RequestMethod.POST,
-			produces = "application/text; charset=UTF-8")
+
+	@RequestMapping(value = "/memberJumunListpaging.do", method = RequestMethod.POST, produces = "application/text; charset=UTF-8")
 	@ResponseBody
-	public String memberJumunListpaging(Model model,HttpSession session,RowNum_DTO rDto) {
+	public String memberJumunListpaging(Model model, HttpSession session, RowNum_DTO rDto) {
 		log.info("주문내역 페이징");
 		JsonObject json = new JsonObject();
 		Member_DTO mDto = (Member_DTO) session.getAttribute("mem");
-		System.out.println("mDto : "+mDto+"// rDto : "+rDto);
+		System.out.println("mDto : " + mDto + "// rDto : " + rDto);
 		Map<String, Object> map = new HashMap<String, Object>();
 		if (mDto.getGcode().equalsIgnoreCase("A")) {
 			rDto.setTotal(jservice.countAllJumun());
 			json = makeJson(jservice.allJumunList(rDto), rDto, mDto);
-		}else {
+		} else {
 			rDto.setTotal(jservice.countMemberJumun(mDto.getId()));
 			map.put("id", mDto.getId());
 			map.put("first", rDto.getFirst());
@@ -575,26 +573,26 @@ public class board_Controller {
 			json = makeJson(mList, rDto, mDto);
 		}
 		model.addAttribute("rDto", rDto);
-		
+
 		return json.toString();
 	}
-	
+
 	@RequestMapping(value = "/memberPage.do", method = RequestMethod.GET)
-	public String memberPage(String id,Model model) {
+	public String memberPage(String id, Model model) {
 		log.info("memberPage");
-		System.out.println("아이디"+id);
-		Member_DTO dto=service.gradeList(id);
+		System.out.println("아이디" + id);
+		Member_DTO dto = service.gradeList(id);
 		System.out.println(dto);
 		model.addAttribute("dto", dto);
 		return "memberPage";
 	}
 
 	@SuppressWarnings("unused")
-	private JsonObject makeJson(List<Jumun_DTO> lists,RowNum_DTO rDto,Member_DTO mDto) {
+	private JsonObject makeJson(List<Jumun_DTO> lists, RowNum_DTO rDto, Member_DTO mDto) {
 		JsonObject json = new JsonObject(); // {}
 		JsonArray jlist = new JsonArray(); // []
 		JsonObject jdto = null; // [{},{}]
-		
+
 		for (Jumun_DTO dto : lists) { // [{dto들},{dto들}] // {"lists":"[{dto들},{dto들}]"}
 			jdto = new JsonObject();
 			jdto.addProperty("jumunnum", dto.getJumunnum());
@@ -608,7 +606,7 @@ public class board_Controller {
 			jdto.addProperty("id", mDto.getId());
 			jlist.add(jdto);
 		}
-		
+
 		jdto = new JsonObject();
 		jdto.addProperty("pageList", rDto.getPageList());
 		jdto.addProperty("index", rDto.getIndex());
@@ -616,12 +614,12 @@ public class board_Controller {
 		jdto.addProperty("listNum", rDto.getListNum());
 		jdto.addProperty("total", rDto.getTotal());
 		jdto.addProperty("count", rDto.getCount());
-		
+
 		json.add("lists", jlist);
 		json.add("rDto", jdto);
-		
+
 		System.out.println(json.toString());
 		return json;
 	}
-	
-} 
+
+}
