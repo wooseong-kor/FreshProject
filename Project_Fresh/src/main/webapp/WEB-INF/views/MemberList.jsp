@@ -20,19 +20,15 @@
 <script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	// 전체 체크
-	function checkAll(bool) {
-// 		alert(bool);
-		var chk = document.getElementsByName("chkVal");
-// 		alert(chk.length);
-		for (var i = 0; i < chk.length; i++) {
-			chk[i].checked = bool;
-		}
-	}
-	
-	function mileageAdd(){
-		var chkId = document.getElementById("chkVal");
-		alert(chkId.value);
+	function mileageAdd(id){
+// 		alert(id); // 각 회원의 아이디 잘가져옴
+		// 회원 아이디로 회원검색
+		// 해당 회원의 마일리지 확인
+		// OPENER에 띄우기
+		var url = "./mileageAdd.do?id="+id;
+		var title = "관리자 마일리지 적립";
+		var prop = "width=300px, height=200px";
+		open(url, title, prop);		
 	}
 </script>
 <body>
@@ -40,13 +36,11 @@
 	<%@include file="/WEB-INF/views/header.jsp"%>
 	
 	<p style="color: darkgray; text-align: right; margin-right: 35px">회원관리 > 사용중 회원 조회</p>
-	<input type="button" class="btn btn-primary" value="마일리지 적립" onclick="mileageAdd()" style="text-align: left; margin-left: 10px;">
 	<div id="container">
 		<h1>사용중 회원 조회</h1>
 		<table class="table table-boardered"> <!-- 해당 class로 bootstrap 설정됨 -->
 			<thead>
 				<tr>
-<!-- 					<th><input type="checkbox" onclick="checkAll(this.checked)"></th> -->
 					<th></th>
 					<th>ID</th>
 					<th>NAME</th>
@@ -57,22 +51,24 @@
 					<th>HIREDATE</th>
 				</tr>
 			</thead>
-			<tbody>
+			<tbody id="userList">
   				<c:forEach var="dto" items="${MemberLists}">
 					<tr>
-						<td><input type="checkbox" id="chkVal" name="chkVal" value="${dto.id}"></td>
+						<td>
+							<button id="mileageBtn" class="btn btn-primary btn-center btn-sm" onclick="mileageAdd('${dto.id}')">마일리지 적립</button>
+						</td>
 						<td><c:out value="${dto.id}"/></td>
 						<td><c:out value="${dto.name}"/></td>
 						<td><c:out value="${dto.gcode}"/></td>
 						<td><c:out value="${dto.email}"/></td>
 						<td><c:out value="${dto.phone}"/></td>
-						<td><c:out value="${dto.mileage}"/></td>
+						<td class="userMileage"><c:out value="${dto.mileage}"/></td>
 						<td><c:out value="${dto.hiredate}"/></td>
 					</tr>
   				</c:forEach>
 			</tbody>
 			<tfoot>
-				
+				<!-- 페이징 넣을 부분 -->
 			</tfoot>
 		</table>
 	</div>

@@ -41,14 +41,14 @@ public interface IMemberDao {
 	//사용중 회원 전체 조회
 	public List<Member_DTO> memberListScroll();
 	
+	//회원 검색
+	public Member_DTO memberSearchOne(String id);
+	
+	// 회원 마일리지 추가 지급
+	public boolean updateMileageMemberOne(Map<String, Object> map);
+	
 	//경고받은 회원 조회
 	public List<Member_DTO> countAllGyungcntMember();
-	
-	//회원 검색
-	public Member_DTO memberSearchOne(Map<String, Object> map);
-	
-	//회원 등급 변경
-	public int updateGradeOne(Map<String, Object> map);
 	
 	//회원 경고 부여
 	public int insertWarning(Map<String, Object> map);
