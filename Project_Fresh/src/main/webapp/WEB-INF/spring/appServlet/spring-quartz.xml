@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.3.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+<context:component-scan base-package="com.min.fresh"/>
+
+<bean id="couponManagement" class="com.min.fresh.utils.CouponManagement">
+</bean>
+
+<bean id="couponDelete" class="com.min.fresh.utils.CouponDelete">
+</bean>
+
+<bean id="jobFactoryBeanOne" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<property name="targetObject" ref="couponManagement"/>
+	<property name="targetMethod" value="memberTakeCoupon"/>
+	<property name="concurrent" value="false"/>
+</bean>
+
+<bean id="jobFactoryBeanTwo" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+	<property name="targetObject" ref="couponDelete"/>
+	<property name="targetMethod" value="couponDelete"/>
+	<property name="concurrent" value="false"/>
+</bean>
+
+<bean id="triggerFactoryBeanOne" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	<property name="jobDetail" ref="jobFactoryBeanOne"/>
+	<property name="cronExpression" value="0 0 0 1 * ?"/>
+</bean>
+
+<bean id="triggerFactoryBeanTwo" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+	<property name="jobDetail" ref="jobFactoryBeanTwo"/>
+	<property name="cronExpression" value="0 58 23 L * ?"/>
+</bean>
+
+<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+	<property name="triggers">
+		<list>
+			<ref bean="triggerFactoryBeanOne"/>
+			<ref bean="triggerFactoryBeanTwo"/>
+		</list>
+	</property>
+</bean>
+</beans>
