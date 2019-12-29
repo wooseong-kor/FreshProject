@@ -199,18 +199,18 @@ SELECT BSGNAME,JUSO,PHONE FROM JUMUN JOIN ADDRLIST USING(BSGCODE) WHERE JUMUNNUM
 </select>					다른매퍼로 이동 -->
 
 <!-- 회원별 주문 내역 수-->
-<!-- <select id="countMemberJumun" parameterType="java.lang.String" resultType="java.lang.Integer">
+<select id="countMemberJumun" parameterType="java.lang.String" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM JUMUN WHERE ID=#{id}
 </select>
-회원별 주문 내역 페이징
+<!-- 회원별 주문 내역 페이징 -->
 <select id="memberJumunList" parameterType="java.util.Map" resultMap="JumunMap">
 SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
 (SELECT ROWNUM,JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
 (SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
 WHERE ROWNUM BETWEEN #{first} AND #{last}
 </select>
-전체 주문내역 수
-<select id="countAllJumun" resultType="java.lang.Integer">
+<!-- 전체 주문내역 수 -->
+<!-- <select id="countAllJumun" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM JUMUN
 </select>
 전체 주문내역 페이징 관리자용
@@ -220,7 +220,7 @@ SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE F
 (SELECT JUMUNNUM,ID,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
 WHERE ROWNUM BETWEEN #{first} AND #{last}
 </select> -->
-<select id="memberJumunList" parameterType="java.util.Map" resultMap="JumunMap">
+<!-- <select id="memberJumunList" parameterType="java.util.Map" resultMap="JumunMap">
 SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM
 (SELECT ROWNUM,JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM 
 (SELECT JUMUNNUM,SANGPGNUM,SANGPNAME,BSGCODE,JUMMONEY,JUMCNT,JUMSTAT,JUMDATE FROM JUMUN JOIN JUMUNPAGE USING(SANGPGNUM) WHERE ID= #{id} ORDER BY JUMDATE DESC))
@@ -228,7 +228,7 @@ WHERE ROWNUM BETWEEN #{first} AND #{last}
 </select>
 <select id="countMemberJumun" parameterType="java.lang.String" resultType="java.lang.Integer">
 SELECT COUNT(*) FROM JUMUN WHERE ID=#{id}
-</select>
+</select> -->
 
 
 <!-- 상품 상세 페이지 전체 개수-->

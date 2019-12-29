@@ -14,6 +14,7 @@
 	<div id="container">
 		<h2>" ${mem.name} " 님</h2>
 		${mem}
+		<a href="./memberJumunList.do">주문내역</a>
 	</div>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
