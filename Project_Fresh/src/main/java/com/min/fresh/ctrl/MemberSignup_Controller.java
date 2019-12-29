@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.Member_DTO;
 import com.min.fresh.dto.Payhistory_DTO;
+import com.min.fresh.model.ICouponMileageService;
 import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IProductService;
 import com.min.fresh.recaptcha.VerifyRecaptcha;
@@ -39,6 +41,9 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 	
 	@Autowired
 	private JavaMailSender mail;
+	
+	@Autowired
+	private ICouponMileageService cservice;
 	
 	@RequestMapping(value = "/Main.do", method = RequestMethod.GET)
 	public String loginForm() {
@@ -110,11 +115,13 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 	@RequestMapping(value = "/memberAdd.do", method = RequestMethod.POST)
 	public String memberAdd(Member_DTO dto, @RequestParam("pswd2") String password,
 			@RequestParam("phone1") String phone1, @RequestParam("phone2") String phone2,
-			@RequestParam("phone3") String phone3 ) {
+			@RequestParam("phone3") String phone3, Model model) {
 		String phone = phone1 +"-"+ phone2 +"-"+ phone3;
 		dto.setPassword(password);
 		dto.setPhone(phone);
 		log.info("★★★★★ 회원가입 - 회원추가 ★★★★★\n {}", dto);
+		String id = dto.getId(); // 가입 축하 쿠폰 아이디 확인
+		model.addAttribute("id", id);
 		return service.insertMember(dto)?"WelcomeFresh":"Error";
 	}
 	
@@ -140,6 +147,8 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		log.info("★★★★★ 로그인 - 가능여부확인 ★★★★★\n▶▷▶ {}", dto);
 		service.updateMemberDelflagJ(); // 자동 정지처리 (경고횟수 2회 이상)
 		service.updateMemberDelflagH(); // 자동 휴먼처리 (마지막로그인 기준 6개월)
+		boolean cisc = cservice.updateUseflagAutoOne(); // 가입축하 쿠폰 만료시 자동으로 지움
+		System.out.println(cisc);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", dto.getId()); // 로그인시 필요한 id
 		map.put("password", dto.getPassword()); // 로그인시 필요한 password
@@ -365,5 +374,13 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
       System.out.println(isc);
       
       return "true";
+   }
+   
+   @RequestMapping(value = "/takeCoupon.do", method = RequestMethod.GET)
+   public String takeCoupon(String id) {
+	   log.info("가입 축하 쿠폰 지급");
+	   boolean isc = cservice.insertCouponhistoryG(id);
+	   System.out.println(isc);
+	   return "MainContainer";
    }
 }
