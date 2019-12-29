@@ -136,10 +136,10 @@ public class PagingService_Impl implements IPagingService {
 		return dao.memberJumunList(map);
 	}
 //
-	@Override
-	public int countAllJumun() {
-		return dao.countAllJumun();
-	}
+//	@Override
+//	public int countAllJumun() {
+//		return dao.countAllJumun();
+//	}
 //
 //	@Override
 //	public List<Jumun_DTO> allJumunList(RowNum_DTO dto) {

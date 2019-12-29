@@ -547,6 +547,7 @@ public class board_Controller {
 			map.put("last", rDto.getLast());
 			lists = pservice.memberJumunList(map);
 		}
+
 		System.out.println("리스트  => "+lists);
 		model.addAttribute("lists", lists);
 		model.addAttribute("rDto", rDto);
