@@ -39,13 +39,13 @@ th,td{
 </tr>
 <c:forEach var="i" items="${lists}" varStatus="v">
 <tr onclick="goPage(${i.sangpgnum})">
-	<td>${i.jumunnum}</td>
-	<td>${i.jumunpage_DTO.sangpname}</td>
-	<td>${i.bsgcode}</td>
-	<td>${i.jummoney}</td>
-	<td>${i.jumcnt}</td>
-	<td>${i.jumstat}</td>
-	<td>${i.jumdate}</td>
+	<td class="list">${i.jumunnum}</td>
+	<td class="list">${i.jumunpage_DTO.sangpname}</td>
+	<td class="list">${i.bsgcode}</td>
+	<td class="list">${i.jummoney}</td>
+	<td class="list">${i.jumcnt}</td>
+	<td class="list">${i.jumstat}</td>
+	<td class="list">${i.jumdate}</td>
 </tr>
 </c:forEach>
 </table>

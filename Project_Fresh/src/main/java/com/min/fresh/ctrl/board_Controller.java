@@ -558,6 +558,7 @@ public class board_Controller {
 	public String memberJumunListpaging(Model model, HttpSession session, RowNum_DTO rDto) {
 		log.info("주문내역 페이징");
 		JsonObject json = new JsonObject();
+		List<Jumun_DTO> list = null;
 		Member_DTO mDto = (Member_DTO) session.getAttribute("mem");
 		System.out.println("mDto : " + mDto + "// rDto : " + rDto);
 		Map<String, Object> map = new HashMap<String, Object>();
@@ -569,8 +570,9 @@ public class board_Controller {
 			map.put("id", mDto.getId());
 			map.put("first", rDto.getFirst());
 			map.put("last", rDto.getLast());
-			List<Jumun_DTO> mList = jservice.memberJumunList(map);
-			json = makeJson(mList, rDto, mDto);
+			list = jservice.memberJumunList(map);
+			System.out.println("mList : "+list);
+			json = makeJson(list, rDto, mDto);
 		}
 		model.addAttribute("rDto", rDto);
 
@@ -593,17 +595,19 @@ public class board_Controller {
 		JsonArray jlist = new JsonArray(); // []
 		JsonObject jdto = null; // [{},{}]
 
+		System.out.println("list : ******"+lists);
 		for (Jumun_DTO dto : lists) { // [{dto들},{dto들}] // {"lists":"[{dto들},{dto들}]"}
+			System.out.println("dto : ******************************************"+dto);
 			jdto = new JsonObject();
 			jdto.addProperty("jumunnum", dto.getJumunnum());
 			jdto.addProperty("id", dto.getId());
+//			jdto.addProperty("sangpname", dto.getJumunpage_DTO().getSangpname());
 			jdto.addProperty("sangpgnum", dto.getSangpgnum());
 			jdto.addProperty("bsgcode", dto.getBsgcode());
 			jdto.addProperty("jummoney", dto.getJummoney());
 			jdto.addProperty("jumcnt", dto.getJumcnt());
 			jdto.addProperty("jumstat", dto.getJumstat());
 			jdto.addProperty("jumdate", String.valueOf(dto.getJumdate()));
-			jdto.addProperty("id", mDto.getId());
 			jlist.add(jdto);
 		}
 
