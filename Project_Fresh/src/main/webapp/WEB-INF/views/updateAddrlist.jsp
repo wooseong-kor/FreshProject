@@ -26,14 +26,14 @@ function openDaumZipAddress() {
 <%@include file="/WEB-INF/views/header.jsp"%>
 <!-- 배송지 수정 -->
 <form action="./updateAddrlistForm.do" method="post">
-	<div>
-		<input type="text" name="id" class="form-control" placeholder="${dto.id}" readonly="readonly"><br>
-		<input type="text" name="bsgcode" class="form-control" placeholder="${dto.bsgcode}"><br>
-		<input type="text" name="bsgname" class="form-control" placeholder="배송지이름"><br>
+	<div class="col-sm-6">
+		<input type="text" name="id" class="form-control" placeholder="${dto.id}" readonly="readonly" value="${dto.id}"><br>
+		<input type="text" name="bsgcode" class="form-control" placeholder="${dto.bsgcode}" value="${dto.bsgcode}"><br>
+		<input type="text" name="bsgname" class="form-control" placeholder="배송지이름" required="required"><br>
 		<input type="button" onClick="openDaumZipAddress();" value = "주소 찾기" /><br>
-		<input type="text" id="address" value="" style="width:240px;" name="juso" class="form-control"/>
+		<input type="text" id="address" value="" style="width:240px;" name="juso" class="form-control" required="required"/>
 		<input type="text" id="address_etc" value="" style="width:200px;" name="juso" class="form-control"/>
-		<input type="text" name="phone" class="form-control" placeholder="핸드폰번호"><br>
+		<input type="text" name="phone" class="form-control" placeholder="핸드폰번호" required="required"><br>
 		<input type="submit" value="등록" class="form-control"><br>
 	</div>
 </form>

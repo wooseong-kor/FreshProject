@@ -9,7 +9,7 @@
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <form action="./insertAnswerForm.do" method="post" id="formData">
-	<div>
+	<div class="col-sm-6">
 		<label>seq</label>
 		<input type="text" class="form-control" name="seq" value="${dto.seq}"><br>
 		<label>답변</label>

@@ -33,7 +33,7 @@
 					 <textarea name="content" id="ckeditor"></textarea>
 					<input type="submit" value="글등록">
 			</form>
-					<a href="./updateQagoForm.do">수정하기</a>
+					<a href="./updateQagoForm.do?id=${dto.id}">수정하기</a>
 		</div>
 	</div>
 <%@include file="/WEB-INF/views/footer.jsp"%>

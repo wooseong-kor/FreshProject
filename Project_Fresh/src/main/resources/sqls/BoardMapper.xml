@@ -111,7 +111,7 @@
 		PHONE=#{phone} WHERE BSGCODE=#{bsgcode} AND ID=#{id}
 	</update> 
 	<!-- 배송지 삭제 -->
-	<delete id="deleteAddrlist" parameterType="java.lang.String">
+	<delete id="deleteAddrlist" parameterType="java.util.Map">
 		DELETE FROM ADDRLIST
 		WHERE BSGCODE=#{bsgcode} AND ID=#{id}
 	</delete>

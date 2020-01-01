@@ -58,7 +58,7 @@ $(document).ready(function(){
 							</div>
 						</li>
 						<li class="nav-item dropdown"><a href="#">NOTICE</a></li>
-						<li class="nav-item dropdown"><a href="#">Q&A</a></li>
+						<li class="nav-item dropdown"><a href="./pagingTest.do">Q&A</a></li>
 						<li class="nav-item dropdown"><a href="#">FAQ</a></li>
 						<c:choose>
 							<c:when test="${mem.gcode eq 'A'}">

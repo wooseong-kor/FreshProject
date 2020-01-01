@@ -40,6 +40,7 @@ function insertAddr() {
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <!-- 배송지 등록 -->
+<h3>배송지 등록하기</h3>
 <form action="./insertAddrlistForm.do" method="post" id="formData">
 	<div>
 		<input type="text" class="form-control" name="id" id="id" value="${dto.id}" ><br>
@@ -55,8 +56,6 @@ function insertAddr() {
 		<input type="button" class="form-control" value="등록" onclick="insertAddr()"><br>
 	</div>  
 </form>
-<a href="./updateAddrlist.do?id=${dto.id}&bsgcode=${dto.bsgcode}">배송지 수정하기</a><br>
-<a href="./addrlistIdList.do?id=${dto.id}">배송지 조회하기</a>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>
