@@ -29,17 +29,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.min.fresh.dto.AddrList_DTO;
 import com.min.fresh.dto.Hoogi_DTO;
-import com.min.fresh.dto.Jaego_DTO;
 import com.min.fresh.dto.Jumun_DTO;
 import com.min.fresh.dto.Jumunpage_DTO;
 import com.min.fresh.dto.Member_DTO;
-import com.min.fresh.dto.Payhistory_DTO;
 import com.min.fresh.dto.ProductImg_DTO;
 import com.min.fresh.dto.QA_GO_DTO;
 import com.min.fresh.dto.RowNum_DTO;
 import com.min.fresh.model.IBoardServiceDao;
 import com.min.fresh.model.IJumun_PaymentService;
-import com.min.fresh.model.IMemberService;
 import com.min.fresh.model.IPagingService;
 import com.min.fresh.utils.FileUpload;
 
@@ -98,14 +95,14 @@ public class board_Controller {
 	public String updateAddrlistForm(AddrList_DTO aDto, Model model) {
 		log.info("updateAddrlistForm 배송지 수정");
 		boolean isc = service.updateAddrlist(aDto);
-		return isc ? "redirect:/addrListOne.do?id=" + aDto.getId() + "bsgcode" + aDto.getBsgcode()
+		return isc ? "redirect:/addrListOne.do?id=" + aDto.getId() + "&bsgcode=" + aDto.getBsgcode()
 				: "redirect:/updateAddrlist.do";
 	}
 
 	// 배송지 삭제
 	@RequestMapping(value = "/deleteAddrlist.do", method = RequestMethod.POST)
-	public String deleteAddrlist(String id, String bsgcode) {
-		log.info("deleteAddrlist 배송지 삭제", id, bsgcode);
+	public String deleteAddrlist(String bsgcode,String id) {
+		log.info("deleteAddrlist 배송지 삭제",bsgcode,id);
 		boolean isc = service.deleteAddrlist(bsgcode, id);
 		return "redirect:/insertAddlist.do";
 	}
@@ -135,7 +132,7 @@ public class board_Controller {
 		return "addrListOne";
 	}
 
-	// QnA
+	// ----QnA----
 	// QnA 글 작성
 	@RequestMapping(value = "/insertQago.do", method = RequestMethod.GET)
 	public String insertQago(Model model, QA_GO_DTO dto) {
@@ -202,13 +199,13 @@ public class board_Controller {
 	public String QagoWrite(QA_GO_DTO dto) {
 		log.info("QagoWrite");
 		boolean isc = service.insertQago(dto);
-		return isc ? "redirect:/QagoOne.do?id=" + dto.getId() + "&seq=" + dto.getSeq() : "insertQago";
+		return isc ? "redirect:/pagingTest.do" : "pagingTest.do";
 	}
 
 	// QnA 글 수정 입력
 	@RequestMapping(value = "/updateQago.do", method = RequestMethod.GET)
-	public String updateQago(@RequestParam("seq") int seq, Model model) {
-		log.info("updateQago 글 작성 폼 입력");
+	public String updateQago(@RequestParam("seq") int seq, Model model) {	
+		log.info("updateQago 글 수정 입력");
 		QA_GO_DTO dto = service.qagoOne(seq);
 		model.addAttribute("dto", dto);
 		return "updateQagoForm";
@@ -217,7 +214,7 @@ public class board_Controller {
 	// QnA 글 수정 등록
 	@RequestMapping(value = "/updateQagoForm.do", method = RequestMethod.POST)
 	public String updateQagoForm(QA_GO_DTO dto) {
-		log.info("updateQagoForm 글 작성 등록");
+		log.info("updateQagoForm 글 수정 ");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("title", dto.getTitle());
 		map.put("content", dto.getContent());
@@ -227,11 +224,11 @@ public class board_Controller {
 	}
 
 	// QnA,공지사항 글 삭제
-	@RequestMapping(value = "/deleteQago.do", method = RequestMethod.GET)
+	@RequestMapping(value = "/deleteQago.do", method = RequestMethod.POST)
 	public String deleteQago(int seq) {
 		log.info("deleteQago 글 삭제", seq);
 		boolean isc = service.deleteQago(seq);
-		return isc ? "redirect:/updateQago.do" : "redirect:/updateQago.do";
+		return isc ? "redirect:/pagingTest.do" : "redirect:/pagingTest.do";
 	}
 
 	// QnA,공지 글 상세 조회
@@ -239,7 +236,9 @@ public class board_Controller {
 	public String qagoOne(@RequestParam("seq") int seq, Model model) {
 		log.info("qagoOne 글 상세조회", seq);
 		QA_GO_DTO qDto = service.qagoOne(seq);
+		QA_GO_DTO dto=service.answerOne(seq);
 		model.addAttribute("qDto", qDto);
+		model.addAttribute("dto", dto);
 		return "QagoOne";
 	}
 
@@ -265,7 +264,7 @@ public class board_Controller {
 
 	// QnA 답글 수정
 	@RequestMapping(value = "/updateAnswer.do", method = RequestMethod.GET)
-	public String updateAnswer(QA_GO_DTO qDto) {
+		public String updateAnswer(QA_GO_DTO qDto) {
 		log.info("updateAnswer 답글 수정", qDto);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("seq", qDto.getSeq());
@@ -280,7 +279,7 @@ public class board_Controller {
 	public String deleteAnswer(int seq) {
 		log.info("deleteAnswer 답글 삭제", seq);
 		boolean isc = service.deleteAnswer(seq);
-		return isc ? "redirect:/updateAnswer.do" : "redirect:/updateAnswer.do";
+		return isc ? "redirect:/pagingTest.do" : "redirect:/pagingTest.do";
 	}
 
 	// QnA 답변 글 조회

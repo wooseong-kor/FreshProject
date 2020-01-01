@@ -7,6 +7,8 @@
 <title>QnA 질문 수정</title>
 </head>
 <body>
+<script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
+<script type="text/javascript" src="./ckeditor/ckeditor.js"></script>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <script type="text/javascript">
 //json
@@ -30,9 +32,8 @@
 					<label for="title">제목</label>
 					<input type="text" class="form-control" id="title" placeholder="제목" name="title" value="${dto.title}"><br>
 					<label for="content">내용</label> 
-					 <textarea name="content" id="ckeditor">${dto.content}</textarea>
-				
-					<input type="submit" value="글수정">
+					<textarea name="content" id="ckeditor">${dto.content}</textarea>
+				<input type="submit" value="글수정">
 			</form>
 		</div>
 </div>

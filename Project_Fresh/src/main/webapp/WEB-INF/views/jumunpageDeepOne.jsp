@@ -5,25 +5,60 @@
 <head>
 <meta charset="UTF-8">
 <script type="text/javascript" src="./js/jquery-3.4.1.js"></script>
-<title>jumunpageDeepOne</title>
+<title>상품 구매 페이지</title>
 <style type="text/css">
-.jumunContainer {
-	position: fixed;
-	width: 400px;
-	right: 400px;
-	border: 5px solid rgb(21, 21, 21);
-	background-color: ;
+body {
+  font-family: "Lato", sans-serif;
 }
 
-.col-sm-10{
-	width: 70%;
-
+.wrapper{
+  padding: 0 30px;
 }
-#meDiv{
-	width : 500px;
-	position: relative;
-	top: 10px;
-	left: 100px;
+
+#main {/* 이미지 div */
+  width: 60%;
+  float:left;
+}
+
+#main img{ /* 이미지 */
+    width: 100%;
+}
+
+#sidenav-wrapper{
+    float:left;
+    margin-left: 2%; 
+}
+
+.sidenav {
+  width: 550px;
+  position: fixed;
+  z-index: 1;
+  background-color: #EAEAEA;
+  overflow-x: hidden;
+  padding: 20px;
+}
+
+.sidenav form{
+	display: block;
+	margin: 0 auto;
+	text-align: center;
+}
+
+.tag-name {
+margin-bottom: 50px;
+}
+
+input[type=button]{
+	width: 200px;
+	padding: 5px;
+	display: block;
+	margin: 0 auto;
+}
+
+.wrapper::after{
+    display: table;
+    clear: both;
+    content: "";
 }
 </style>
 </head>
@@ -187,66 +222,65 @@
 			open(url, title, prop);
 		}
 	</script>
-	<div id="container" style="width: 90%; margin: auto;">
-		<div class="col-sm-10">
+	<!-- <div id="container" style="width: 90%; margin: auto;"> -->
+		<!-- <div class="col-sm-10"> -->
 			<%-- <h5>상품 코드 -${dto.sangcode}</h5>
 			<h3>상품명 -${dto.sangpname}</h3>
 			<h1>${dto.title}</h1>
 			<h4>수량-${n}</h4>
 			<h5>가격 -${dto.product_DTO.price}</h5> --%>
-			이자리에 썸네일 들어갈거야
-			${dto.content}
-		</div>
-	<div id="meDiv">
-		<div class="jumunContainer">
-			<div>
-				<p>상품페이지번호 : ${dto.sangpgnum}</p>
-				<h3>상품명 : ${dto.sangpname}</h3>
-				<h1>${dto.title}</h1>
-			</div>
-			<form action="#" id="payment">
-				<div>
-					<h5 id="sangcodetag">
-						상품 코드 - <span id="sangcode">${dto.sangcode}</span>
-					</h5>
-					<h3 id="pricetag">
-						가격 - <span id="price">${dto.product_DTO.price}</span>
-					</h3>
-					<input type="hidden" id="absolprice"
-						value="${dto.product_DTO.price}"> <input type="hidden"
-						id="realsangcode" name="sangcode" value="${dto.sangcode}">
-					<h4>
-						수량 - <select id="count" name="jumcnt" onchange="change()">
-							<option value="1" selected="selected">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select> 재고량 - <span id="cnt">${n}</span>
-					</h4>
-				</div>
-				<div>
-					<input type="radio" name="couOrMile" onclick="selOption()">쿠폰
-					<input type="radio" name="couOrMile" onclick="selOption()">마일리지<br>
-					<input type="button" id="couponuse" value="쿠폰 적용" onclick="couponUse()">
-					<input type="text" name="mileage" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
-					<input type="hidden" id="memberMileage" value="${mileage}"> 
-					<input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
-					결제금액 - <input type="text" name="paymoney" readonly="readonly"
-						id="resultPrice" value="0"> <input type="hidden"
-						id="couseq" name="couseq"> <input type="hidden"
-						name="paywhat" value="t"> <input type="hidden"
-						name="sangpgnum" value="${dto.sangpgnum}"> 
-						<input type="hidden" id="jummoney" name="jummoney" value="0"> 
-						<input type="hidden" name="bsgcode" id="bsg" value="null"> 
-						<input type="button" onclick="selectBSG()" value="배송지 설정하기"> 
-						<input type="button" id="onPayment" onclick="payment()" value="결제하기">
-				</div>
-			</form>
-		</div>
-	</div>
-	</div>
-	
+			<!-- 이자리에 썸네일 들어갈거야 -->
+			<%-- ${dto.content} --%>
+		<!-- </div> -->
+
+<section class="wrapper">
+    <article id="main">
+        <img src="./image/watmude.jpg">
+    </article><!-- class="main" end // 이 박스에 이미지 넣으면 됨 -->  
+    <article id="sidenav-wrapper">
+        <div class="sidenav">
+            <form action="#" id="payment">
+                <div>
+                   <h5 id="sangcodetag" class="tag-name">
+                      상품 코드 - <span id="sangcode">${dto.sangcode}</span>
+                   </h5>
+                   <h3 id="pricetag">
+                      가격 - <span id="price">${dto.product_DTO.price}</span>
+                   </h3>
+                   <input type="hidden" id="absolprice"
+                      value="${dto.product_DTO.price}"> <input type="hidden"
+                      id="realsangcode" name="sangcode" value="${dto.sangcode}">
+                   <h4>
+                      수량 - <select id="count" name="jumcnt" onchange="change()">
+                         <option value="1" selected="selected">1</option>
+                         <option value="2">2</option>
+                         <option value="3">3</option>
+                         <option value="4">4</option>
+                         <option value="5">5</option>
+                      </select> 재고량 - <span id="cnt">${n}</span>
+                   </h4>
+                </div>
+                <div>
+                   <input type="radio" name="couOrMile" onclick="selOption()">쿠폰
+                   <input type="radio" name="couOrMile" onclick="selOption()">마일리지<br>
+                   <input type="button" class="form-control"class="form-control" id="couponuse" value="쿠폰 적용" onclick="couponUse()">
+                   <input type="text" name="mileage" id="mileage" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" onchange="limitMileage()">
+                   <input type="hidden" id="memberMileage" value="${mileage}"> 
+                   <input type="checkbox" id="maxmile" onclick="maxMile()">최대금액 적용<br>
+                   결제금액 - <input type="text" name="paymoney" readonly="readonly"
+                      id="resultPrice" value="0"> <input type="hidden"
+                      id="couseq" name="couseq"> <input type="hidden"
+                      name="paywhat" value="t"> <input type="hidden"
+                      name="sangpgnum" value="${dto.sangpgnum}"> <br>
+                      <input type="hidden" id="jummoney" name="jummoney" value="0"> 
+                      <input type="hidden" name="bsgcode" id="bsg" value="null"> <br>
+                      <input type="button" class="form-control" onclick="selectBSG()" value="배송지 설정하기"> <br>
+                      <input type="button" class="form-control" id="onPayment" onclick="payment()" value="결제하기">
+                </div>
+             </form>
+        </div> <!-- class="sidenav" end -->
+    </article>
+</section><!-- class="wrapper" end -->
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

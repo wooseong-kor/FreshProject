@@ -13,12 +13,12 @@
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
-<form action="./deleteAddrlist.do" method="post">
+<form>
     <div class="col-sm-6">
       <label>아이디</label> 
       <input type="text" class="form-control" value="${aDto.id}" readonly="readonly">
       <label>배송지 코드</label> 
-      <input type="text" class="form-control" value="${aDto.bsgcode}">
+      <input type="text" class="form-control" value="${aDto.bsgcode}" readonly="readonly">
       <label>배송지 이름</label> 
       <input type="text" class="form-control" value="${aDto.bsgname}">
       <label>주소</label> 
@@ -26,9 +26,24 @@
       <label>핸드폰 번호</label> 
       <input type="text" class="form-control" value="${aDto.phone}">
       
-      <input type="submit" class="form-control" value="배송지 삭제">
+      <input type="button" class="form-control" value="배송지 수정" onclick="update()">
+      <input type="button" class="form-control" value="배송지 삭제" id="del">
     </div>
   </form>
+  <script type="text/javascript">
+  window.onload=function(){
+		var del=document.getElementById("del");
+		del.onclick=function(){
+			var formData=document.forms[0];
+			formData.action="./deleteAddrlist.do?id=${aDto.id}&bsgcode=${aDto.bsgcode}";
+			formData.method="post";
+			formData.submit();
+		}
+	}
+  function update(){
+	  location.href="./updateAddrlist.do?id=${aDto.id}&bsgcode=${aDto.bsgcode}";
+  }
+  </script>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>
