@@ -248,7 +248,7 @@
 	<!-- 후기 수정 -->
 	<update id="updateHoogi" parameterType="Hoogi">
 		UPDATE HOOGI SET TITLE=#{title},
-		CONTENT=#{content} WHERE ID=#{id}
+		CONTENT=#{content} SEQ=#{seq}
 	</update>
 	<!-- 후기 페이지별 후기 개수 -->
 	<select id="countSangpgnumHoogi"

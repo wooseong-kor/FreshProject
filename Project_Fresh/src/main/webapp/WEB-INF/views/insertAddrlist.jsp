@@ -40,9 +40,9 @@ function insertAddr() {
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
 <!-- 배송지 등록 -->
-<h3>배송지 등록하기</h3>
 <form action="./insertAddrlistForm.do" method="post" id="formData">
-	<div>
+	<div class="col-sm-6">
+		<h3>배송지 등록하기</h3>
 		<input type="text" class="form-control" name="id" id="id" value="${dto.id}" ><br>
 		<input type="text" class="form-control" name="bsgname" placeholder="배송지 이름" required="required"><br>
 		<!-- <input type="text" class="form-control" name="juso" placeholder="주소지" required="required"> --><br>

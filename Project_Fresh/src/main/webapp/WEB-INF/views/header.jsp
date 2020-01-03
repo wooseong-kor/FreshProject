@@ -57,9 +57,8 @@ $(document).ready(function(){
 								<a class="dropdown-item" href="http://localhost:8099/Project_Fresh/jumunpageListScroll.do?sangcode=0">&nbsp;&nbsp;&nbsp;CATEGORY</a>
 							</div>
 						</li>
-						<li class="nav-item dropdown"><a href="#">NOTICE</a></li>
+						<li class="nav-item dropdown"><a href="./noticeList.do">NOTICE</a></li>
 						<li class="nav-item dropdown"><a href="./pagingTest.do">Q&A</a></li>
-						<li class="nav-item dropdown"><a href="#">FAQ</a></li>
 						<c:choose>
 							<c:when test="${mem.gcode eq 'A'}">
 								<li class="nav-item dropdown"><a href="./product.do">상품관리</a></li>

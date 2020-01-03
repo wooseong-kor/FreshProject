@@ -439,6 +439,17 @@ public class board_Controller {
 		return "jumunpageListScroll";
 	}
 
+	// 상품 검색 
+	@RequestMapping(value = "/searchJumunpageList.do", method = RequestMethod.GET)
+		public String searchJumunpageList(Model model, String sangname) {
+			log.info("searchJumunpageList 상품 검색 컨트롤러 시작");
+			System.out.println(sangname);
+			Jumunpage_DTO jdto=service.searchJumunpageList(sangname);
+			System.out.println(jdto);
+			model.addAttribute("dto", jdto);
+			return "searchJumunpageList";
+		}
+	
 	// 상품 목록 페이지용 이미지(썸네일) 등록
 	@RequestMapping(value = "/insertProductimg.do", method = RequestMethod.GET)
 	public String insertProductimg() {
@@ -624,5 +635,16 @@ public class board_Controller {
 		System.out.println(json.toString());
 		return json;
 	}
+	//공지사항 목록 이동
+	@RequestMapping(value = "/noticeList.do", method = RequestMethod.GET)
+	public String noticeList() {
+		return "noticeList";
+	}
+	//공지사항 상세 이동
+	@RequestMapping(value = "/noticeOne.do", method = RequestMethod.GET)
+	public String noticeOne() {
+		return "noticeOne";
+	}
+	
 
 }
