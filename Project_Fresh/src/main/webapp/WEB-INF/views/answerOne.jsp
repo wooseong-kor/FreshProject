@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>answerOne</title>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
@@ -16,8 +21,8 @@
       <input type="text" class="form-control" value="${dto.content}">
       <label>답변일</label> 
       <input type="text" class="form-control" value="${dto.regdate}">
+<%@include file="/WEB-INF/views/footer.jsp"%>
     </div>
   </form>
-<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

@@ -23,12 +23,20 @@ a{
   box-shadow:0 0px 0px rgba(0, 0, 0, 0);
   width: 5px;
 }
+
+
 </style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript" src="./js/bootstrap.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){
 	$(".dropdown-menu").hide();
+//검색
+	document.getElementById("search").onclick = function() {
+	document.getElementById("formData").submit();
+	return false;
+}; 
 });
 </script>
 	<header>
@@ -42,7 +50,7 @@ $(document).ready(function(){
 						<span class="icon-bar"></span>
 						<span class="icon-bar"></span>                        
 					</button>
-					<a class="navbar-brand" href="./Main.do">
+					<a class="navbar-brand" href="./Main.do" style="padding:9px; margin-left: 12px;">
 						<span><img src="./image/logo.png" id="png"></span>
 					</a>
 				</div>
@@ -59,7 +67,7 @@ $(document).ready(function(){
 						</li>
 						<li class="nav-item dropdown"><a href="./noticeList.do">NOTICE</a></li>
 						<li class="nav-item dropdown"><a href="./pagingTest.do">Q&A</a></li>
-						<c:choose>
+					<c:choose>
 							<c:when test="${mem.gcode eq 'A'}">
 								<li class="nav-item dropdown"><a href="./product.do">상품관리</a></li>
 								<li class="nav-item dropdown"><a href="#">입고관리</a></li>
@@ -90,8 +98,10 @@ $(document).ready(function(){
 						 <!-- 세션여부확인 -->
 						 <c:choose>
 						 	<c:when test="${empty mem}">
+						 		<li><a><img src="./image/MemberSearch.png" alt="search" data-toggle="modal" data-target="#myModal"></a></li>
 						 		<li><a href="./loginPage.do"><span><img src="./image/Member.png" alt="member">LOG IN</span></a></li>
 						 	</c:when>
+						 	
 						 	<c:otherwise>
 						 		<li><span>${mem.name} 님</span></li>
 								<!-- 관리자 사용자 구분해서 장바구니 출력 -->
@@ -105,8 +115,33 @@ $(document).ready(function(){
 						 		<li><a href="./logout.do"><span><img src="./image/Member.png" alt="member">LOG OUT</span></a></li>
 						 	</c:otherwise>
 						 </c:choose>
-					</ul>
+						 </ul>
+				</div>
+			<!-- 모달 창 -->
+		<form action="./searchJumunpageList.do" id="formData">	
+			<div class="modal" id="myModal">
+				<div class="modal-dialog">
+					<div class="modal-content">
+
+						<!-- 모달 헤더 -->
+						<div class="modal-header">
+							<h4 class="modal-title">상품 검색</h4>
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+						</div>
+
+						<!-- 모달 바디 -->
+						<div class="modal-body"><input type="text" class="form-control" placeholder="내용" id="sangname" name="sangname"></div>
+						
+						<!-- 모달 푸터 -->
+						<div class="modal-footer">
+							<button type="button" class="btn btn-warning" id="search">검색</button>
+							<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
+						</div>
+
+					</div>
 				</div>
 			</div>
+		</form>	
+		</div>
 		</nav>
 	</header>

@@ -7,6 +7,9 @@
 <meta charset="UTF-8">
 <title>addrlistIdList</title>
 <style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
 table.tab{
 border-collapse: separate;
 border-spacing: 1px; 
@@ -34,7 +37,7 @@ background: #eee;
 </head>
 <body>
 	<%@include file="/WEB-INF/views/header.jsp"%>
-	<div id="container" style="width: 90%; margin: auto;">
+	<div id="container" class="col-sm-6">
 	<table class="tab">
 	<tr>
 		<th>배송지 코드</th>

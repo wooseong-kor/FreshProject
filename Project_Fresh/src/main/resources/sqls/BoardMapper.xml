@@ -248,7 +248,7 @@
 	<!-- 후기 수정 -->
 	<update id="updateHoogi" parameterType="Hoogi">
 		UPDATE HOOGI SET TITLE=#{title},
-		CONTENT=#{content} SEQ=#{seq}
+		CONTENT=#{content} WHERE SEQ=#{seq}
 	</update>
 	<!-- 후기 페이지별 후기 개수 -->
 	<select id="countSangpgnumHoogi"
@@ -267,7 +267,7 @@
 	<!-- 후기 상세 조회 -->
 	<select id="hoogiOne" parameterType="java.util.Map"
 		resultType="Hoogi">
-		SELECT SEQ,SANGPGNUM,ID,TITLE,CONTENT,H.REGDATE
+		SELECT H.SEQ,H.SANGPGNUM,H.ID,H.TITLE,H.CONTENT,H.REGDATE
 		,P.IMGPATH
 		FROM HOOGI H JOIN JUMUNPAGE S
 		ON H.SANGPGNUM=S.SANGPGNUM
