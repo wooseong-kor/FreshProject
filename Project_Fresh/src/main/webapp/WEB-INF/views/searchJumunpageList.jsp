@@ -10,7 +10,11 @@
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
-${dto}
+${dto.sangpgnum}
+${dto.sangcode}
+${dto.sangpname}
+${dto.title}
+${dto.content}
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

@@ -10,6 +10,11 @@
 <script type="text/javascript" src="./js/bootstrap.js"></script>
 <script type="text/javascript">
 </script>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
@@ -27,8 +32,11 @@
       <input type="text" class="form-control" value="${aDto.phone}">
       
       <input type="button" class="form-control" value="배송지 수정" onclick="update()">
-      <input type="button" class="form-control" value="배송지 삭제" id="del">
+      <input type="button" class="form-control" value="배송지 삭제" id="del" style="margin-bottom: 10px;">
+	
     </div>
+     <%@include file="/WEB-INF/views/footer.jsp"%>
+   
   </form>
   <script type="text/javascript">
   window.onload=function(){
@@ -44,6 +52,5 @@
 	  location.href="./updateAddrlist.do?id=${aDto.id}&bsgcode=${aDto.bsgcode}";
   }
   </script>
-<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

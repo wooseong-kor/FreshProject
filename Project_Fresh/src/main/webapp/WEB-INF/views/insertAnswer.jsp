@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>insertAnswer</title>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>

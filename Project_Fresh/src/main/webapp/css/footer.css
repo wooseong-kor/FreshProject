@@ -6,4 +6,6 @@ footer {
   height: 6rem;
   font-size: x-small;
   text-align: center;
+  bottom: 0;
+  position: fixed;
 }

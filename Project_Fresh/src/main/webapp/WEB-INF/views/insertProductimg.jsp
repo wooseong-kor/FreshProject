@@ -18,6 +18,11 @@
 	});
 </script>
 <title>목록 썸네일 등록</title>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>

@@ -101,8 +101,8 @@ public class board_Controller {
 
 	// 배송지 삭제
 	@RequestMapping(value = "/deleteAddrlist.do", method = RequestMethod.POST)
-	public String deleteAddrlist(String bsgcode,String id) {
-		log.info("deleteAddrlist 배송지 삭제",bsgcode,id);
+	public String deleteAddrlist(String bsgcode, String id) {
+		log.info("deleteAddrlist 배송지 삭제", bsgcode, id);
 		boolean isc = service.deleteAddrlist(bsgcode, id);
 		return "redirect:/insertAddlist.do";
 	}
@@ -204,7 +204,7 @@ public class board_Controller {
 
 	// QnA 글 수정 입력
 	@RequestMapping(value = "/updateQago.do", method = RequestMethod.GET)
-	public String updateQago(@RequestParam("seq") int seq, Model model) {	
+	public String updateQago(@RequestParam("seq") int seq, Model model) {
 		log.info("updateQago 글 수정 입력");
 		QA_GO_DTO dto = service.qagoOne(seq);
 		model.addAttribute("dto", dto);
@@ -236,7 +236,7 @@ public class board_Controller {
 	public String qagoOne(@RequestParam("seq") int seq, Model model) {
 		log.info("qagoOne 글 상세조회", seq);
 		QA_GO_DTO qDto = service.qagoOne(seq);
-		QA_GO_DTO dto=service.answerOne(seq);
+		QA_GO_DTO dto = service.answerOne(seq);
 		model.addAttribute("qDto", qDto);
 		model.addAttribute("dto", dto);
 		return "QagoOne";
@@ -264,7 +264,7 @@ public class board_Controller {
 
 	// QnA 답글 수정
 	@RequestMapping(value = "/updateAnswer.do", method = RequestMethod.GET)
-		public String updateAnswer(QA_GO_DTO qDto) {
+	public String updateAnswer(QA_GO_DTO qDto) {
 		log.info("updateAnswer 답글 수정", qDto);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("seq", qDto.getSeq());
@@ -316,7 +316,6 @@ public class board_Controller {
 
 	// 상품 후기 등록
 	@RequestMapping(value = "/insertHoogiForm.do", method = RequestMethod.POST)
-	@ResponseBody
 	public String insertHoogiForm(Hoogi_DTO hDto) {
 		log.info("insertHoogiForm 후기 입력", hDto);
 		boolean isc = service.insertHoogi(hDto);
@@ -325,20 +324,28 @@ public class board_Controller {
 
 	// 상품 후기 수정
 	@RequestMapping(value = "/updateHoogi.do", method = RequestMethod.GET)
-	public String updateHoogi(Hoogi_DTO hDto) {
-		log.info("updateHoogi 후기 수정", hDto);
+	public String updateHoogi(Hoogi_DTO hDto,Model model) {
+		log.info("updateHoogi 후기 수정");
+		model.addAttribute("dto", hDto);
+		return "updateHoogi";
+	}
+	// 상품 후기 수정
+	@RequestMapping(value = "/updateHoogiForm.do", method = RequestMethod.POST)
+	public String updateHoogiForm(Hoogi_DTO hDto) {
+		log.info("updateHoogiForm 후기 수정", hDto);
 		boolean isc = service.updateHoogi(hDto);
 		return isc ? "updateHoogi" : "updateHoogi";
 	}
 
 	// 상품 후기 상세 조회
 	@RequestMapping(value = "/hoogiOne.do", method = RequestMethod.GET)
-	public String hoogiOne(Model model, String sangpgnum) {
+	public String hoogiOne(Model model, Hoogi_DTO hdto) {
 		log.info("hoogiOne 후기 상세");
-		Hoogi_DTO hDto = new Hoogi_DTO();
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("id", hDto.getId());
-		map.put("seq", hDto.getSeq());
+		map.put("id", hdto.getId());
+		map.put("seq", hdto.getSeq());
+		Hoogi_DTO dto=service.hoogiOne(map);
+		model.addAttribute("dto", dto);
 		return "hoogiOne";
 	}
 
@@ -439,17 +446,17 @@ public class board_Controller {
 		return "jumunpageListScroll";
 	}
 
-	// 상품 검색 
+	// 상품 검색
 	@RequestMapping(value = "/searchJumunpageList.do", method = RequestMethod.GET)
-		public String searchJumunpageList(Model model, String sangname) {
-			log.info("searchJumunpageList 상품 검색 컨트롤러 시작");
-			System.out.println(sangname);
-			Jumunpage_DTO jdto=service.searchJumunpageList(sangname);
-			System.out.println(jdto);
-			model.addAttribute("dto", jdto);
-			return "searchJumunpageList";
-		}
-	
+	public String searchJumunpageList(Model model, String sangname) {
+		log.info("searchJumunpageList 상품 검색 컨트롤러 시작");
+		System.out.println(sangname);
+		Jumunpage_DTO jdto = service.searchJumunpageList(sangname);
+		System.out.println(jdto);
+		model.addAttribute("dto", jdto);
+		return "searchJumunpageList";
+	}
+
 	// 상품 목록 페이지용 이미지(썸네일) 등록
 	@RequestMapping(value = "/insertProductimg.do", method = RequestMethod.GET)
 	public String insertProductimg() {
@@ -581,7 +588,7 @@ public class board_Controller {
 			map.put("first", rDto.getFirst());
 			map.put("last", rDto.getLast());
 			list = jservice.memberJumunList(map);
-			System.out.println("mList : "+list);
+			System.out.println("mList : " + list);
 			json = makeJson(list, rDto, mDto);
 		}
 		model.addAttribute("rDto", rDto);
@@ -605,9 +612,9 @@ public class board_Controller {
 		JsonArray jlist = new JsonArray(); // []
 		JsonObject jdto = null; // [{},{}]
 
-		System.out.println("list : ******"+lists);
+		System.out.println("list : ******" + lists);
 		for (Jumun_DTO dto : lists) { // [{dto들},{dto들}] // {"lists":"[{dto들},{dto들}]"}
-			System.out.println("dto : ******************************************"+dto);
+			System.out.println("dto : ******************************************" + dto);
 			jdto = new JsonObject();
 			jdto.addProperty("jumunnum", dto.getJumunnum());
 			jdto.addProperty("id", dto.getId());
@@ -635,16 +642,17 @@ public class board_Controller {
 		System.out.println(json.toString());
 		return json;
 	}
-	//공지사항 목록 이동
+
+	// 공지사항 목록 이동
 	@RequestMapping(value = "/noticeList.do", method = RequestMethod.GET)
 	public String noticeList() {
 		return "noticeList";
 	}
-	//공지사항 상세 이동
+
+	// 공지사항 상세 이동
 	@RequestMapping(value = "/noticeOne.do", method = RequestMethod.GET)
 	public String noticeOne() {
 		return "noticeOne";
 	}
-	
 
 }

@@ -5,6 +5,11 @@
 <head>
 <meta charset="UTF-8">
 <title>QnA 질문 수정</title>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <script type="text/javascript" src="./js/jquery-3.4.1.js"></script>

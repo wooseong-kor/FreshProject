@@ -18,6 +18,11 @@
 	});
 </script>
 <title>상품 구매페이지 등록</title>
+<style type="text/css">
+.col-sm-6{
+margin: 0 25%;
+}
+</style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
