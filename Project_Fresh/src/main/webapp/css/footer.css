@@ -1,11 +1,11 @@
 @charset "UTF-8";
 
 footer {
-  left: 0;
-  right: 0;
+  position: fixed;
+  left: 0px;
+  bottom: 0;
   height: 6rem;
+  width:100%; 
   font-size: x-small;
   text-align: center;
-  bottom: 0;
-  position: fixed;
 }

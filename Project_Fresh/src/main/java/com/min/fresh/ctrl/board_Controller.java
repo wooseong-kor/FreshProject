@@ -259,7 +259,7 @@ public class board_Controller {
 		map.put("seq", dto.getSeq());
 		map.put("content", dto.getAcontent());
 		boolean isc = service.insertAnswer(map);
-		return isc ? "redirect:/insertAnswer.do" : "redirect:/insertAnswer.do";
+		return isc ? "redirect:/pagingTest.do" : "redirect:/pagingTest.do";
 	}
 
 	// QnA 답글 수정
@@ -275,8 +275,8 @@ public class board_Controller {
 	}
 
 	// QnA 답변 글 삭제
-	@RequestMapping(value = "/deleteAnswer.do", method = RequestMethod.GET)
-	public String deleteAnswer(int seq) {
+	@RequestMapping(value = "/deleteAnswer.do", method = RequestMethod.POST)
+	public String deleteAnswer(@RequestParam("seq") int seq) {
 		log.info("deleteAnswer 답글 삭제", seq);
 		boolean isc = service.deleteAnswer(seq);
 		return isc ? "redirect:/pagingTest.do" : "redirect:/pagingTest.do";
@@ -319,16 +319,17 @@ public class board_Controller {
 	public String insertHoogiForm(Hoogi_DTO hDto) {
 		log.info("insertHoogiForm 후기 입력", hDto);
 		boolean isc = service.insertHoogi(hDto);
-		return "insertHoogi";
+		return "redirect:/sangpgnumHoogiList.do?sangpgnum="+hDto.getSangpgnum();
 	}
 
 	// 상품 후기 수정
 	@RequestMapping(value = "/updateHoogi.do", method = RequestMethod.GET)
-	public String updateHoogi(Hoogi_DTO hDto,Model model) {
+	public String updateHoogi(Hoogi_DTO hDto, Model model) {
 		log.info("updateHoogi 후기 수정");
 		model.addAttribute("dto", hDto);
 		return "updateHoogi";
 	}
+
 	// 상품 후기 수정
 	@RequestMapping(value = "/updateHoogiForm.do", method = RequestMethod.POST)
 	public String updateHoogiForm(Hoogi_DTO hDto) {
@@ -344,9 +345,36 @@ public class board_Controller {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", hdto.getId());
 		map.put("seq", hdto.getSeq());
-		Hoogi_DTO dto=service.hoogiOne(map);
+		Hoogi_DTO dto = service.hoogiOne(map);
 		model.addAttribute("dto", dto);
 		return "hoogiOne";
+	}
+
+	// 상품 후기 삭제
+	@RequestMapping(value = "/deleteHoogi.do", method = RequestMethod.POST)
+	public String deleteHoogi(int seq) {
+		log.info("deleteHoogi 후기 삭제", seq);
+		boolean isc = service.deleteHoogi(seq);
+		return isc ? "redirect:/insertHoogi.do" : "redirect:/insertHoogi.do";
+	}
+	
+	//상품 후기 목록
+	@RequestMapping(value = "/sangpgnumHoogiList.do",method = RequestMethod.GET)
+	public String sangpgnumHoogiList(Model model,String sangpgnum) {
+		log.info("sangpgnumHoogiList 후기 목록");
+		RowNum_DTO rdto=new RowNum_DTO();
+		rdto.setTotal(service.countSangpgnumHoogi(sangpgnum));
+		int count=rdto.getCount();
+		System.out.println("페이지 갯수"+count);
+		System.out.println(rdto);
+		Map<String, Object> map=new HashMap<String, Object>();
+		map.put("sangpgnum", sangpgnum);
+		map.put("first", rdto.getFirst());
+		map.put("last", rdto.getLast());
+		List<Hoogi_DTO> hdto=service.sangpgnumHoogiList(map);
+		model.addAttribute("rdto", rdto);
+		model.addAttribute("hdto",hdto);
+		return "sangpgnumHoogiList";
 	}
 
 	// 상품 구매페이지 등록

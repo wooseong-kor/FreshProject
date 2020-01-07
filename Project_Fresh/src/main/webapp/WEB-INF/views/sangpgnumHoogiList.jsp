@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>    
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>공지사항 목록</title>
+<title>상품 후기 목록</title>
 <style type="text/css">
 table.tab{
 border-collapse: separate;
@@ -13,7 +14,6 @@ text-align: center;
 line-height: 1.5; 
 margin: 20px 10px;
 text-decoration: none;
-padding-bottom: 10%;
 }
 table.tab th { 
 width: 155px; 
@@ -34,26 +34,26 @@ background: #eee;
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
-<div style="width: 90%; margin: auto;">
-<h3>Notice</h3>
-	<table class="tab">
-	<tr>
+<form>
+		<div id="container" style="width: 90%; margin: auto;">
+		<table class="tab">
+		<tr>
 		<th>번호</th>
 		<th>제목</th>
+		<th>아이디</th>
 		<th>작성일</th>
-	</tr>	
-	<tr>
-		<td>1</td>
-		<td><a href="http://localhost:8099/Project_Fresh/noticeOne.do">상품 관련 공지사항</a></td>
-		<td>2020년 01월 01일</td>
-	</tr>	
-	<tr>
-		<td>2</td>
-		<td><a href="http://localhost:8099/Project_Fresh/noticeOne.do">배송 관련 공지사항</a></td>
-		<td>2020년 01월 01일</td>
-	</tr>	
-	</table>
-	</div>
+		</tr>	
+	<c:forEach var="dto" items="${hdto}" varStatus="v">
+		<tr>
+			<td>${dto.seq}</td>
+			<td><a href="http://localhost:8099/Project_Fresh/hoogiOne.do?id=${dto.id}&seq=${dto.seq}">${dto.title}</a></td>
+			<td>${dto.id}</td>
+			<td>${dto.regdate}</td>
+		</tr>
+	</c:forEach>
+		</table>	
+		</div>
+</form>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

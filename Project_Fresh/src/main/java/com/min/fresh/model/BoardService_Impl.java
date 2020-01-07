@@ -195,7 +195,7 @@ public class BoardService_Impl implements IBoardServiceDao {
 	}
 
 	@Override
-	public Hoogi_DTO sangpgnumHoogiList(Map<String, Object> map) {
+	public List<Hoogi_DTO> sangpgnumHoogiList(Map<String, Object> map) {
 		log.info("sangpgnumHoogiList");
 		return dao.sangpgnumHoogiList(map);
 	}

@@ -71,7 +71,7 @@ public interface IBoardServiceDao {
 //	후기 페이지별 후기 갯수
 	public int countSangpgnumHoogi(String sangpgnum);
 //	후기 페이지별 페이징
-	public Hoogi_DTO sangpgnumHoogiList(Map<String, Object> map);
+	public List<Hoogi_DTO> sangpgnumHoogiList(Map<String, Object> map);
 //	후기 상세 조회
 	public Hoogi_DTO hoogiOne(Map<String, Object> map);
 //	상품 구매 페이지 입력
