@@ -13,16 +13,17 @@ margin: 0 25%;
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
-<form>
+<form action="./deleteAnswer.do" method="post">
     <div class="col-sm-6">
       <label>번호</label> 
-      <input type="text" class="form-control" value="${dto.seq}" readonly="readonly">
+      <input type="text" class="form-control" value="${dto.seq}" readonly="readonly" name="seq">
       <label>내용</label> 
       <input type="text" class="form-control" value="${dto.content}">
       <label>답변일</label> 
       <input type="text" class="form-control" value="${dto.regdate}">
-<%@include file="/WEB-INF/views/footer.jsp"%>
+      <input type="submit" class="form-control" value="답변 삭제">
     </div>
   </form>
+<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

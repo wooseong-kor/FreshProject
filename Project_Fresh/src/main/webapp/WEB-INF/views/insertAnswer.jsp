@@ -8,6 +8,7 @@
 <style type="text/css">
 .col-sm-6{
 margin: 0 25%;
+padding-bottom: 10%;
 }
 </style>
 </head>

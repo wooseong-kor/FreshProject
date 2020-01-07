@@ -8,11 +8,13 @@
 <style type="text/css">
 .col-sm-6{
 margin: 0 25%;
+padding-bottom: 10%;
 }
 </style>
 </head>
 <body>
 <%@include file="/WEB-INF/views/header.jsp"%>
+<form action="./deleteHoogi.do" method="post">
 <div class="col-sm-6">
 	<h3>후기 상세 조회</h3><br>
 	<label>번호</label>
@@ -27,7 +29,9 @@ margin: 0 25%;
 		<input type="text" name="content" class="form-control" value="${dto.content}"><br>
 	<label>작성일</label>
 		<input type="text" name="regdate" class="form-control" value="${dto.regdate}"><br>
+		<input type="submit" class="form-control" value="후기 삭제">
 	</div>
+	</form>
 	<%@include file="/WEB-INF/views/footer.jsp"%>
 </body>
 </html>

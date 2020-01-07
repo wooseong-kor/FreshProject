@@ -3,6 +3,8 @@
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <!-- 화면 줄였을 때 스크린 넓이를 디바이스에 맞춤,원래 비율 사용 -->
 <meta name='viewport' content='width=device-width, initial-scale=1'>
+<script type="text/javascript" src="./js/bootstrap.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap.min.css">
 <link type="text/css" rel="stylesheet" href ="./css/bootstrap-theme.min.css">
 <link rel="stylesheet" type="text/css" href="./css/footer.css">
@@ -23,22 +25,7 @@ a{
   box-shadow:0 0px 0px rgba(0, 0, 0, 0);
   width: 5px;
 }
-
-
 </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script type="text/javascript" src="./js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-	$(".dropdown-menu").hide();
-//검색
-	document.getElementById("search").onclick = function() {
-	document.getElementById("formData").submit();
-	return false;
-}; 
-});
-</script>
 	<header>
 		<nav class="navbar navbar-default">
 			<div class="container-fluid">
@@ -67,7 +54,7 @@ $(document).ready(function(){
 						</li>
 						<li class="nav-item dropdown"><a href="./noticeList.do">NOTICE</a></li>
 						<li class="nav-item dropdown"><a href="./pagingTest.do">Q&A</a></li>
-					<c:choose>
+						<c:choose>
 							<c:when test="${mem.gcode eq 'A'}">
 								<li class="nav-item dropdown"><a href="./product.do">상품관리</a></li>
 								<li class="nav-item dropdown"><a href="#">입고관리</a></li>
@@ -96,12 +83,11 @@ $(document).ready(function(){
 					<!-- heder 우측 -->
 					<ul class="nav navbar-nav navbar-right">
 						 <!-- 세션여부확인 -->
+						 <li><a><img src="./image/MemberSearch.png" alt="search" data-toggle="modal" data-target="#myModal"></a></li>
 						 <c:choose>
 						 	<c:when test="${empty mem}">
-						 		<li><a><img src="./image/MemberSearch.png" alt="search" data-toggle="modal" data-target="#myModal"></a></li>
 						 		<li><a href="./loginPage.do"><span><img src="./image/Member.png" alt="member">LOG IN</span></a></li>
 						 	</c:when>
-						 	
 						 	<c:otherwise>
 						 		<li><span>${mem.name} 님</span></li>
 								<!-- 관리자 사용자 구분해서 장바구니 출력 -->
@@ -115,24 +101,21 @@ $(document).ready(function(){
 						 		<li><a href="./logout.do"><span><img src="./image/Member.png" alt="member">LOG OUT</span></a></li>
 						 	</c:otherwise>
 						 </c:choose>
-						 </ul>
+					</ul>
 				</div>
-			<!-- 모달 창 -->
+		<!-- 모달 창 -->
 		<form action="./searchJumunpageList.do" id="formData">	
 			<div class="modal" id="myModal">
 				<div class="modal-dialog">
 					<div class="modal-content">
 
-						<!-- 모달 헤더 -->
 						<div class="modal-header">
 							<h4 class="modal-title">상품 검색</h4>
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 						</div>
 
-						<!-- 모달 바디 -->
 						<div class="modal-body"><input type="text" class="form-control" placeholder="내용" id="sangname" name="sangname"></div>
 						
-						<!-- 모달 푸터 -->
 						<div class="modal-footer">
 							<button type="button" class="btn btn-warning" id="search">검색</button>
 							<button type="button" class="btn btn-danger" data-dismiss="modal">닫기</button>
@@ -141,7 +124,17 @@ $(document).ready(function(){
 					</div>
 				</div>
 			</div>
-		</form>	
-		</div>
+		</form>
+			</div>
 		</nav>
 	</header>
+<script type="text/javascript">
+$(document).ready(function(){
+	$(".dropdown-menu").hide();
+});
+//검색
+document.getElementById("search").onclick = function() {
+document.getElementById("formData").submit();
+return false;
+};
+</script>

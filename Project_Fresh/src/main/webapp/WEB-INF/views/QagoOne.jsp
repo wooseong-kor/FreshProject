@@ -8,6 +8,7 @@
 <style type="text/css">
 .col-sm-6{
 margin: 0 25%;
+padding-bottom: 10%;
 }
 </style>
 </head>
@@ -26,6 +27,7 @@ margin: 0 25%;
     <input type="button" class="form-control" value="질문 수정" onclick="update()">
     <input type="button" class="form-control" value="질문 삭제" id="del">
     <input type="button" class="form-control" value="답변 확인" onclick="reply()">
+    <input type="button" class="form-control" value="답변 입력" onclick="insert()">
     </div>
 </div>
 </form>
@@ -45,6 +47,9 @@ margin: 0 25%;
   function reply(){
 	  location.href="./answerOne.do?seq=${dto.seq}";
   }
+  function insert() {
+	  location.href="./insertAnswer.do?seq=${qDto.seq}";
+}
   </script>
 <%@include file="/WEB-INF/views/footer.jsp"%>
 </body>

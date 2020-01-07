@@ -196,9 +196,9 @@ public class BoardDao_Impl implements IBoardDao {
 	}
 
 	@Override
-	public Hoogi_DTO sangpgnumHoogiList(Map<String, Object> map) {
+	public List<Hoogi_DTO> sangpgnumHoogiList(Map<String, Object> map) {
 		log.info("sangpgnumHoogiList 실행");
-		Hoogi_DTO dto = session.selectOne(NS + "sangpgnumHoogiList", map);
+		List<Hoogi_DTO> dto = session.selectList(NS + "sangpgnumHoogiList", map);
 		return dto;
 	}
 

@@ -8,6 +8,7 @@
 <style type="text/css">
 .col-sm-6{
 margin: 0 25%;
+padding-bottom: 10%;
 }
 </style>
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.7.min.js"></script>
