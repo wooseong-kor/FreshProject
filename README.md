@@ -1,2 +1,2 @@
 # FreshProject
-WMS와 과일쇼핑몰
+쇼핑몰 
