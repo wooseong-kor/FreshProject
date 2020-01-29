@@ -39,7 +39,7 @@
 	}
 
 	function googleChartAjax(){
-		alert("작동");
+//		alert("작동");
 		$.ajax({
 			url:"./chart.do",
 			type:"post",

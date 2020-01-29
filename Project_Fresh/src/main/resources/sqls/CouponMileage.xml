@@ -138,13 +138,16 @@
   </update> -->
   
   <!-- 만료된 가입쿠폰 지우기 -->
-  <update id="updateUseflagAutoOne">
+  <update id="updateUseflagAutoOne" parameterType="java.lang.String">
   UPDATE COUPONHISTORY SET USEFLAG = 'Y'
-        WHERE COUCODE = 'COU01'
-        AND
-        (SELECT (TRUNC(SYSDATE)-TRUNC(JGNALZA))
-                FROM COUPONHISTORY
-                        WHERE COUCODE = 'COU01') > 7
+	WHERE ID = #{id} AND
+	COUCODE = 'COU01'
+	AND
+	(SELECT C.TG
+	FROM (SELECT ID ID, (TRUNC(SYSDATE)-TRUNC(JGNALZA)) TG
+				FROM COUPONHISTORY C
+					WHERE COUCODE = 'COU01') C
+		WHERE C.ID = #{id}) > 7
   </update>
   
   <!-- 만료된 그외의 쿠폰 지우기 -->

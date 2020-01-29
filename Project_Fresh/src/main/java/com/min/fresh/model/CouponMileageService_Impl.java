@@ -91,8 +91,8 @@ public class CouponMileageService_Impl implements ICouponMileageService {
 	}
 
 	@Override
-	public boolean updateUseflagAutoOne() {
-		return (dao.updateUseflagAutoOne()>0)?true:false;
+	public boolean updateUseflagAutoOne(String id) {
+		return (dao.updateUseflagAutoOne(id)>0)?true:false;
 	}
 
 	@Override

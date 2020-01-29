@@ -147,7 +147,8 @@ private Logger log = LoggerFactory.getLogger(MemberSignup_Controller.class);
 		log.info("★★★★★ 로그인 - 가능여부확인 ★★★★★\n▶▷▶ {}", dto);
 		service.updateMemberDelflagJ(); // 자동 정지처리 (경고횟수 2회 이상)
 		service.updateMemberDelflagH(); // 자동 휴먼처리 (마지막로그인 기준 6개월)
-		boolean cisc = cservice.updateUseflagAutoOne(); // 가입축하 쿠폰 만료시 자동으로 지움
+		String id = dto.getId();
+		boolean cisc = cservice.updateUseflagAutoOne(id); // 가입축하 쿠폰 만료시 자동으로 지움
 		System.out.println(cisc);
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("id", dto.getId()); // 로그인시 필요한 id
