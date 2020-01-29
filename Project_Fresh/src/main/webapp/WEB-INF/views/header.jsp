@@ -74,7 +74,7 @@ a{
 									</div>
 								</li>
 								
-								<li class="nav-item dropdown"><a href="#">통계</a></li>
+								<li class="nav-item dropdown"><a href="./gochart.do">통계</a></li>
 							</c:when>
 							<c:otherwise>
 							</c:otherwise>

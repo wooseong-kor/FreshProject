@@ -112,9 +112,9 @@ public class CouponMileageDao_Impl implements ICouponMileageDao {
 	}
 
 	@Override
-	public int updateUseflagAutoOne() {
+	public int updateUseflagAutoOne(String id) {
 		log.info("updateUseflagAutoOne 실행");
-		return session.update(NS+"updateUseflagAutoOne");
+		return session.update(NS+"updateUseflagAutoOne", id);
 	}
 
 	@Override

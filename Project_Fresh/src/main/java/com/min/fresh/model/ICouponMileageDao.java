@@ -39,7 +39,7 @@ public interface ICouponMileageDao {
 	//결제할때 결제금액에 쿠폰금액 차감된걸로 결제금액 변경(VIP)
 	public int updatePaymoneyVOne(Map<String, Object> map);
 	//만료된 가입쿠폰 지우기
-	public int updateUseflagAutoOne();
+	public int updateUseflagAutoOne(String id);
 	//만료된 그외의 쿠폰 지우기
 	public int updateCouponUseflaghistory();
 	//쿠폰 내역 아이디별 전체 개수
